@@ -32,7 +32,6 @@
 	  <Folder Include="Middleware\" />
 	  <Folder Include="Authorization\" />
 	  <Folder Include="ConfigSetting\" />
-	  <Folder Include="EntityFrameworkCore\" />
 	  <Folder Include="Services\" />
 	</ItemGroup>
 
