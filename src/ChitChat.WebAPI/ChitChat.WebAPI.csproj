@@ -26,7 +26,7 @@
 	</ItemGroup>
 	
   <ItemGroup>
-    <ProjectReference Include="..\chit-chat-backend.Infrastructure\ChitChat.Infrastructure.csproj" />
+    <ProjectReference Include="..\ChitChat.Infrastructure\ChitChat.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
