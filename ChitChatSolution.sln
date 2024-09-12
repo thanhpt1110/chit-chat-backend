@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChitChat.Application", "src
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{A796AB91-F924-4086-A895-65102C6547DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChitChat.Test", "test\ChitChat.Test\ChitChat.Test.csproj", "{D21CB7BF-1E5E-42C6-B549-79D0A850B351}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChitChat.Test", "test\ChitChat.Test\ChitChat.Test.csproj", "{D21CB7BF-1E5E-42C6-B549-79D0A850B351}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{37FE7C74-3803-4E83-A00F-09A51F680D0A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,10 @@ Global
 		{D21CB7BF-1E5E-42C6-B549-79D0A850B351}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D21CB7BF-1E5E-42C6-B549-79D0A850B351}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D21CB7BF-1E5E-42C6-B549-79D0A850B351}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37FE7C74-3803-4E83-A00F-09A51F680D0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37FE7C74-3803-4E83-A00F-09A51F680D0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37FE7C74-3803-4E83-A00F-09A51F680D0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37FE7C74-3803-4E83-A00F-09A51F680D0A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

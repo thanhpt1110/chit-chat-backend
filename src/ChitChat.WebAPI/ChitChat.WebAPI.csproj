@@ -5,6 +5,10 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>ChitChat.WebAPI</RootNamespace>
+    <UserSecretsId>3803187d-c2f2-4669-9bf6-a9422c6a7832</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..</DockerfileContext>
+    <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,3 +34,4 @@
   </ItemGroup>
 
 </Project>
+	
