@@ -4,7 +4,7 @@ services:
   chitchat.webapi:
     image: ${DOCKER_REGISTRY-}chitchatwebapi
     build:
-      context: ../
+      context: ../../
       dockerfile: src/ChitChat.WebAPI/Dockerfile
     ports:
         - "8080:8080"

@@ -19,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{A796AB91-F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChitChat.Test", "test\ChitChat.Test\ChitChat.Test.csproj", "{D21CB7BF-1E5E-42C6-B549-79D0A850B351}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "DockerCompose\docker-compose.dcproj", "{37FE7C74-3803-4E83-A00F-09A51F680D0A}"
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker\DockerCompose\docker-compose.dcproj", "{37FE7C74-3803-4E83-A00F-09A51F680D0A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
