@@ -1,8 +1,11 @@
 ﻿using ChitChat.Application.Helpers;
 using ChitChat.DataAccess.Data;
 using ChitChat.Domain.Identity;
-using ChitChat.Infrastructure.Authorization;
+using ChitChat.Infrastructure.Caching;
 using ChitChat.Infrastructure.EntityFrameworkCore;
+using ChitChat.Infrastructure.Logging;
+using ChitChat.Infrastructure.Middleware;
+using ChitChat.Infrastructure.Authorization;
 using ChitChat.Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -19,9 +22,18 @@ namespace ChitChat.Infrastructure
     {
         public static WebApplicationBuilder AddInfrastructure(this WebApplicationBuilder builder)
         {
-            builder.AddEntityFramewordCore();
-            builder.AddAppAuthorization();
-            builder.Services.AddInfrastructureService().AddAuthorization();
+            builder
+            .AddEntityFramewordCore()
+            //.AddAppAuthorization()
+            .AddCaching();
+
+
+            // Services
+            builder.Services
+             .AddInfrastructureService().AddAuthorization();
+
+            // Host
+            builder.Host.AddHostSerilogConfiguration();
             return builder;
 
         }
@@ -55,5 +67,11 @@ namespace ChitChat.Infrastructure
                 options.User.RequireUniqueEmail = true;
             });
         }
+        public static IApplicationBuilder AddInfrastuctureApplication(this IApplicationBuilder app)
+        {
+            app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
+            return app;
+        }
+
     }
 }
