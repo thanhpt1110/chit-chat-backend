@@ -31,8 +31,6 @@
 	<ItemGroup>
 	  <Folder Include="Middleware\" />
 	  <Folder Include="Authorization\" />
-	  <Folder Include="ConfigSetting\" />
-	  <Folder Include="Services\" />
 	</ItemGroup>
 
 </Project>

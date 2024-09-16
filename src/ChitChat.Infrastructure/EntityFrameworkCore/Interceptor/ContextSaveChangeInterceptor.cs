@@ -1,4 +1,5 @@
-﻿using ChitChat.Domain.Common;
+﻿using ChitChat.Application.Helpers;
+using ChitChat.Domain.Common;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using System;
 using System.Collections.Generic;
@@ -10,12 +11,12 @@ namespace ChitChat.DataAccess.Data.Interceptor
 {
     public class ContextSaveChangeInterceptor : SaveChangesInterceptor
     {
-        //private readonly IClaimService _claimService;
+        private readonly IClaimService _claimService;
 
-        //public ContextSaveChangeInterceptor(IClaimService claimService)
-        //{
-        //    _claimService = claimService;
-        //}
+        public ContextSaveChangeInterceptor(IClaimService claimService)
+        {
+            _claimService = claimService;
+        }
 
         public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(
             DbContextEventData eventData,
@@ -32,12 +33,12 @@ namespace ChitChat.DataAccess.Data.Interceptor
                     switch (entry.State)
                     {
                         case EntityState.Added:
-                            //entry.Entity.CreatedBy = _claimService.GetUserId();
-                            //entry.Entity.CreatedOn = DateTime.UtcNow;
+                            entry.Entity.CreatedBy = _claimService.GetUserId();
+                            entry.Entity.CreatedOn = DateTime.UtcNow;
                             break;
                         case EntityState.Modified:
-                            //entry.Entity.UpdatedBy = _claimService.GetUserId();
-                            //entry.Entity.UpdatedOn = DateTime.UtcNow;
+                            entry.Entity.UpdatedBy = _claimService.GetUserId();
+                            entry.Entity.UpdatedOn = DateTime.UtcNow;
                             break;
                     }
                 }
