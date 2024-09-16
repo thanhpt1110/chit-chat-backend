@@ -18,5 +18,9 @@
   <ItemGroup>
     <ProjectReference Include="..\ChitChat.DataAccess\ChitChat.DataAccess.csproj" />
   </ItemGroup>
+	
+  <ItemGroup>
+    <Folder Include="Services\Caching\CacheKey\" />
+  </ItemGroup>
 
 </Project>

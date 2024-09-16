@@ -1,0 +1,38 @@
+# This is a generated file. Not intended for manual editing.
+version: "3.4"
+services:
+  chitchat.webapi:
+    build:
+      context: "D:\\Data\\UIT\\HK7\\SE121\\Project\\chit-chat-backend"
+      dockerfile: "src/ChitChat.WebAPI/Dockerfile"
+      target: "base"
+      args:
+        BUILD_CONFIGURATION: "Debug"
+    command: []
+    entrypoint:
+    - "/opt/rider-debugger/linux-x64/JetBrains.Debugger.Worker"
+    - "--runtimeconfig"
+    - "/opt/rider-debugger/JetBrains.Debugger.Worker.runtimeconfig.json"
+    - "--mode=server"
+    - "--frontend-port=57100"
+    - "--backend-port=57300"
+    - "--timeout=60"
+    environment:
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+      RIDER_DEBUGGER_LOG_DIR: "/var/opt/rider-debugger"
+      RESHARPER_LOG_CONF: "/etc/opt/rider-debugger/backend-log.xml"
+    image: "chitchatwebapi:dev"
+    ports:
+    - "127.0.0.1:57011:57100"
+    - "127.0.0.1:57211:57300"
+    volumes:
+    - "C:\\Users\\My Laptop\\AppData\\Roaming\\Microsoft\\UserSecrets:/root/.microsoft/usersecrets"
+    - "C:\\Users\\My Laptop\\.nuget\\packages:/root/.nuget/packages"
+    - "D:\\Data\\UIT\\HK7\\SE121\\Project\\chit-chat-backend\\src\\ChitChat.WebAPI:/app:rw"
+    - "D:\\Data\\UIT\\HK7\\SE121\\Project\\chit-chat-backend:/src:rw"
+    - "C:\\Users\\My Laptop\\AppData\\Local\\JetBrains\\RiderRemoteDebugger\\2024.2.4\\\
+      Linux64:/opt/rider-debugger"
+    - "D:\\Application\\JetBrains\\JetBrains Rider 2024.2.4\\bin:/etc/opt/rider-debugger/backend-log.xml"
+    - "C:\\Users\\My Laptop\\AppData\\Local\\JetBrains\\Rider2024.2\\log\\DebuggerWorker\\\
+      JetBrains.Debugger.Worker.2024_9_15_00_38_48:/var/opt/rider-debugger:rw"
+    working_dir: "/app"
