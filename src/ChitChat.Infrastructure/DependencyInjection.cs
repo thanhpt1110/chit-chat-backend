@@ -5,6 +5,7 @@ using ChitChat.Infrastructure.Caching;
 using ChitChat.Infrastructure.EntityFrameworkCore;
 using ChitChat.Infrastructure.Logging;
 using ChitChat.Infrastructure.Middleware;
+using ChitChat.Infrastructure.Authorization;
 using ChitChat.Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -34,6 +35,7 @@ namespace ChitChat.Infrastructure
             // Host
             builder.Host.AddHostSerilogConfiguration();
             return builder;
+
         }
         public static IServiceCollection AddInfrastructureService(this IServiceCollection services)
         {
@@ -41,11 +43,6 @@ namespace ChitChat.Infrastructure
             services.AddSingleton<IClaimService, ClaimService>();
             services.AddSingleton<ITokenService, TokenService>();
             return services;
-        }
-        public static IApplicationBuilder AddInfrastuctureApplication(this IApplicationBuilder app)
-        {
-            app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
-            return app;
         }
         private static void AddIdentity(this IServiceCollection services)
         {
@@ -70,5 +67,11 @@ namespace ChitChat.Infrastructure
                 options.User.RequireUniqueEmail = true;
             });
         }
+        public static IApplicationBuilder AddInfrastuctureApplication(this IApplicationBuilder app)
+        {
+            app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
+            return app;
+        }
+
     }
 }
