@@ -1,5 +1,7 @@
 ﻿using ChitChat.Application.Mapping;
 using ChitChat.Application.Services;
+using ChitChat.Application.Services.Interface;
+using ChitChat.Application.Validators;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -11,18 +13,30 @@ namespace ChitChat.Application
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
-            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            // Add Validators
+
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly())
+                .AddValidatorsFromAssemblyContaining<IValidatorMarker>();
+
+            // Add MediaR
+
             services.AddMediatR(cfg =>
             {
                 cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
             });
+
+            // Add AutoMapper
+
             services.AddAutoMapper(typeof(IMappingProfileMarker));
-            services.AddService();
+
+            // Add Services
+            services.AddServices();
+            
+            
             return services;
         }
-        public static IServiceCollection AddService(this IServiceCollection services) {
-
+        public static IServiceCollection AddServices(this IServiceCollection services) {
+            services.AddScoped<IUserService, UserService>();
             return services;
         }
     }

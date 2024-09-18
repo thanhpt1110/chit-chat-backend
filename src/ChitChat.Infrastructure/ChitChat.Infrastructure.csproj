@@ -25,12 +25,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-    <ProjectReference Include="..\ChitChat.Application\ChitChat.Application.csproj" />
-  </ItemGroup>
-
-	<ItemGroup>
 	  <Folder Include="Middleware\" />
 	  <Folder Include="Authorization\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\ChitChat.Application\ChitChat.Application.csproj" />
 	</ItemGroup>
 
 </Project>

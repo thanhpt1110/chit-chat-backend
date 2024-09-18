@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ChitChat.WebAPI.Controllers
 {
-    [Route("api/post")]
+    [Route("api/[controller]")]
     [ApiController]
 
     public class PostController : ControllerBase

@@ -2,7 +2,10 @@ using ChitChat.Application;
 using ChitChat.DataAccess;
 using ChitChat.DataAccess.Data;
 using ChitChat.Infrastructure;
+using ChitChat.Infrastructure.Validations;
 using ChitChat.WebAPI;
+using FluentValidation.AspNetCore;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using System;
 
@@ -10,7 +13,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+ValidatorOptions.Global.DefaultRuleLevelCascadeMode = CascadeMode.Stop;
+builder.Services
+    .AddFluentValidationAutoValidation()
+    .AddFluentValidationClientsideAdapters()
+    .AddControllers(config => config.Filters.Add(typeof(ValidateModelAttribute)));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
