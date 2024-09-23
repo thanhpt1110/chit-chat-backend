@@ -4,11 +4,13 @@ using ChitChat.Application.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ChitChat.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -20,11 +22,13 @@ namespace ChitChat.WebAPI.Controllers
         }
 
         [HttpPost("register")]
+        [AllowAnonymous]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterationRequestDto registerationRequestDto)
         {
             return Ok(ApiResult<bool>.Success(await _userService.RegisterAsync(registerationRequestDto)));
         }
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> LoginUser([FromBody] LoginRequestDto loginRequestDto)
         {
             return Ok(ApiResult<LoginResponseDto>.Success(await _userService.LoginAsync(loginRequestDto)));
