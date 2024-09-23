@@ -71,9 +71,20 @@ namespace ChitChat.Application.Services
             {
                 RefreshToken = refreshToken,
                 AccessToken = accessToken,
-                User = userDto
+                User = userDto,
+                LoginHistoryId = loginHistory.Id
             };
             return loginResponse;
+        }
+
+        public async Task<bool> LogoutAsync(Guid loginHistoryId)
+        {
+            LoginHistory loginHistory = await _loginHistoryRepository.GetFirstOrDefaultAsync(p => p.Id == loginHistoryId);
+            loginHistory.LogoutTime = DateTime.Now; 
+            loginHistory.RefreshToken = null;
+            loginHistory.RefreshTokenExpiryTime = null;
+            await _loginHistoryRepository.UpdateAsync(loginHistory);    
+            return true;
         }
 
         public async Task<bool> RegisterAsync(RegisterationRequestDto registerationRequestDto)

@@ -34,7 +34,6 @@ namespace ChitChat.Domain.Common
             get
             {
                 var culture = Thread.CurrentThread.CurrentCulture;
-                
                 return Texts[LocalizationSettings.DefaultCulture];
             }
         }

@@ -29,6 +29,10 @@ namespace ChitChat.WebAPI.Controllers
         {
             return Ok(ApiResult<LoginResponseDto>.Success(await _userService.LoginAsync(loginRequestDto)));
         }
-
+        [HttpPost("logout")]
+        public async Task<IActionResult> LogoutUser([FromBody] Guid loginHistoryId)
+        {
+            return Ok(ApiResult<bool>.Success(await _userService.LogoutAsync(loginHistoryId)));
+        }
     }
 }
