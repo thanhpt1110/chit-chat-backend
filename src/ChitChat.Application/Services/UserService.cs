@@ -9,11 +9,7 @@ using ChitChat.DataAccess.Repositories.Interrface;
 using ChitChat.Domain.Entities;
 using ChitChat.Domain.Identity;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace ChitChat.Application.Services
 {
@@ -21,13 +17,15 @@ namespace ChitChat.Application.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IBaseRepository<LoginHistory> _loginHistoryRepository;
+        private readonly ILogger<UserService> _logger;
         private UserManager<UserApplication> _userManager;
         private RoleManager<ApplicationRole> _roleManager;
         private ITokenService _tokenService;
         private IMapper _mapper;
-        public UserService(IUserRepository userRepository, IRepositoryFactory repositoryFactory, 
+        public UserService(ILogger<UserService> logger, IUserRepository userRepository, IRepositoryFactory repositoryFactory,
             UserManager<UserApplication> userManager, RoleManager<ApplicationRole> roleManager, ITokenService tokenService, IMapper mapper)
         {
+            _logger = logger;
             _userRepository = userRepository;
             _loginHistoryRepository = repositoryFactory.GetRepository<LoginHistory>();
             _userManager = userManager;
@@ -59,14 +57,14 @@ namespace ChitChat.Application.Services
             await _loginHistoryRepository.AddAsync(loginHistory);
 
             UserDto userDto = _mapper.Map<UserDto>(user);
-             /*   new()
-            {
-                Email = user.Email,
-                PhoneNumber = user.PhoneNumber,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Id = user.Id
-            };*/
+            /*   new()
+           {
+               Email = user.Email,
+               PhoneNumber = user.PhoneNumber,
+               FirstName = user.FirstName,
+               LastName = user.LastName,
+               Id = user.Id
+           };*/
             LoginResponseDto loginResponse = new()
             {
                 RefreshToken = refreshToken,
@@ -74,16 +72,19 @@ namespace ChitChat.Application.Services
                 User = userDto,
                 LoginHistoryId = loginHistory.Id
             };
+            _logger.Log(LogLevel.Information, $"User {loginHistory.UserId} login at ${loginHistory.LoginTime}");
             return loginResponse;
         }
 
         public async Task<bool> LogoutAsync(Guid loginHistoryId)
         {
             LoginHistory loginHistory = await _loginHistoryRepository.GetFirstOrDefaultAsync(p => p.Id == loginHistoryId);
-            loginHistory.LogoutTime = DateTime.Now; 
+            loginHistory.LogoutTime = DateTime.Now;
             loginHistory.RefreshToken = null;
             loginHistory.RefreshTokenExpiryTime = null;
-            await _loginHistoryRepository.UpdateAsync(loginHistory);    
+            await _loginHistoryRepository.UpdateAsync(loginHistory);
+            _logger.Log(LogLevel.Information, $"User {loginHistory.UserId} logout at ${loginHistory.LogoutTime}");
+
             return true;
         }
 

@@ -1,16 +1,10 @@
-﻿using ChitChat.DataAccess.Repositories.Interrface;
+﻿using ChitChat.DataAccess.Data;
+using ChitChat.DataAccess.Repositories.Interrface;
 using ChitChat.Domain.Common;
 using ChitChat.Domain.Entities;
-using Microsoft.EntityFrameworkCore.Query;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using ChitChat.Domain.Exceptions;
-using ChitChat.DataAccess.Data;
+using Microsoft.EntityFrameworkCore.Query;
+using System.Linq.Expressions;
 
 namespace ChitChat.DataAccess.Repositories
 {
