@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChitChat.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240912090242_InitDatabase-Verbose")]
+    [Migration("20240923185457_InitDatabase-Verbose")]
     partial class InitDatabaseVerbose
     {
         /// <inheritdoc />
@@ -135,7 +135,6 @@ namespace ChitChat.DataAccess.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("RefreshToken")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("RefreshTokenExpiryTime")

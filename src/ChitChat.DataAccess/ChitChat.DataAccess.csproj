@@ -20,5 +20,8 @@
   <ItemGroup>
     <ProjectReference Include="..\ChitChat.Domain\ChitChat.Domain.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
 
 </Project>

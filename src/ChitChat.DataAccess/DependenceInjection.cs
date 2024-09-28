@@ -11,6 +11,7 @@ using ChitChat.Domain.Identity;
 using Microsoft.AspNetCore.Identity;
 using ChitChat.DataAccess.Data;
 using Microsoft.Extensions.Options;
+using ChitChat.DataAccess.Repositories.Interface;
 
 namespace ChitChat.DataAccess
 {
@@ -26,7 +27,8 @@ namespace ChitChat.DataAccess
         {
             services
             .AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>))
-            .AddScoped<IRepositoryFactory, RepositoryFactory>();
+            .AddScoped<IRepositoryFactory, RepositoryFactory>()
+            .AddScoped<IUserRepository, UserRepository>();
         }
 
     }

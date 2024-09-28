@@ -7,9 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ChitChat.WebAPI.Controllers
 {
-    [Route("api/post")]
+    [Route("api/[controller]")]
     [ApiController]
-
     public class PostController : ControllerBase
     {
         public PostController()
@@ -21,11 +20,12 @@ namespace ChitChat.WebAPI.Controllers
         {
             return Ok(new Post() { CreatedOn = DateTime.Now, Description = "Hello"} );
         }
-/*        [HttpGet]
+        [HttpGet]
         [Route("{id:int}")]
         public async Task<IActionResult> Get(string id)
         {
-            return Ok(ApiResult<PostResponseDto>.Success(await _postService.GetPostByUserIdAsync(id)));
-        }*/
+            return Ok(new Post() { CreatedOn = DateTime.Now, Description = $"Hello{id}" });
+
+        }
     }
 }
