@@ -15,6 +15,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ChitChat.Infrastructure.Validations;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 namespace ChitChat.Infrastructure
 {
@@ -34,6 +37,10 @@ namespace ChitChat.Infrastructure
 
             // Host
             builder.Host.AddHostSerilogConfiguration();
+
+            // Validation
+
+
             return builder;
 
         }

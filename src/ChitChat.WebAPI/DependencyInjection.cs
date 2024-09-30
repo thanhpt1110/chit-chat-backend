@@ -20,7 +20,15 @@ namespace ChitChat.WebAPI
             var configuration = builder.Configuration;
             var services = builder.Services;
 
-            var jwtSettings = configuration.GetSection(nameof(JWTConfigSetting)).Get<JWTConfigSetting>();
+            JWTConfigSetting jwtSettings = new()
+            {
+                Audience = Environment.GetEnvironmentVariable("Audience"),
+                Issuer = Environment.GetEnvironmentVariable("Issuer"),
+                RefreshTokenValidityInDays = int.Parse(Environment.GetEnvironmentVariable("RefreshTokenValidityInDays")),
+                TokenValidityInDays = int.Parse(Environment.GetEnvironmentVariable("TokenValidityInDays")),
+                SecretKey = Environment.GetEnvironmentVariable("SecretKey")
+            };
+            
             services.AddSingleton<JWTConfigSetting>(jwtSettings);
 
             var key = Encoding.ASCII.GetBytes(jwtSettings.SecretKey);
