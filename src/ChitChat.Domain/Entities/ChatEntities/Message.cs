@@ -1,8 +1,6 @@
-﻿using ChitChat.Domain.Identity;
-
-namespace ChitChat.Domain.Entities.ChatEntities
+﻿namespace ChitChat.Domain.Entities.ChatEntities
 {
-    public class Message:BaseAuditedEntity
+    public class Message : BaseAuditedEntity
     {
         public Guid ConversationId { get; set; }
         public string SenderId { get; set; }

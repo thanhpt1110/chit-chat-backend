@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ChitChat.Application.Models.Dtos.User;
-using ChitChat.Domain.Identity;
+﻿using ChitChat.Application.Models.Dtos.User;
 using FluentValidation;
 namespace ChitChat.Application.Validators.User
 {

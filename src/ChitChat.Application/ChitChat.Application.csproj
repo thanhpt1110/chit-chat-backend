@@ -22,7 +22,6 @@
   <ItemGroup>
     <Folder Include="Services\Caching\CacheKey\" />
     <Folder Include="Validators\Conversation\" />
-    <Folder Include="Validators\Message\" />
   </ItemGroup>
 
 </Project>

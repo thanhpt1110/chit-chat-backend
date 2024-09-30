@@ -3,10 +3,12 @@
     public class MessageDto
     {
         Guid Id { get; set; }
-        public string Message { get; set; }
-        public DateTime TimeCreate { get; set; }
-        public DateTime TimeUpdate { get; set; }
-        public string UserSenderId { get; set; }
-        public Guid ConverastionId { get; set; }
+        public string MessageText { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public DateTime UpdateOn { get; set; }
+        public string SenderId { get; set; }
+        public Guid ConversationId { get; set; }
+        public string Status { get; set; }
+
     }
 }

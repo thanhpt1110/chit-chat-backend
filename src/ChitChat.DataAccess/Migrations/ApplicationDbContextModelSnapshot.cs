@@ -28,14 +28,27 @@ namespace ChitChat.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("LastMessageId")
+                    b.Property<bool>("IsSeen")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("LastMessageId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -56,7 +69,7 @@ namespace ChitChat.DataAccess.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("userId")
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
@@ -64,9 +77,9 @@ namespace ChitChat.DataAccess.Migrations
 
                     b.HasIndex("ConversationId");
 
-                    b.HasIndex("userId");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("ConversationDetail");
+                    b.ToTable("ConversationDetails");
                 });
 
             modelBuilder.Entity("ChitChat.Domain.Entities.ChatEntities.Message", b =>
@@ -78,6 +91,9 @@ namespace ChitChat.DataAccess.Migrations
                     b.Property<Guid>("ConversationId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ConversationId1")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -87,6 +103,10 @@ namespace ChitChat.DataAccess.Migrations
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Message12")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MessageText")
                         .IsRequired()
@@ -101,7 +121,6 @@ namespace ChitChat.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedOn")
@@ -110,6 +129,8 @@ namespace ChitChat.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ConversationId");
+
+                    b.HasIndex("ConversationId1");
 
                     b.HasIndex("SenderId");
 
@@ -173,7 +194,6 @@ namespace ChitChat.DataAccess.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedOn")
@@ -215,7 +235,6 @@ namespace ChitChat.DataAccess.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedOn")
@@ -321,7 +340,6 @@ namespace ChitChat.DataAccess.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedOn")
@@ -356,7 +374,6 @@ namespace ChitChat.DataAccess.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedOn")
@@ -518,12 +535,10 @@ namespace ChitChat.DataAccess.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("AvatarUrl")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Bio")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -546,7 +561,6 @@ namespace ChitChat.DataAccess.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Gender")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("LastLogin")
@@ -717,8 +731,7 @@ namespace ChitChat.DataAccess.Migrations
                     b.HasOne("ChitChat.Domain.Entities.ChatEntities.Message", "LastMessage")
                         .WithMany()
                         .HasForeignKey("LastMessageId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("LastMessage");
                 });
@@ -726,14 +739,14 @@ namespace ChitChat.DataAccess.Migrations
             modelBuilder.Entity("ChitChat.Domain.Entities.ChatEntities.ConversationDetail", b =>
                 {
                     b.HasOne("ChitChat.Domain.Entities.ChatEntities.Conversation", "Conversation")
-                        .WithMany()
+                        .WithMany("ConversationDetails")
                         .HasForeignKey("ConversationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("ChitChat.Domain.Identity.UserApplication", "User")
                         .WithMany()
-                        .HasForeignKey("userId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -749,6 +762,10 @@ namespace ChitChat.DataAccess.Migrations
                         .HasForeignKey("ConversationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("ChitChat.Domain.Entities.ChatEntities.Conversation", null)
+                        .WithMany("Messages")
+                        .HasForeignKey("ConversationId1");
 
                     b.HasOne("ChitChat.Domain.Identity.UserApplication", "Sender")
                         .WithMany()
@@ -945,6 +962,13 @@ namespace ChitChat.DataAccess.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ChitChat.Domain.Entities.ChatEntities.Conversation", b =>
+                {
+                    b.Navigation("ConversationDetails");
+
+                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("ChitChat.Domain.Entities.PostEntities.Post", b =>

@@ -1,18 +1,16 @@
 using ChitChat.Application;
 using ChitChat.DataAccess;
-using ChitChat.DataAccess.Data;
 using ChitChat.Infrastructure;
 using ChitChat.Infrastructure.Validations;
 using ChitChat.WebAPI;
-using FluentValidation.AspNetCore;
 using FluentValidation;
-using Microsoft.EntityFrameworkCore;
-using System;
+using FluentValidation.AspNetCore;
+using UCA.DataAccess.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-DotNetEnv.Env.Load(); 
+DotNetEnv.Env.Load();
 ValidatorOptions.Global.DefaultRuleLevelCascadeMode = CascadeMode.Stop;
 builder.Services
     .AddFluentValidationAutoValidation()
@@ -29,13 +27,19 @@ builder
     .AddWebAPI();
 var app = builder.Build();
 
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-ApplyMigration();
+/*ApplyMigration();*/
+// Migrate Database
+using var scope = app.Services.CreateAsyncScope();
+await AutomatedMigration.MigrateAsync(scope.ServiceProvider);
+
 app.UseHttpsRedirection();
 app.AddInfrastuctureApplication();
 app.UseAuthentication();
@@ -45,7 +49,7 @@ app.MapControllers();
 
 app.Run();
 
-void ApplyMigration() // apply new pending migration
+/*void ApplyMigration() // apply new pending migration
 {
     using (var scope = app.Services.CreateScope()) // Get the services 
     {
@@ -55,4 +59,4 @@ void ApplyMigration() // apply new pending migration
             _db.Database.Migrate();
         }
     }
-}
+}*/

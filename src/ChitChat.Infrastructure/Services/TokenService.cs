@@ -4,18 +4,13 @@ using ChitChat.Domain.Common;
 using ChitChat.Domain.Identity;
 using ChitChat.Infrastructure.ConfigSetting;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChitChat.Infrastructure.Services
 {
-    public class TokenService: ITokenService
+    public class TokenService : ITokenService
     {
         private readonly JWTConfigSetting _jWTConfigSetting;
         public TokenService(JWTConfigSetting jWTConfigSetting)
@@ -37,9 +32,8 @@ namespace ChitChat.Infrastructure.Services
             {
             new Claim(ClaimTypes.NameIdentifier, user.Id),
             new Claim(ClaimTypes.Name, user.UserName),
-            
             };
-
+            // Thêm các claim cho từng role của user
             var tokenHandler = new JwtSecurityTokenHandler();
 
             var tokenDescriptor = new SecurityTokenDescriptor

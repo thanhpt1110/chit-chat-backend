@@ -111,6 +111,7 @@ namespace ChitChat.Application.Services
             if (result.Succeeded)
             {
                 var userToReturn = await _userRepository.GetFirstOrDefaultAsync(p => p.Email == registerationRequestDto.Email);
+
                 UserDto userToReturnDto = new UserDto()
                 {
                     Email = userToReturn.Email,

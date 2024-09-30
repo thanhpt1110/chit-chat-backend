@@ -1,5 +1,4 @@
-﻿using ChitChat.Domain.Entities;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
 namespace ChitChat.Domain.Identity
@@ -12,11 +11,11 @@ namespace ChitChat.Domain.Identity
         [MaxLength(255)]
         public string LastName { get; set; }
         [MaxLength(255)]
-        public string AvatarUrl { get; set; }
+        public string? AvatarUrl { get; set; }
         public UserStatus UserStatus { get; set; }
-        public string Bio { get; set; }
+        public string? Bio { get; set; }
         public DateTime DateOfBirth { get; set; }
-        public string Gender { get; set; }
+        public string? Gender { get; set; }
 
     }
 }
