@@ -3,14 +3,25 @@ using ChitChat.DataAccess;
 using ChitChat.Infrastructure;
 using ChitChat.Infrastructure.Validations;
 using ChitChat.WebAPI;
+<<<<<<< HEAD
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using UCA.DataAccess.Persistence;
+=======
+using FluentValidation.AspNetCore;
+using FluentValidation;
+using Microsoft.EntityFrameworkCore;
+using System;
+>>>>>>> develop
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+<<<<<<< HEAD
 DotNetEnv.Env.Load();
+=======
+DotNetEnv.Env.Load(); 
+>>>>>>> develop
 ValidatorOptions.Global.DefaultRuleLevelCascadeMode = CascadeMode.Stop;
 builder.Services
     .AddFluentValidationAutoValidation()
