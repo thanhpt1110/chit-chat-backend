@@ -35,5 +35,17 @@ namespace ChitChat.WebAPI.Controllers
 
             return Ok(ApiResult<ConversationDto>.Success(await _conversationService.CreateNewConversation(recieverId, _claimService.GetUserId())));
         }
+        [HttpPut]
+        [Route("")]
+        public async Task<IActionResult> Put(ConversationDto conversationDto)
+        {
+            return Ok(ApiResult<ConversationDto>.Success(await _conversationService.UpdateConversation(conversationDto)));
+        }
+        [HttpDelete]
+        [Route("{conversaionId}")]
+        public async Task<IActionResult> Delete(Guid conversaionId)
+        {
+            return Ok(ApiResult<ConversationDto>.Success(await _conversationService.DeleteConversation(conversaionId)));
+        }
     }
 }

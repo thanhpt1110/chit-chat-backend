@@ -14,7 +14,7 @@ namespace ChitChat.DataAccess.Repositories
         {
             var listConversation = await (from convDetail in Context.ConversationDetails
                                           join conv in Context.Conversations on convDetail.ConversationId equals conv.Id
-                                          where convDetail.UserId == userId
+                                          where convDetail.UserId == userId && conv.IsDeleted == false
                                           select conv)
                                           .Include(
                                             c => c.ConversationDetails

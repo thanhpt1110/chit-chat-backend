@@ -99,5 +99,13 @@ namespace ChitChat.Application.Services
             await _conversationRepository.UpdateAsync(_mapper.Map<Conversation>(conversation));
             return conversation;
         }
+
+        public async Task<ConversationDto> DeleteConversation(Guid conversationId)
+        {
+            Conversation conversation = await _conversationRepository.GetFirstOrDefaultAsync(p => p.Id == conversationId);
+            conversation.IsDeleted = true;
+            await _conversationRepository.UpdateAsync(conversation);
+            return _mapper.Map<ConversationDto>(conversation);
+        }
     }
 }
