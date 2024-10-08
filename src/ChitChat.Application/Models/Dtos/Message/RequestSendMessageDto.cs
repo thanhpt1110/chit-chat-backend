@@ -4,6 +4,5 @@
     {
         public Guid ConversationId { get; set; }
         public string MessageText { get; set; }
-
     }
 }

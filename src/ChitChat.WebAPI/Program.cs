@@ -1,6 +1,7 @@
 using ChitChat.Application;
 using ChitChat.DataAccess;
 using ChitChat.Infrastructure;
+using ChitChat.Infrastructure.SignalR;
 using ChitChat.Infrastructure.Validations;
 using ChitChat.WebAPI;
 using FluentValidation;
@@ -25,6 +26,17 @@ builder.Services
 builder
     .AddInfrastructure()
     .AddWebAPI();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
+});
 var app = builder.Build();
 
 
@@ -40,12 +52,19 @@ if (app.Environment.IsDevelopment())
 using var scope = app.Services.CreateAsyncScope();
 await AutomatedMigration.MigrateAsync(scope.ServiceProvider);
 
+app.UseCors("AllowAll");
+
 app.UseHttpsRedirection();
+
 app.AddInfrastuctureApplication();
+
 app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.AddSignalRHub();
 
 app.Run();
 

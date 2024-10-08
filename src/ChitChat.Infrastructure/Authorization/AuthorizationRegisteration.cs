@@ -1,14 +1,10 @@
 ﻿using ChitChat.Infrastructure.ConfigSetting;
+using ChitChat.Infrastructure.SignalR.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChitChat.Infrastructure.Authorization
 {
@@ -31,6 +27,21 @@ namespace ChitChat.Infrastructure.Authorization
                     ValidIssuer = jwtOption.Issuer,
                     ValidAudience = jwtOption.Audience,
                     ValidateAudience = true
+                };
+                x.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+
+                        // Kiểm tra xem request là SignalR
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) && (path.StartsWithSegments($"/{HubEndpoint.ChatHubEndpoint}") || path.StartsWithSegments($"/{HubEndpoint.ConversationHubEndpoint}")))
+                        {
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
                 };
             });
             return builder;

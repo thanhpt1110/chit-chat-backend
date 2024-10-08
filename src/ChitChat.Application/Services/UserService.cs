@@ -10,6 +10,7 @@ using ChitChat.Domain.Entities;
 using ChitChat.Domain.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using System.Security.Claims;
 
 namespace ChitChat.Application.Services
 {
@@ -21,9 +22,15 @@ namespace ChitChat.Application.Services
         private UserManager<UserApplication> _userManager;
         private RoleManager<ApplicationRole> _roleManager;
         private ITokenService _tokenService;
+        private IClaimService _claimService;
         private IMapper _mapper;
-        public UserService(ILogger<UserService> logger, IUserRepository userRepository, IRepositoryFactory repositoryFactory,
-            UserManager<UserApplication> userManager, RoleManager<ApplicationRole> roleManager, ITokenService tokenService, IMapper mapper)
+        public UserService(ILogger<UserService> logger
+            , IUserRepository userRepository
+            , IRepositoryFactory repositoryFactory
+            , UserManager<UserApplication> userManager
+            , RoleManager<ApplicationRole> roleManager
+            , ITokenService tokenService
+            , IMapper mapper, IClaimService claimService)
         {
             _logger = logger;
             _userRepository = userRepository;
@@ -32,6 +39,7 @@ namespace ChitChat.Application.Services
             _roleManager = roleManager;
             _tokenService = tokenService;
             _mapper = mapper;
+            _claimService = claimService;
         }
         public async Task<LoginResponseDto> LoginAsync(LoginRequestDto loginRequestDto)
         {
@@ -47,7 +55,6 @@ namespace ChitChat.Application.Services
             }
             // if user is found, Generate JWT Token
             var roles = await _userManager.GetRolesAsync(user);
-            var accessToken = _tokenService.GenerateAccessToken(user, roles);
             LoginHistory loginHistory = new();
             loginHistory.Id = Guid.NewGuid();
             loginHistory.LoginTime = DateTime.Now;
@@ -55,6 +62,7 @@ namespace ChitChat.Application.Services
             loginHistory.IsDeleted = false;
             var refreshToken = GenerateRefreshToken(loginHistory);
             await _loginHistoryRepository.AddAsync(loginHistory);
+            var accessToken = _tokenService.GenerateAccessToken(user, roles, loginHistory);
 
             UserDto userDto = _mapper.Map<UserDto>(user);
             /*   new()
@@ -86,6 +94,42 @@ namespace ChitChat.Application.Services
             _logger.Log(LogLevel.Information, $"User {loginHistory.UserId} logout at ${loginHistory.LogoutTime}");
 
             return true;
+        }
+
+        public async Task<RefreshTokenDto> RefreshAccessToken(RefreshTokenRequestDto request)
+        {
+            var claimIdentity = await _tokenService.GetPrincipalFromExpiredToken(request.AccessToken)
+                ?? throw new NotFoundException(request.AccessToken, typeof(ClaimsIdentity));
+            string username = claimIdentity.Name;
+            var user = await _userManager.FindByNameAsync(username)
+                ?? throw new NotFoundException(username, typeof(UserApplication));
+            var loginHistoryIdAsString = this._claimService.GetLoginHistoryId(claimIdentity);
+            if (string.IsNullOrWhiteSpace(loginHistoryIdAsString))
+            {
+                throw new NotFoundException(loginHistoryIdAsString, typeof(LoginHistory));
+            }
+            var loginHistoryId = Guid.Parse(loginHistoryIdAsString);
+            var roles = await _userManager.GetRolesAsync(user);
+
+            var loginHistory = await this._loginHistoryRepository.GetFirstOrDefaultAsync(x => x.Id == loginHistoryId
+                                                && x.UserId == user.Id
+                                                && !x.IsDeleted);
+            if (loginHistory.RefreshToken != request.RefreshToken || loginHistory.RefreshTokenExpiryTime <= DateTime.UtcNow)
+            {
+                throw new InvalidModelException(ErrorTexts.InvalidAccessOrRefreshToken);
+            }
+            var newAccessToken = _tokenService.GenerateAccessToken(user, roles, loginHistory);
+
+            var (newRefreshTokenResult, _) = _tokenService.GenerateRefreshToken();
+
+            loginHistory.RefreshToken = newRefreshTokenResult;
+
+            await this._loginHistoryRepository.UpdateAsync(loginHistory);
+            return new RefreshTokenDto()
+            {
+                AccessToken = newAccessToken,
+                RefreshToken = newRefreshTokenResult,
+            };
         }
 
         public async Task<bool> RegisterAsync(RegisterationRequestDto registerationRequestDto)

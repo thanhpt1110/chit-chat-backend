@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using ChitChat.Application.Exceptions;
 using ChitChat.Application.Localization;
+using ChitChat.Application.Models.Dtos.Conversation;
 using ChitChat.Application.Models.Dtos.Message;
+using ChitChat.Application.Models.Dtos.User;
 using ChitChat.Application.Services.Interface;
+using ChitChat.Application.SignalR.INotification;
 using ChitChat.DataAccess.Repositories.Interface;
 using ChitChat.DataAccess.Repositories.Interrface;
 using ChitChat.Domain.Entities.ChatEntities;
@@ -13,14 +16,25 @@ namespace ChitChat.Application.Services
     public class MessageService : IMessageService
     {
         private readonly IBaseRepository<Message> _messageRepository;
+        private readonly IBaseRepository<ConversationDetail> _conversationDetailRepository;
         private readonly IConversationRepository _conversationRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IConversationNotificationService _conversationNotificationService;
         private readonly IMapper _mapper;
-        public MessageService(IBaseRepository<Message> messageRepository, IMapper mapper
-            , IConversationRepository conversationRepository)
+        private readonly IMessageNotificationService _messageNotificationService;
+        public MessageService(IRepositoryFactory factoryRepository, IMapper mapper
+            , IConversationRepository conversationRepository
+            , IConversationNotificationService conversationNotificationService
+            , IUserRepository userRepository
+            , IMessageNotificationService messageNotificationService)
         {
-            _messageRepository = messageRepository;
+            _messageRepository = factoryRepository.GetRepository<Message>();
             _mapper = mapper;
             _conversationRepository = conversationRepository;
+            _conversationNotificationService = conversationNotificationService;
+            _conversationDetailRepository = factoryRepository.GetRepository<ConversationDetail>();
+            _userRepository = userRepository;
+            _messageNotificationService = messageNotificationService;
         }
 
         public async Task<List<MessageDto>> FindMessageWithText(RequestSearchMessageDto searchRequest)
@@ -49,8 +63,21 @@ namespace ChitChat.Application.Services
             }
             await _messageRepository.AddAsync(message);
             conversation.LastMessageId = message.Id;
+            var userReceiverConversation = await _conversationDetailRepository.GetFirstOrDefaultAsync(p => p.ConversationId == conversation.Id && p.UserId != senderId);
+            var userReciver = await _userRepository.GetFirstOrDefaultAsync(p => p.Id == userReceiverConversation.UserId);
+            ConversationDto conversationDto = new ConversationDto()
+            {
+                Id = conversation.Id,
+                IsSeen = conversation.IsSeen,
+                UserReceiverId = userReceiverConversation.UserId,
+                LastMessage = _mapper.Map<MessageDto>(message),
+                UserReceiver = _mapper.Map<UserDto>(userReciver)
+            };
+            var messageDto = _mapper.Map<MessageDto>(message);
+            await _messageNotificationService.SendMessageToSpecificClient(messageDto);
             await _conversationRepository.UpdateAsync(conversation);
-            return _mapper.Map<MessageDto>(message);
+            await _conversationNotificationService.UpdateConversation(conversationDto, senderId);
+            return messageDto;
         }
 
         public async Task<MessageDto> UpdateMessage(MessageDto message)

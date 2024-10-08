@@ -24,7 +24,7 @@ namespace ChitChat.Infrastructure.Services
             randomNumberGenerator.GetBytes(randomNumber);
             return (Convert.ToBase64String(randomNumber), _jWTConfigSetting.RefreshTokenValidityInDays);
         }
-        public string GenerateAccessToken(UserApplication user, IEnumerable<string> roles)
+        public string GenerateAccessToken(UserApplication user, IEnumerable<string> roles, LoginHistory loginHistory)
         {
             var key = Encoding.ASCII.GetBytes(_jWTConfigSetting.SecretKey);
 
@@ -32,6 +32,7 @@ namespace ChitChat.Infrastructure.Services
             {
             new Claim(ClaimTypes.NameIdentifier, user.Id),
             new Claim(ClaimTypes.Name, user.UserName),
+            new Claim(JWTConfigSetting.LoginHistoryIdClaimType, loginHistory.Id.ToString()),
             };
             // Thêm các claim cho từng role của user
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -76,6 +77,33 @@ namespace ChitChat.Infrastructure.Services
                 throw new SecurityTokenException("Invalid token");
 
             return validateResult.ClaimsIdentity;
+
+        }
+
+        public async Task<string> GetUserIdFromAccessToken(string? token)
+        {
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = _jWTConfigSetting.Issuer,
+                ValidAudience = _jWTConfigSetting.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jWTConfigSetting.SecretKey)),
+                ValidateLifetime = true
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            var validateResult = await tokenHandler.ValidateTokenAsync(token, tokenValidationParameters);
+            if (!validateResult.IsValid)
+            {
+                throw new InvalidModelException(ErrorDescription.InvalidAccessOrRefreshToken);
+            }
+
+            var securityToken = validateResult.SecurityToken;
+
+            if (securityToken is not JwtSecurityToken jwtSecurityToken || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+                throw new SecurityTokenException("Invalid token");
+            return validateResult.ClaimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
         }
     }
