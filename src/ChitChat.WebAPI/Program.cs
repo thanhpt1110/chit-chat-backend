@@ -1,18 +1,18 @@
+using Chitchat.DataAccess.Data;
 using ChitChat.Application;
 using ChitChat.DataAccess;
 using ChitChat.DataAccess.Data;
 using ChitChat.Infrastructure;
 using ChitChat.Infrastructure.Validations;
 using ChitChat.WebAPI;
-using FluentValidation.AspNetCore;
 using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-DotNetEnv.Env.Load(); 
+DotNetEnv.Env.Load();
 ValidatorOptions.Global.DefaultRuleLevelCascadeMode = CascadeMode.Stop;
 builder.Services
     .AddFluentValidationAutoValidation()
@@ -29,13 +29,18 @@ builder
     .AddWebAPI();
 var app = builder.Build();
 
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-ApplyMigration();
+
+// Migrate Database
+using var scope = app.Services.CreateAsyncScope();
+await AutomatedMigration.MigrateAsync(scope.ServiceProvider);
+
 app.UseHttpsRedirection();
 app.AddInfrastuctureApplication();
 app.UseAuthentication();

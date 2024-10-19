@@ -1,5 +1,3 @@
-﻿using ChitChat.Domain.Identity;
-
 namespace ChitChat.Domain.Entities.UserEntities
 {
     public class UserFollowerRequest:BaseEntity

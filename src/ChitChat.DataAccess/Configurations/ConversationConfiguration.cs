@@ -1,12 +1,4 @@
-﻿using ChitChat.Domain.Entities.ChatEntities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChitChat.DataAccess.Configurations
 {
@@ -14,17 +6,29 @@ namespace ChitChat.DataAccess.Configurations
     {
         public void Configure(EntityTypeBuilder<Conversation> modelBuilder)
         {
-            // Conversation Detail
-            modelBuilder
-            .HasKey(c => c.Id);
+            // Configure primary key
+            modelBuilder.HasKey(c => c.Id);
 
+            // Configure relationship with LastMessage
             modelBuilder
-                .HasOne(m => m.LastMessage)
+                .HasOne(c => c.LastMessage)
                 .WithMany()
-                .HasForeignKey(m => m.LastMessageId)
-                 .OnDelete(DeleteBehavior.Restrict);
+                .HasForeignKey(c => c.LastMessageId)
+                .OnDelete(DeleteBehavior.Restrict);
 
+            // Configure relationship with Messages
+            modelBuilder
+                .HasMany(c => c.Messages)
+                .WithOne(m => m.Conversation)
+                .HasForeignKey(m => m.ConversationId)
+                .OnDelete(DeleteBehavior.Cascade);
 
+            // Configure relationship with ConversationDetails
+            modelBuilder
+                .HasMany(c => c.ConversationDetails)
+                .WithOne(cd => cd.Conversation)
+                .HasForeignKey(cd => cd.ConversationId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

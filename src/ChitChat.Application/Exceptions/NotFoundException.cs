@@ -15,7 +15,7 @@ namespace ChitChat.Application.Exceptions
             Code = ApiResultErrorCodes.NotFound;
         }
 
-        public NotFoundException(string message): base(message)
+        public NotFoundException(string message) : base(message)
         {
             Code = ApiResultErrorCodes.NotFound;
         }

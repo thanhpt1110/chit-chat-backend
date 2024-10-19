@@ -1,12 +1,11 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
 #nullable disable
+
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ChitChat.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class InitDatabaseVerbose : Migration
+    public partial class InitDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -33,11 +32,11 @@ namespace ChitChat.DataAccess.Migrations
                     LastLogin = table.Column<DateTime>(type: "datetime2", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    AvatarUrl = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    AvatarUrl = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     UserStatus = table.Column<int>(type: "int", nullable: false),
-                    Bio = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Bio = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -243,7 +242,7 @@ namespace ChitChat.DataAccess.Migrations
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
@@ -269,7 +268,7 @@ namespace ChitChat.DataAccess.Migrations
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
@@ -360,7 +359,7 @@ namespace ChitChat.DataAccess.Migrations
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
@@ -418,7 +417,7 @@ namespace ChitChat.DataAccess.Migrations
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
@@ -439,20 +438,20 @@ namespace ChitChat.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ConversationDetail",
+                name: "ConversationDetails",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ConversationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    userId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ConversationDetail", x => x.Id);
+                    table.PrimaryKey("PK_ConversationDetails", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ConversationDetail_AspNetUsers_userId",
-                        column: x => x.userId,
+                        name: "FK_ConversationDetails_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -463,9 +462,13 @@ namespace ChitChat.DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LastMessageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    LastMessageId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsSeen = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -481,10 +484,11 @@ namespace ChitChat.DataAccess.Migrations
                     SenderId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     MessageText = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ConversationId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
@@ -502,6 +506,11 @@ namespace ChitChat.DataAccess.Migrations
                         principalTable: "Conversations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Messages_Conversations_ConversationId1",
+                        column: x => x.ConversationId1,
+                        principalTable: "Conversations",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -559,14 +568,14 @@ namespace ChitChat.DataAccess.Migrations
                 column: "UserPostedId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ConversationDetail_ConversationId",
-                table: "ConversationDetail",
+                name: "IX_ConversationDetails_ConversationId",
+                table: "ConversationDetails",
                 column: "ConversationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ConversationDetail_userId",
-                table: "ConversationDetail",
-                column: "userId");
+                name: "IX_ConversationDetails_UserId",
+                table: "ConversationDetails",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Conversations_LastMessageId",
@@ -577,6 +586,11 @@ namespace ChitChat.DataAccess.Migrations
                 name: "IX_Messages_ConversationId",
                 table: "Messages",
                 column: "ConversationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Messages_ConversationId1",
+                table: "Messages",
+                column: "ConversationId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Messages_SenderId",
@@ -634,12 +648,12 @@ namespace ChitChat.DataAccess.Migrations
                 column: "UserId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_ConversationDetail_Conversations_ConversationId",
-                table: "ConversationDetail",
+                name: "FK_ConversationDetails_Conversations_ConversationId",
+                table: "ConversationDetails",
                 column: "ConversationId",
                 principalTable: "Conversations",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Conversations_Messages_LastMessageId",
@@ -661,6 +675,10 @@ namespace ChitChat.DataAccess.Migrations
                 name: "FK_Messages_Conversations_ConversationId",
                 table: "Messages");
 
+            migrationBuilder.DropForeignKey(
+                name: "FK_Messages_Conversations_ConversationId1",
+                table: "Messages");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -677,7 +695,7 @@ namespace ChitChat.DataAccess.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "ConversationDetail");
+                name: "ConversationDetails");
 
             migrationBuilder.DropTable(
                 name: "LoginHistories");

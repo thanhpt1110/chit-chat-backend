@@ -1,8 +1,8 @@
-﻿using ChitChat.Domain.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace ChitChat.Domain.Entities.PostEntities
 {
-    public class Comment:BaseAuditedEntity
+    public class Comment : BaseAuditedEntity
     {
         public Guid PostId { get; set; }
         public Guid? ParentCommentId { get; set; }
@@ -11,5 +11,9 @@ namespace ChitChat.Domain.Entities.PostEntities
         public Post Post { get; set; } // Navigation property
         public Comment ParentComment { get; set; } // Navigation property
         public UserApplication UserPosted { get; set; }
+
+        [Required]
+        public string TestMigration { get; set; }
+        public string Test_Update_comment { get; set; }
     }
 }

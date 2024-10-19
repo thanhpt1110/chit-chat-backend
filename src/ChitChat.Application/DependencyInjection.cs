@@ -4,8 +4,6 @@ using ChitChat.Application.Services.Interface;
 using ChitChat.Application.Validators;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 using System.Reflection;
 namespace ChitChat.Application
 {
@@ -31,12 +29,15 @@ namespace ChitChat.Application
 
             // Add Services
             services.AddServices();
-            
-            
+
+
             return services;
         }
-        public static IServiceCollection AddServices(this IServiceCollection services) {
+        public static IServiceCollection AddServices(this IServiceCollection services)
+        {
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IConversationService, ConversationService>();
+            services.AddScoped<IMessageService, MessageService>();
             return services;
         }
     }

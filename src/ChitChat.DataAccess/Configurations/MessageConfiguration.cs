@@ -1,11 +1,4 @@
-﻿using ChitChat.Domain.Entities.ChatEntities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChitChat.DataAccess.Configurations
 {
@@ -13,20 +6,20 @@ namespace ChitChat.DataAccess.Configurations
     {
         public void Configure(EntityTypeBuilder<Message> modelBuilder)
         {
-            // Message
-            modelBuilder
-            .HasKey(m => m.Id);
+            // Configure primary key
+            modelBuilder.HasKey(m => m.Id);
 
+            // Configure relationship with Conversation
             modelBuilder
                 .HasOne(m => m.Conversation)
-                .WithMany()
+                .WithMany(c => c.Messages)
                 .HasForeignKey(m => m.ConversationId);
 
+            // Configure relationship with Sender
             modelBuilder
                 .HasOne(m => m.Sender)
                 .WithMany()
                 .HasForeignKey(m => m.SenderId);
-
         }
     }
 }

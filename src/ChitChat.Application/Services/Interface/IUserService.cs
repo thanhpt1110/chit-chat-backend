@@ -1,9 +1,4 @@
 ﻿using ChitChat.Application.Models.Dtos.User;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChitChat.Application.Services.Interface
 {

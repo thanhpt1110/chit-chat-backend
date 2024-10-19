@@ -12,6 +12,7 @@
 		<PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
 		<PackageReference Include="MediatR" Version="12.4.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.8" />
+		<PackageReference Include="System.Linq.Expressions" Version="4.3.0" />
 	</ItemGroup>
 	
   <ItemGroup>
@@ -20,6 +21,7 @@
 	
   <ItemGroup>
     <Folder Include="Services\Caching\CacheKey\" />
+    <Folder Include="Validators\Conversation\" />
   </ItemGroup>
 
 </Project>

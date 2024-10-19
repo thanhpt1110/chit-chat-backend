@@ -1,18 +1,12 @@
-﻿using ChitChat.Domain.Entities.ChatEntities;
-using ChitChat.Domain.Entities.PostEntities.Reaction;
+﻿using ChitChat.Domain.Entities;
+using ChitChat.Domain.Entities.ChatEntities;
 using ChitChat.Domain.Entities.PostEntities;
+using ChitChat.Domain.Entities.PostEntities.Reaction;
 using ChitChat.Domain.Entities.SystemEntities;
 using ChitChat.Domain.Entities.UserEntities;
 using ChitChat.Domain.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using ChitChat.Domain.Entities;
 
 namespace ChitChat.DataAccess.Data
 {
@@ -22,6 +16,7 @@ namespace ChitChat.DataAccess.Data
         public DbSet<UserFollower> UserFollowers { get; set; }
         public DbSet<UserFollowerRequest> UserFollowerRequests { get; set; }
         public DbSet<Conversation> Conversations { get; set; }
+        public DbSet<ConversationDetail> ConversationDetails { get; set; }
         public DbSet<LoginHistory> LoginHistories { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Post> Posts { get; set; }

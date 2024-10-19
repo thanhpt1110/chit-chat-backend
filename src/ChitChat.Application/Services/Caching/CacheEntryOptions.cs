@@ -1,9 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace ChitChat.Application.Services.Caching
 {
     public class CacheEntryOptions
@@ -17,5 +11,4 @@ namespace ChitChat.Application.Services.Caching
             SlidingExpiration = TimeSpan.FromHours(1)
         };
     }
-
 }
