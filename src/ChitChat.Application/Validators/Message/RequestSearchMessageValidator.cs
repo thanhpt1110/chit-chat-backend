@@ -1,4 +1,4 @@
-using ChitChat.Application.Models.Dtos.Message;
+﻿using ChitChat.Application.Models.Dtos.Message;
 using FluentValidation;
 
 namespace ChitChat.Application.Validators.Message

@@ -1,7 +1,6 @@
 using Chitchat.DataAccess.Data;
 using ChitChat.Application;
 using ChitChat.DataAccess;
-using ChitChat.DataAccess.Data;
 using ChitChat.Infrastructure;
 using ChitChat.Infrastructure.Validations;
 using ChitChat.WebAPI;
@@ -36,7 +35,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 // Migrate Database
 using var scope = app.Services.CreateAsyncScope();
 await AutomatedMigration.MigrateAsync(scope.ServiceProvider);
@@ -50,7 +48,7 @@ app.MapControllers();
 
 app.Run();
 
-void ApplyMigration() // apply new pending migration
+/*void ApplyMigration() // apply new pending migration
 {
     using (var scope = app.Services.CreateScope()) // Get the services 
     {
@@ -60,4 +58,4 @@ void ApplyMigration() // apply new pending migration
             _db.Database.Migrate();
         }
     }
-}
+}*/

@@ -1,4 +1,4 @@
-using ChitChat.Application.Models.Dtos.Message;
+﻿using ChitChat.Application.Models.Dtos.Message;
 using ChitChat.Application.Models.Dtos.User;
 
 namespace ChitChat.Application.Models.Dtos.Conversation

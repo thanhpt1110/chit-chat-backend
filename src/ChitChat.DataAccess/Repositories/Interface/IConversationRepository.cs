@@ -1,4 +1,5 @@
-using ChitChat.DataAccess.Repositories.Interrface;
+﻿using ChitChat.DataAccess.Repositories.Interrface;
+using ChitChat.Domain.Entities.ChatEntities;
 
 namespace ChitChat.DataAccess.Repositories.Interface
 {
