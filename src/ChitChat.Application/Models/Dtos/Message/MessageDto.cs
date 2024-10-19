@@ -1,8 +1,7 @@
-﻿namespace ChitChat.Application.Models.Dtos.Message
+namespace ChitChat.Application.Models.Dtos.Message
 {
-    public class MessageDto
+    public class MessageDto : BaseResponseDto
     {
-        Guid Id { get; set; }
         public string MessageText { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime UpdateOn { get; set; }

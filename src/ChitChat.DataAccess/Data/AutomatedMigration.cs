@@ -1,5 +1,6 @@
-﻿using ChitChat.DataAccess.Data;
+using ChitChat.DataAccess.Data;
 using ChitChat.Domain.Identity;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -27,8 +28,6 @@ namespace UCA.DataAccess.Persistence
             await DbContextSeed.SeedDatabaseAsync(userManager, roleManager);
         }
     }
-<<<<<<< HEAD
+
 }
-=======
-}
->>>>>>> f3cb4b116209a485328b4a68a73c9f65c45b3aea
+

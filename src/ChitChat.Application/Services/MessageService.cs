@@ -1,12 +1,9 @@
-﻿using AutoMapper;
-using ChitChat.Application.Exceptions;
-using ChitChat.Application.Localization;
+using AutoMapper;
+
 using ChitChat.Application.Models.Dtos.Message;
 using ChitChat.Application.Services.Interface;
 using ChitChat.DataAccess.Repositories.Interface;
 using ChitChat.DataAccess.Repositories.Interrface;
-using ChitChat.Domain.Entities.ChatEntities;
-using ChitChat.Domain.Enums;
 
 namespace ChitChat.Application.Services
 {
@@ -40,16 +37,16 @@ namespace ChitChat.Application.Services
         public async Task<MessageDto> SendMessage(RequestSendMessageDto request, string senderId)
         {
             Message message = _mapper.Map<Message>(request);
-            message.SenderId = senderId;
-            message.Status = MessageStatus.NORMAL;
-            var conversation = await _conversationRepository.GetFirstOrDefaultAsync(p => p.Id == request.ConversationId);
-            if (conversation == null)
-            {
-                throw new NotFoundException(ValidationTexts.NotFound.Format(conversation.GetType(), request.ConversationId));
-            }
-            await _messageRepository.AddAsync(message);
-            conversation.LastMessageId = message.Id;
-            await _conversationRepository.UpdateAsync(conversation);
+            /*            message.SenderId = senderId;
+                        message.Status = MessageStatus.NORMAL;
+                        var conversation = await _conversationRepository.GetFirstOrDefaultAsync(p => p.Id == request.ConversationId);
+                        if (conversation == null)
+                        {
+                            throw new NotFoundException(ValidationTexts.NotFound.Format(conversation.GetType(), request.ConversationId));
+                        }
+                        await _messageRepository.AddAsync(message);
+                        conversation.LastMessageId = message.Id;
+                        await _conversationRepository.UpdateAsync(conversation);*/
             return _mapper.Map<MessageDto>(message);
         }
 

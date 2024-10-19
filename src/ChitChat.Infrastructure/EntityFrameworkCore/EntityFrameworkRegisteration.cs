@@ -1,6 +1,7 @@
-﻿using ChitChat.DataAccess;
+using ChitChat.DataAccess;
 using ChitChat.DataAccess.Data;
 using ChitChat.DataAccess.Data.Interceptor;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

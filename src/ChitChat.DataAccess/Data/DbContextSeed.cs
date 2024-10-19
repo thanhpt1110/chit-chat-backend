@@ -1,5 +1,6 @@
-﻿using ChitChat.Domain.Enums;
+using ChitChat.Domain.Enums;
 using ChitChat.Domain.Identity;
+
 using Microsoft.AspNetCore.Identity;
 
 namespace ChitChat.DataAccess.Data

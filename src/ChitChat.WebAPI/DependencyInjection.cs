@@ -1,8 +1,10 @@
-﻿using ChitChat.Infrastructure.ConfigSetting;
+using System.Text;
+
+using ChitChat.Infrastructure.ConfigSetting;
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Text;
 
 namespace ChitChat.WebAPI
 {
@@ -28,7 +30,7 @@ namespace ChitChat.WebAPI
                 TokenValidityInDays = int.Parse(Environment.GetEnvironmentVariable("TokenValidityInDays")),
                 SecretKey = Environment.GetEnvironmentVariable("SecretKey")
             };
-            
+
             services.AddSingleton<JWTConfigSetting>(jwtSettings);
 
             var key = Encoding.ASCII.GetBytes(jwtSettings.SecretKey);

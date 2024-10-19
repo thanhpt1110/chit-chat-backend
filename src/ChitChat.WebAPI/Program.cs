@@ -1,12 +1,13 @@
-using Chitchat.DataAccess.Data;
 using ChitChat.Application;
 using ChitChat.DataAccess;
 using ChitChat.Infrastructure;
 using ChitChat.Infrastructure.Validations;
 using ChitChat.WebAPI;
+
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Microsoft.EntityFrameworkCore;
+
+using UCA.DataAccess.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 

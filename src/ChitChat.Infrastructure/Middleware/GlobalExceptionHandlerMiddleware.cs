@@ -1,9 +1,12 @@
-﻿using ChitChat.Application.Models;
+using System.Text.Json;
+
+using ChitChat.Application.Models;
 using ChitChat.Domain.Exceptions;
+
 using FluentValidation;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using System.Text.Json;
 
 namespace ChitChat.Infrastructure.Middleware
 {

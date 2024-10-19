@@ -1,10 +1,12 @@
-﻿using ChitChat.DataAccess.Data;
+using System.Linq.Expressions;
+
+using ChitChat.DataAccess.Data;
 using ChitChat.DataAccess.Repositories.Interrface;
 using ChitChat.Domain.Common;
 using ChitChat.Domain.Entities;
 using ChitChat.Domain.Exceptions;
+
 using Microsoft.EntityFrameworkCore.Query;
-using System.Linq.Expressions;
 
 namespace ChitChat.DataAccess.Repositories
 {
@@ -211,6 +213,7 @@ namespace ChitChat.DataAccess.Repositories
             {
                 response.Items = await query.Skip(pageIndex * pageSize).Take(pageSize).ToListAsync();
             }
+
 
             return response;
         }

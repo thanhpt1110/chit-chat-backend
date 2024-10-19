@@ -1,4 +1,4 @@
-﻿namespace ChitChat.Application.Models.Dtos.Message
+namespace ChitChat.Application.Models.Dtos.Message
 {
     public class RequestSearchMessageDto
     {

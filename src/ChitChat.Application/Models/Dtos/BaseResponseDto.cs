@@ -1,7 +1,7 @@
 namespace ChitChat.Application.Models.Dtos
 {
-    public class BaseResponseDto
+    public abstract class BaseResponseDto
     {
-        public Guid Id;
+        public Guid Id { get; set; }
     }
 }
