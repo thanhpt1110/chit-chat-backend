@@ -1,4 +1,4 @@
-﻿using ChitChat.Domain.Entities.PostEntities;
+using ChitChat.Domain.Entities.PostEntities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChitChat.WebAPI.Controllers

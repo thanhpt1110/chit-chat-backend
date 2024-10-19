@@ -1,23 +1,14 @@
-﻿using ChitChat.Application.Helpers;
+using ChitChat.Application.Helpers;
 using ChitChat.DataAccess.Data;
 using ChitChat.Domain.Identity;
 using ChitChat.Infrastructure.Caching;
 using ChitChat.Infrastructure.EntityFrameworkCore;
 using ChitChat.Infrastructure.Logging;
 using ChitChat.Infrastructure.Middleware;
-using ChitChat.Infrastructure.Authorization;
 using ChitChat.Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ChitChat.Infrastructure.Validations;
-using FluentValidation;
-using FluentValidation.AspNetCore;
 
 namespace ChitChat.Infrastructure
 {

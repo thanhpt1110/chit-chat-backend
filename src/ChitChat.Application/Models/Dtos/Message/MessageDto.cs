@@ -1,4 +1,4 @@
-﻿namespace ChitChat.Application.Models.Dtos.Message
+namespace ChitChat.Application.Models.Dtos.Message
 {
     public class MessageDto
     {
@@ -9,6 +9,5 @@
         public string SenderId { get; set; }
         public Guid ConversationId { get; set; }
         public string Status { get; set; }
-
     }
 }

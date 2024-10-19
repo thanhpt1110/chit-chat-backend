@@ -1,4 +1,4 @@
-﻿using ChitChat.Domain.Entities.ChatEntities;
+using ChitChat.Domain.Entities.ChatEntities;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ChitChat.DataAccess.Configurations
@@ -17,8 +17,6 @@ namespace ChitChat.DataAccess.Configurations
                 .HasForeignKey(m => m.ConversationId)
                  .OnDelete(DeleteBehavior.Restrict);
             ;
-
-
         }
     }
 }

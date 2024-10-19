@@ -1,11 +1,5 @@
-﻿using ChitChat.Domain.Entities;
-using ChitChat.Domain.Entities.ChatEntities;
+using ChitChat.Domain.Entities;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChitChat.DataAccess.Configurations
 {
@@ -16,8 +10,6 @@ namespace ChitChat.DataAccess.Configurations
             // Conversation Detail
             modelBuilder
             .HasKey(c => c.Id);
-
-
         }
     }
 }

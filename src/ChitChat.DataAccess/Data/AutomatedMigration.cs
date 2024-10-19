@@ -1,9 +1,9 @@
-﻿using ChitChat.DataAccess.Data;
+using ChitChat.DataAccess.Data;
 using ChitChat.Domain.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace UCA.DataAccess.Persistence
+namespace Chitchat.DataAccess.Data
 {
     public static class AutomatedMigration
     {

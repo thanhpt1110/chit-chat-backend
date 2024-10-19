@@ -1,4 +1,4 @@
-﻿namespace ChitChat.Domain.Enums
+namespace ChitChat.Domain.Enums
 {
     public enum UserRoles
     {

@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using ChitChat.Application.Models.Dtos.User;
 using ChitChat.Domain.Identity;
 
@@ -11,7 +11,6 @@ namespace ChitChat.Application.Mapping
             CreateMap<UserApplication, UserDto>();
             CreateMap<RegisterationRequestDto, UserApplication>();
             CreateMap<LoginRequestDto, UserApplication>();
-
         }
     }
 }

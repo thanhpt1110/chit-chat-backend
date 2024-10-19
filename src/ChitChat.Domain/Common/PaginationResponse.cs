@@ -1,4 +1,4 @@
-﻿namespace ChitChat.Domain.Common
+namespace ChitChat.Domain.Common
 {
     public class PaginationResponse<T>
     {

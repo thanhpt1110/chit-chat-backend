@@ -1,4 +1,4 @@
-﻿using ChitChat.Application.Helpers;
+using ChitChat.Application.Helpers;
 using ChitChat.Application.Models;
 using ChitChat.Application.Models.Dtos.Conversation;
 using ChitChat.Application.Services.Interface;

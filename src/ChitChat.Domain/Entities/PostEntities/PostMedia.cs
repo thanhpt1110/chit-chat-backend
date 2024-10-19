@@ -1,4 +1,4 @@
-﻿namespace ChitChat.Domain.Entities.PostEntities
+namespace ChitChat.Domain.Entities.PostEntities
 {
     public class PostMedia:BaseEntity
     {
