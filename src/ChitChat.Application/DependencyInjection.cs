@@ -1,10 +1,13 @@
-﻿using ChitChat.Application.Mapping;
+using System.Reflection;
+
+using ChitChat.Application.Mapping;
 using ChitChat.Application.Services;
 using ChitChat.Application.Services.Interface;
 using ChitChat.Application.Validators;
+
 using FluentValidation;
+
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 namespace ChitChat.Application
 {
     public static class DependencyInjection
@@ -37,7 +40,6 @@ namespace ChitChat.Application
         {
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IConversationService, ConversationService>();
-            services.AddScoped<IMessageService, MessageService>();
             return services;
         }
     }

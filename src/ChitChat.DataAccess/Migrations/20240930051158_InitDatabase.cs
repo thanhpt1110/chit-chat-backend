@@ -1,4 +1,7 @@
+#nullable disable
+
 using Microsoft.EntityFrameworkCore.Migrations;
+
 namespace ChitChat.DataAccess.Migrations
 {
     /// <inheritdoc />

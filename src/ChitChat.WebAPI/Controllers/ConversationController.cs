@@ -55,9 +55,21 @@ namespace ChitChat.WebAPI.Controllers
         }
         [HttpPut]
         [Route("${conversationId}/messages/{messageId}")]
-        public async Task<IActionResult> UpdateConversationAsync(Guid conversationId, Guid messageId, [FromBody] ConversationDto request)
+        public async Task<IActionResult> UpdateMessageAsync(Guid conversationId, Guid messageId, [FromBody] MessageDto messageDto)
         {
-            return Ok(ApiResult<ConversationDto>.Success(await _conversationService.UpdateConversationAsync(request)));
+            return Ok(ApiResult<MessageDto>.Success(await _conversationService.UpdateMessageAsync(messageDto)));
+        }
+        [HttpDelete]
+        [Route("${conversationId}")]
+        public async Task<IActionResult> DeleteConversationAsync(Guid conversationId)
+        {
+            return Ok(ApiResult<ConversationDto>.Success(await _conversationService.DeleteConversationAsync(conversationId)));
+        }
+        [HttpDelete]
+        [Route("${conversationId}/messages/{messageId}")]
+        public async Task<IActionResult> DeleteConversationAsync(Guid conversationId, Guid messageId)
+        {
+            return Ok(ApiResult<MessageDto>.Success(await _conversationService.DeleteMessageAsync(messageId)));
         }
     }
 }

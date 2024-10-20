@@ -88,10 +88,16 @@ namespace ChitChat.Application.Services
             {
                 throw new InvalidModelException(ValidationTexts.NotValidate.Format(userIds.GetType(), userIds));
             }
+            if (userIds.Count == 2 && await _conversationRepository.IsConversationExisted(userIds[0], userIds[1]))
+            {
+                throw new ConflictException(ValidationTexts.Conflict.Format("Conversation", userIds[0] + " and user " + userIds[1]));
+            }
             Conversation conversation = new Conversation()
             {
                 IsDeleted = false,
                 LastMessageId = null,
+                NumOfUser = userIds.Count,
+                ConversationType = userIds.Count == 2 ? ConversationType.Person.ToString() : ConversationType.Group.ToString(),
             };
             await _conversationRepository.AddAsync(conversation);
             List<ConversationDetail> conversationDetails = new();
@@ -127,22 +133,40 @@ namespace ChitChat.Application.Services
             await _conversationRepository.UpdateAsync(conversation);
             return _mapper.Map<MessageDto>(message);
         }
-        public Task<MessageDto> UpdateMessageAsync(MessageDto message)
+        public async Task<MessageDto> UpdateMessageAsync(MessageDto messageDto)
         {
-            throw new NotImplementedException();
+            Message message = await _messageRepository.GetFirstOrDefaultAsync(p => p.Id == messageDto.Id);
+            message.MessageText = messageDto.MessageText;
+            message.Status = MessageStatus.EDITED;
+            await _messageRepository.UpdateAsync(message);
+            return _mapper.Map<MessageDto>(message);
+        }
+        public async Task<ConversationDto> UpdateConversationAsync(ConversationDto conversationDto)
+        {
+            Conversation conversation = await _conversationRepository.GetFirstOrDefaultAsync(p => p.Id == conversationDto.Id);
+            if (conversation == null)
+            {
+                throw new NotFoundException(ValidationTexts.NotFound.Format("Conversation", conversationDto.Id));
+            }
+            // Cập nhật từng thuộc tính từ DTO
+            _mapper.Map(conversationDto, conversation);
+            await _conversationRepository.UpdateAsync(conversation);
+            return _mapper.Map<ConversationDto>(conversation);
+        }
+        public async Task<ConversationDto> DeleteConversationAsync(Guid conversationId)
+        {
+            Conversation conversation = await _conversationRepository.GetFirstOrDefaultAsync(p => p.Id == conversationId);
+            conversation.IsDeleted = true;
+            await _conversationRepository.UpdateAsync(conversation);
+            return _mapper.Map<ConversationDto>(conversation);
+        }
+        public async Task<MessageDto> DeleteMessageAsync(Guid messageId)
+        {
+            Message message = await _messageRepository.GetFirstOrDefaultAsync(p => p.Id == messageId);
+            message.Status = MessageStatus.UNSENT;
+            await _messageRepository.UpdateAsync(message);
+            return _mapper.Map<MessageDto>(message);
+        }
 
-        }
-        public Task<ConversationDto> UpdateConversationAsync(ConversationDto conversation)
-        {
-            throw new NotImplementedException();
-        }
-        public Task<ConversationDto> DeleteConversationAsync(Guid conversationId)
-        {
-            throw new NotImplementedException();
-        }
-        public Task<MessageDto> DeleteMessageAsync(Guid messageId)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

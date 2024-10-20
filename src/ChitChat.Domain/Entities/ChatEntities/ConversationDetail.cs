@@ -1,4 +1,4 @@
-﻿namespace ChitChat.Domain.Entities.ChatEntities
+namespace ChitChat.Domain.Entities.ChatEntities
 {
     public class ConversationDetail : BaseEntity
     {
