@@ -5,6 +5,16 @@ VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker\DockerCompose\docker-compose.dcproj", "{37FE7C74-3803-4E83-A00F-09A51F680D0A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChitChat.Application", "src\ChitChat.Application\ChitChat.Application.csproj", "{2B21ACB8-2DEF-4570-816B-3526A0424498}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChitChat.DataAccess", "src\ChitChat.DataAccess\ChitChat.DataAccess.csproj", "{F9BC92AB-CE04-4376-80C0-4124C1E9D3CF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChitChat.Domain", "src\ChitChat.Domain\ChitChat.Domain.csproj", "{E187C325-BF28-459C-A734-9710D43A4169}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChitChat.Infrastructure", "src\ChitChat.Infrastructure\ChitChat.Infrastructure.csproj", "{4413BC8B-ABF3-43A2-A411-3057C8D0539F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChitChat.WebAPI", "src\ChitChat.WebAPI\ChitChat.WebAPI.csproj", "{B8E7EF18-5085-42AD-985E-111A38FF6705}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +25,26 @@ Global
 		{37FE7C74-3803-4E83-A00F-09A51F680D0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37FE7C74-3803-4E83-A00F-09A51F680D0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37FE7C74-3803-4E83-A00F-09A51F680D0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B21ACB8-2DEF-4570-816B-3526A0424498}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B21ACB8-2DEF-4570-816B-3526A0424498}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B21ACB8-2DEF-4570-816B-3526A0424498}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B21ACB8-2DEF-4570-816B-3526A0424498}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9BC92AB-CE04-4376-80C0-4124C1E9D3CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9BC92AB-CE04-4376-80C0-4124C1E9D3CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9BC92AB-CE04-4376-80C0-4124C1E9D3CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9BC92AB-CE04-4376-80C0-4124C1E9D3CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E187C325-BF28-459C-A734-9710D43A4169}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E187C325-BF28-459C-A734-9710D43A4169}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E187C325-BF28-459C-A734-9710D43A4169}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E187C325-BF28-459C-A734-9710D43A4169}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4413BC8B-ABF3-43A2-A411-3057C8D0539F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4413BC8B-ABF3-43A2-A411-3057C8D0539F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4413BC8B-ABF3-43A2-A411-3057C8D0539F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4413BC8B-ABF3-43A2-A411-3057C8D0539F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8E7EF18-5085-42AD-985E-111A38FF6705}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8E7EF18-5085-42AD-985E-111A38FF6705}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8E7EF18-5085-42AD-985E-111A38FF6705}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8E7EF18-5085-42AD-985E-111A38FF6705}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

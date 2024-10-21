@@ -5,8 +5,8 @@ namespace ChitChat.Application.Services.Interface
 {
     public interface IConversationService
     {
-        Task<List<ConversationDto>> GetConversationsByUserIdAsync(int pageIndex, int pageSize);
-        Task<ConversationDetailDto> GetConversationsDetailAsync(Guid conversationId, int messagePageIndex, int messagePageSize);
+        Task<List<ConversationDto>> GetAllConversationsAsync(int pageIndex, int pageSize);
+        Task<ConversationDetailDto> GetConversationsByIdAsync(Guid conversationId, int messagePageIndex, int messagePageSize);
         // post
         Task<ConversationDto> CreateConversationAsync(List<string> userIds);
         Task<MessageDto> SendMessageAsync(Guid conversationId, RequestSendMessageDto request);

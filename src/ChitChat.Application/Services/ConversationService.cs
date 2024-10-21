@@ -38,7 +38,7 @@ namespace ChitChat.Application.Services
             _claimService = claimService;
         }
 
-        public async Task<List<ConversationDto>> GetConversationsByUserIdAsync(int pageIndex, int pageSize)
+        public async Task<List<ConversationDto>> GetAllConversationsAsync(int pageIndex, int pageSize)
         {
             var userId = _claimService.GetUserId();
             var paginationResponse = await _conversationRepository
@@ -61,7 +61,7 @@ namespace ChitChat.Application.Services
             }
             return response;
         }
-        public async Task<ConversationDetailDto> GetConversationsDetailAsync(Guid conversationId, int messagePageIndex, int messagePageSize)
+        public async Task<ConversationDetailDto> GetConversationsByIdAsync(Guid conversationId, int messagePageIndex, int messagePageSize)
         {
             var userId = _claimService.GetUserId();
             var conversation = await _conversationRepository

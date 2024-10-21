@@ -7,7 +7,7 @@ using ChitChat.WebAPI;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 
-using UCA.DataAccess.Persistence;
+using UCA.DataAccess.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

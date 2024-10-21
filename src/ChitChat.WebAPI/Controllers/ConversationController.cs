@@ -25,15 +25,15 @@ namespace ChitChat.WebAPI.Controllers
         }
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> GetConversationsByUserIdAsync([FromQuery] int pageIndex = 0, [FromQuery] int pageSize = 30)
+        public async Task<IActionResult> GetAllConversationsAsync([FromQuery] int pageIndex = 0, [FromQuery] int pageSize = 30)
         {
-            return Ok(ApiResult<List<ConversationDto>>.Success(await _conversationService.GetConversationsByUserIdAsync(pageIndex, pageSize)));
+            return Ok(ApiResult<List<ConversationDto>>.Success(await _conversationService.GetAllConversationsAsync(pageIndex, pageSize)));
         }
         [HttpGet]
         [Route("${conversationId}")]
-        public async Task<IActionResult> GetConversationsByUserIdAsync(Guid conversationId, [FromQuery] int messagePageIndex = 0, [FromQuery] int messagePageSize = 100)
+        public async Task<IActionResult> GetConversationsByIdAsync(Guid conversationId, [FromQuery] int messagePageIndex = 0, [FromQuery] int messagePageSize = 100)
         {
-            return Ok(ApiResult<ConversationDetailDto>.Success(await _conversationService.GetConversationsDetailAsync(conversationId, messagePageIndex, messagePageSize)));
+            return Ok(ApiResult<ConversationDetailDto>.Success(await _conversationService.GetConversationsByIdAsync(conversationId, messagePageIndex, messagePageSize)));
         }
         [HttpPost]
         [Route("")]
