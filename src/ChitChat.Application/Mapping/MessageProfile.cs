@@ -1,4 +1,5 @@
 using AutoMapper;
+
 using ChitChat.Application.Models.Dtos.Message;
 
 namespace ChitChat.Application.Mapping

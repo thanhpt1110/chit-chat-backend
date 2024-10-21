@@ -1,5 +1,6 @@
 using ChitChat.DataAccess.Data;
 using ChitChat.DataAccess.Repositories.Interface;
+using ChitChat.Domain.Enums;
 
 namespace ChitChat.DataAccess.Repositories
 {
@@ -19,6 +20,7 @@ namespace ChitChat.DataAccess.Repositories
                                             c => c.ConversationDetails
                                             )
                                           .Include(c => c.LastMessage)
+
                                           .AsNoTracking()
                                           .ToListAsync();
             return listConversation;
@@ -29,7 +31,7 @@ namespace ChitChat.DataAccess.Repositories
             bool hasConversation = await Context.ConversationDetails
             .Where(cd2 => cd2.UserId == userReceiverId)
             .Select(cd2 => Context.ConversationDetails
-                .Any(cd1 => cd1.UserId == userSenderId && cd1.ConversationId == cd2.ConversationId))
+            .Any(cd1 => cd1.UserId == userSenderId && cd1.ConversationId == cd2.ConversationId && cd2.Conversation.ConversationType == ConversationType.Person.ToString()))
             .AnyAsync(result => result == true);
             return hasConversation;
         }

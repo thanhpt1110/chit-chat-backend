@@ -1,9 +1,9 @@
-using ChitChat.DataAccess.Data;
 using ChitChat.Domain.Identity;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Chitchat.DataAccess.Data
+namespace ChitChat.DataAccess.Data
 {
     public static class AutomatedMigration
     {
@@ -27,4 +27,6 @@ namespace Chitchat.DataAccess.Data
             await DbContextSeed.SeedDatabaseAsync(userManager, roleManager);
         }
     }
+
 }
+

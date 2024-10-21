@@ -1,4 +1,4 @@
-﻿namespace ChitChat.Application.Models.Dtos.User
+namespace ChitChat.Application.Models.Dtos.User
 {
     public class RegisterationRequestDto
     {

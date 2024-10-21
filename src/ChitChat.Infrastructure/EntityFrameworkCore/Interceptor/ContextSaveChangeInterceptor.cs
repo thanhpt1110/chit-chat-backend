@@ -1,5 +1,6 @@
-﻿using ChitChat.Application.Helpers;
+using ChitChat.Application.Helpers;
 using ChitChat.Domain.Common;
+
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace ChitChat.DataAccess.Data.Interceptor
@@ -36,6 +37,8 @@ namespace ChitChat.DataAccess.Data.Interceptor
                             {
                                 auditedEntity.CreatedBy = _claimService.GetUserId(); // Cast entity sang IAuditedEntity
                                 auditedEntity.CreatedOn = DateTime.UtcNow;
+                                auditedEntity.UpdatedBy = auditedEntity.CreatedBy;
+                                auditedEntity.UpdatedOn = auditedEntity.CreatedOn;
                             }
                             break;
 

@@ -1,7 +1,9 @@
-﻿using ChitChat.Domain.Common;
-using ChitChat.Domain.Entities;
-using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
+
+using ChitChat.Domain.Common;
+using ChitChat.Domain.Entities;
+
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace ChitChat.DataAccess.Repositories.Interrface
 {

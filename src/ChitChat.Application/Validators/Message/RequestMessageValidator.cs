@@ -1,4 +1,5 @@
-﻿using ChitChat.Application.Models.Dtos.Message;
+using ChitChat.Application.Models.Dtos.Message;
+
 using FluentValidation;
 
 namespace ChitChat.Application.Validators.Message
@@ -8,7 +9,6 @@ namespace ChitChat.Application.Validators.Message
         public RequestMessageValidator()
         {
             RuleFor(message => message.MessageText).NotEmpty().NotNull();
-            RuleFor(message => message.ConversationId).NotEmpty().NotNull();
         }
     }
 }
