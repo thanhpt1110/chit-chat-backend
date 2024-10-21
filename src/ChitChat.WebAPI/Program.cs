@@ -1,14 +1,12 @@
 using ChitChat.Application;
 using ChitChat.DataAccess;
+using ChitChat.DataAccess.Data;
 using ChitChat.Infrastructure;
 using ChitChat.Infrastructure.Validations;
 using ChitChat.WebAPI;
 
 using FluentValidation;
 using FluentValidation.AspNetCore;
-
-using UCA.DataAccess.Data;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -49,14 +47,3 @@ app.MapControllers();
 
 app.Run();
 
-/*void ApplyMigration() // apply new pending migration
-{
-    using (var scope = app.Services.CreateScope()) // Get the services 
-    {
-        var _db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        if (_db.Database.GetPendingMigrations().Count() > 0) // apply all the pending migration
-        {
-            _db.Database.Migrate();
-        }
-    }
-}*/
