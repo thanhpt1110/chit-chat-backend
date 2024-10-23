@@ -1,4 +1,5 @@
 using ChitChat.Domain.Entities.SystemEntities;
+
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ChitChat.DataAccess.Configurations

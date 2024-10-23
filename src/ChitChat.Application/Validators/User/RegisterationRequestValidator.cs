@@ -1,4 +1,5 @@
-﻿using ChitChat.Application.Models.Dtos.User;
+using ChitChat.Application.Models.Dtos.User;
+
 using FluentValidation;
 namespace ChitChat.Application.Validators.User
 {

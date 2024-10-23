@@ -1,6 +1,6 @@
-﻿namespace ChitChat.Domain.Entities.PostEntities
+namespace ChitChat.Domain.Entities.PostEntities
 {
-    public class PostDetailTag:BaseEntity
+    public class PostDetailTag : BaseEntity
     {
         public Guid PostId { get; set; }
         public string Tag { get; set; }

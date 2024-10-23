@@ -1,7 +1,9 @@
+using System.Linq.Expressions;
+
 using ChitChat.Domain.Entities;
 using ChitChat.Domain.Identity;
+
 using Microsoft.EntityFrameworkCore.Query;
-using System.Linq.Expressions;
 
 namespace ChitChat.DataAccess.Repositories.Interface
 {
@@ -17,7 +19,13 @@ namespace ChitChat.DataAccess.Repositories.Interface
         Task<List<UserApplication>> GetAllAsync(Expression<Func<UserApplication, bool>> predicate, IEnumerable<Expression<Func<UserApplication, BaseEntity>>> includes);
         Task<List<UserApplication>> GetAllAsync(Expression<Func<UserApplication, bool>> predicate, Func<IQueryable<UserApplication>, IIncludableQueryable<UserApplication, object>> includeQuery);
         Task<List<UserApplication>> GetAllAsync(Expression<Func<UserApplication, bool>> predicate, Func<IQueryable<UserApplication>, IOrderedQueryable<UserApplication>> sort);
+        Task<UserApplication> UpdateAsync(UserApplication entity);
 
+        Task<List<UserApplication>> UpdateRangeAsync(List<UserApplication> entities);
+
+        Task<UserApplication> DeleteAsync(UserApplication entity);
+
+        Task<bool> AnyAsync(Expression<Func<UserApplication, bool>> predicate);
 
     }
 }

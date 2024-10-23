@@ -31,27 +31,21 @@ namespace ChitChat.DataAccess.Data
                 {
                     Id = Guid.NewGuid().ToString(),
                     UserName = "admin",
-                    FirstName = "admin",
-                    LastName = "1",
+                    DisplayName = "admin",
                     Email = "admin@gmail.com",
                     EmailConfirmed = true,
                     AvatarUrl = "",
-                    Bio = "",
                     UserStatus = Domain.Enums.UserStatus.Public,
-                    Gender = "Male"
                 },
                 new UserApplication
                 {
                     Id = Guid.NewGuid().ToString(),
                     UserName = "admin1",
-                    FirstName = "admin1",
-                    LastName = "2",
+                    DisplayName = "admin1",
                     Email = "admin1@gmail.com",
                     EmailConfirmed = true,
                     AvatarUrl = "",
-                    Bio = "",
                     UserStatus = Domain.Enums.UserStatus.Public,
-                    Gender = "Male"
                 }
             };
 
