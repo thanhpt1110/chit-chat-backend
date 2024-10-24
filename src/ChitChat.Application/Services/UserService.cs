@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+using AutoMapper;
+
 using ChitChat.Application.Exceptions;
 using ChitChat.Application.Helpers;
 using ChitChat.Application.Localization;
@@ -8,6 +9,7 @@ using ChitChat.DataAccess.Repositories.Interface;
 using ChitChat.DataAccess.Repositories.Interrface;
 using ChitChat.Domain.Entities;
 using ChitChat.Domain.Identity;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
@@ -98,14 +100,11 @@ namespace ChitChat.Application.Services
             {
                 UserName = registerationRequestDto.Email,
                 Email = registerationRequestDto.Email,
-                FirstName = registerationRequestDto.FirstName,
-                LastName = registerationRequestDto.LastName,
+                DisplayName = registerationRequestDto.LastName + registerationRequestDto.FirstName,
                 PhoneNumber = registerationRequestDto.PhoneNumber,
                 NormalizedEmail = registerationRequestDto.Email.ToUpper(),
                 AvatarUrl = "",
-                Bio = "",
                 UserStatus = Domain.Enums.UserStatus.Public,
-                Gender = "Male"
             };
             var result = await _userManager.CreateAsync(newUser, registerationRequestDto.Password); // Hash password by .net identity
             if (result.Succeeded)
@@ -115,9 +114,8 @@ namespace ChitChat.Application.Services
                 {
                     Email = userToReturn.Email,
                     Id = userToReturn.Id,
-                    FirstName = userToReturn.FirstName,
-                    LastName = userToReturn.FirstName,
-                    PhoneNumber = userToReturn.LastName,
+                    DisplayName = userToReturn.DisplayName,
+                    PhoneNumber = userToReturn.PhoneNumber ?? "",
                 };
                 return true;
             }

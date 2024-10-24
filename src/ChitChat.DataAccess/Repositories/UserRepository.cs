@@ -1,15 +1,12 @@
-﻿using ChitChat.DataAccess.Data;
+using System.Linq.Expressions;
+
+using ChitChat.DataAccess.Data;
 using ChitChat.DataAccess.Repositories.Interface;
 using ChitChat.Domain.Entities;
 using ChitChat.Domain.Exceptions;
 using ChitChat.Domain.Identity;
+
 using Microsoft.EntityFrameworkCore.Query;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChitChat.DataAccess.Repositories
 {
@@ -70,6 +67,35 @@ namespace ChitChat.DataAccess.Repositories
             return await query.ToListAsync();
         }
 
+        public async Task<UserApplication> UpdateAsync(UserApplication entity)
+        {
+            DbSet.Update(entity);
+            await Context.SaveChangesAsync();
+
+            return entity;
+        }
+
+        public async Task<UserApplication> DeleteAsync(UserApplication entity)
+        {
+            var removedEntity = DbSet.Remove(entity).Entity;
+            await Context.SaveChangesAsync();
+
+            return removedEntity;
+        }
+
+        public async Task<bool> AnyAsync(Expression<Func<UserApplication, bool>> predicate)
+        {
+            return await DbSet.AnyAsync(predicate);
+        }
+
+        public async Task<List<UserApplication>> UpdateRangeAsync(List<UserApplication> entities)
+        {
+            DbSet.UpdateRange(entities);
+
+            await Context.SaveChangesAsync();
+
+            return entities;
+        }
 
 
 

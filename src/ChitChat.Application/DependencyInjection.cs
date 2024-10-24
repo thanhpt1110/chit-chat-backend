@@ -40,6 +40,7 @@ namespace ChitChat.Application
         {
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IConversationService, ConversationService>();
+            services.AddScoped<IProfileService, ProfileService>();
             return services;
         }
     }
