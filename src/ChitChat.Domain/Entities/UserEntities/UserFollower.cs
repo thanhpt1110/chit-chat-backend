@@ -1,6 +1,6 @@
 namespace ChitChat.Domain.Entities.UserEntities
 {
-    public class UserFollower:BaseEntity
+    public class UserFollower : BaseEntity
     {
         public string UserId { get; set; }
         public string FollowerId { get; set; }
