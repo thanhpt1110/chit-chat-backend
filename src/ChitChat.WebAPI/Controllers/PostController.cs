@@ -13,6 +13,7 @@ namespace ChitChat.WebAPI.Controllers
             // this._postService = postService;
         }
         [HttpGet]
+
         public async Task<IActionResult> Get()
         {
             return Ok(new Post() { CreatedOn = DateTime.Now, Description = "Hello" });

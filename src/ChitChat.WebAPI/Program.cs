@@ -2,11 +2,13 @@ using ChitChat.Application;
 using ChitChat.DataAccess;
 using ChitChat.DataAccess.Data;
 using ChitChat.Infrastructure;
+using ChitChat.Infrastructure.SignalR;
 using ChitChat.Infrastructure.Validations;
 using ChitChat.WebAPI;
 
 using FluentValidation;
 using FluentValidation.AspNetCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -42,6 +44,7 @@ app.UseHttpsRedirection();
 app.AddInfrastuctureApplication();
 app.UseAuthentication();
 app.UseAuthorization();
+app.AddSignalRHub();
 
 app.MapControllers();
 
