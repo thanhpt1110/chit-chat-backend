@@ -24,7 +24,6 @@ namespace ChitChat.DataAccess.Repositories
         public async Task<UserApplication> GetFirstAsync(Expression<Func<UserApplication, bool>> predicate)
         {
             var entity = await DbSet.Where(predicate).FirstOrDefaultAsync();
-
             return entity ?? throw new ResourceNotFoundException(typeof(UserApplication));
         }
 

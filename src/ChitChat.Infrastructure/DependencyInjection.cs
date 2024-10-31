@@ -6,6 +6,7 @@ using ChitChat.Infrastructure.EntityFrameworkCore;
 using ChitChat.Infrastructure.Logging;
 using ChitChat.Infrastructure.Middleware;
 using ChitChat.Infrastructure.Services;
+using ChitChat.Infrastructure.SignalR;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -20,7 +21,8 @@ namespace ChitChat.Infrastructure
             builder
             .AddEntityFramewordCore()
             //.AddAppAuthorization()
-            .AddCaching();
+            .AddCaching()
+            .AddSignalRRegistration();
 
 
             // Services

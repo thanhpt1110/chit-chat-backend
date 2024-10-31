@@ -33,8 +33,12 @@ namespace ChitChat.Application.Services
             _userManager = userManager;
             _roleManager = roleManager;
             _tokenService = tokenService;
-            _mapper = mapper;
+            Mapper = mapper;
         }
+
+        public IMapper Mapper { get => this.Mapper1; set => this.Mapper1 = value; }
+        public IMapper Mapper1 { get => this._mapper; set => this._mapper = value; }
+
         public async Task<LoginResponseDto> LoginAsync(LoginRequestDto loginRequestDto)
         {
             UserApplication user = await _userRepository.GetFirstOrDefaultAsync(p => p.UserName == loginRequestDto.UserName);
@@ -58,7 +62,7 @@ namespace ChitChat.Application.Services
             var refreshToken = GenerateRefreshToken(loginHistory);
             await _loginHistoryRepository.AddAsync(loginHistory);
 
-            UserDto userDto = _mapper.Map<UserDto>(user);
+            UserDto userDto = Mapper.Map<UserDto>(user);
             /*   new()
            {
                Email = user.Email,
