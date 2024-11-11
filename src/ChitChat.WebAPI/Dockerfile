@@ -12,13 +12,13 @@ WORKDIR /src
 # Cập nhật đường dẫn với `src`
 COPY ["src/ChitChat.WebAPI/ChitChat.WebAPI.csproj", "ChitChat.WebAPI/"]
 COPY ["src/ChitChat.Infrastructure/ChitChat.Infrastructure.csproj", "ChitChat.Infrastructure/"]
-COPY ["src/ChitChatApplication/ChitChat.Application.csproj", "ChitChatApplication/"]
+COPY ["src/ChitChat.Application/ChitChat.Application.csproj", "ChitChat.Application/"]
 COPY ["src/ChitChat.DataAccess/ChitChat.DataAccess.csproj", "ChitChat.DataAccess/"]
 COPY ["src/ChitChat.Domain/ChitChat.Domain.csproj", "ChitChat.Domain/"]
 
 RUN dotnet restore "ChitChat.WebAPI/ChitChat.WebAPI.csproj"
 
-COPY src/ . # Cập nhật để copy tất cả các file từ thư mục `src`
+COPY src/ . 
 WORKDIR "/src/ChitChat.WebAPI"
 RUN dotnet build "ChitChat.WebAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
