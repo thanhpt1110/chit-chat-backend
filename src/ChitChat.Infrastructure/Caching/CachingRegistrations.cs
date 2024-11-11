@@ -1,4 +1,5 @@
 using ChitChat.Application.Services.Caching;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 

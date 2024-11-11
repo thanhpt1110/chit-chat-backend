@@ -28,11 +28,11 @@ namespace ChitChat.Application.Services
             this._claimService = claimService;
             this._userRepository = userRepository;
         }
-        public async Task<List<ProfileDto>> GetAllProfilesAsync(string searchText, int pageIndex, int pageSize)
+        public async Task<List<ProfileDto>> GetAllProfilesAsync(ProfileSearchQueryDto query)
         {
             var paginationResponse = await _profileRepository.GetAllAsync(
-                            p => p.IsDeleted == false && p.SearchData.Contains(searchText), p => p.OrderByDescending(p => p.Id)
-                            , pageIndex, pageSize, p => p.Include(p => p.UserApplication));
+                            p => p.IsDeleted == false && p.SearchData.Contains(query.SearchText), p => p.OrderByDescending(p => p.Id)
+                            , query.PageIndex, query.PageSize, p => p.Include(p => p.UserApplication));
             return _mapper.Map<List<ProfileDto>>(paginationResponse.Items);
         }
         public async Task<ProfileDto> GetProfileByIdAsync(Guid userId)

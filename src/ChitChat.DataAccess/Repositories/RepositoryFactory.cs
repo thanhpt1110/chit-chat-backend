@@ -1,5 +1,6 @@
 using ChitChat.DataAccess.Repositories.Interrface;
 using ChitChat.Domain.Entities;
+
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ChitChat.DataAccess.Repositories

@@ -1,5 +1,6 @@
-﻿using ChitChat.Domain.Identity;
 using System.Security.Claims;
+
+using ChitChat.Domain.Identity;
 
 namespace ChitChat.Application.Helpers
 {

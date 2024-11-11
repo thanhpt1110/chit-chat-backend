@@ -1,6 +1,8 @@
-﻿using ChitChat.Application.Helpers;
-using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
+
+using ChitChat.Application.Helpers;
+
+using Microsoft.AspNetCore.Http;
 
 namespace ChitChat.Infrastructure.Services
 {

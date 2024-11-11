@@ -3,6 +3,7 @@ using AutoMapper;
 using ChitChat.Application.Exceptions;
 using ChitChat.Application.Helpers;
 using ChitChat.Application.Localization;
+using ChitChat.Application.Models;
 using ChitChat.Application.Models.Dtos.Conversation;
 using ChitChat.Application.Models.Dtos.Message;
 using ChitChat.Application.Models.Dtos.User;
@@ -27,14 +28,14 @@ namespace ChitChat.Application.Services
         private readonly IUserRepository _userRepository;
         private readonly IUserNotificationService _userNotificationService;
         private readonly IConversationNotificationService _conversationNotificationService;
-
         public ConversationService(IConversationRepository conversationRepository
             , IUserRepository userRepository
             , IRepositoryFactory repositoryFactory
             , IMapper mapper
             , IClaimService claimService
             , IConversationNotificationService conversationNotificationService
-            , IUserNotificationService userNotificationService)
+            , IUserNotificationService userNotificationService
+            )
         {
             _userRepository = userRepository;
             _conversationRepository = conversationRepository;
@@ -46,12 +47,12 @@ namespace ChitChat.Application.Services
             _userNotificationService = userNotificationService;
         }
 
-        public async Task<List<ConversationDto>> GetAllConversationsAsync(int pageIndex, int pageSize)
+        public async Task<List<ConversationDto>> GetAllConversationsAsync(PaginationFilter paginationFilter)
         {
             var userId = _claimService.GetUserId();
             var paginationResponse = await _conversationRepository
                                     .GetAllAsync(p => p.ConversationDetails.Any(p => p.UserId == userId)
-                                    , p => p.OrderByDescending(c => c.UpdatedOn), pageIndex, pageSize
+                                    , p => p.OrderByDescending(c => c.UpdatedOn), paginationFilter.PageIndex, paginationFilter.PageSize
                                     , query => query.Include(c => c.LastMessage)
                                                     .Include(c => c.ConversationDetails));
             List<ConversationDto> response = new();

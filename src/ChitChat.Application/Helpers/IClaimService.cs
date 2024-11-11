@@ -1,4 +1,4 @@
-﻿namespace ChitChat.Application.Helpers
+namespace ChitChat.Application.Helpers
 {
     public interface IClaimService
     {
