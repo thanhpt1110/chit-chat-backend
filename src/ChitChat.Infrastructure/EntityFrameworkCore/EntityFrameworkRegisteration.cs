@@ -23,11 +23,12 @@ namespace ChitChat.Infrastructure.EntityFrameworkCore
                 options
                     .AddInterceptors(provider.GetRequiredService<ContextSaveChangeInterceptor>());
 
-
-                options.UseSqlServer(databaseConfig.ConnectionString, opt =>
-                {
-                    opt.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
-                });
+                options.UseMySql(databaseConfig.ConnectionString,
+                    new MySqlServerVersion(new Version(8, 0, 41)), // Đảm bảo chọn đúng version MySQL bạn đang dùng
+                    opt =>
+                    {
+                        opt.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
+                    });
 
             });
 
