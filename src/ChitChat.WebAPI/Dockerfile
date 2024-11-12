@@ -30,8 +30,5 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-# Install netcat
-RUN apt-get update && apt-get install -y netcat
-
 # Wait for MySQL and then start the app
 ENTRYPOINT ["sh", "-c", "until nc -z -v -w30 mysql 3306; do echo 'Waiting for MySQL...'; sleep 1; done && dotnet ChitChat.WebAPI.dll"]
