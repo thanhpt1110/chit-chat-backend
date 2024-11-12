@@ -1,17 +1,16 @@
-﻿using ChitChat.Domain.Identity;
+using ChitChat.Domain.Entities.ChatEntities;
 
-namespace ChitChat.Domain.Entities.ChatEntities
+public class Conversation : BaseAuditedEntity
 {
-    public class Conversation:BaseEntity
-    {
-        public Guid LastMessageId { get; set; }
-        //public string userId1 { get; set; }
-        //public string userId2 { get; set; }
+    public Guid? LastMessageId { get; set; }
+    //public string userId1 { get; set; }
+    //public string userId2 { get; set; }
 
-        public DateTime CreatedDate { get; set; }
-        public Message LastMessage { get; set; }
-        //public UserApplication User1 { get; set; }
-        //public UserApplication User2 { get; set; }
+    public Message? LastMessage { get; set; }
+    public bool IsSeen { get; set; }
+    public int NumOfUser { get; set; }
+    public string ConversationType { get; set; }
 
-    }
+    public IEnumerable<Message> Messages { get; set; }
+    public IEnumerable<ConversationDetail> ConversationDetails { get; set; }
 }

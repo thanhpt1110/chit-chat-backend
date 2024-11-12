@@ -1,9 +1,4 @@
-﻿using ChitChat.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ChitChat.Domain.Entities;
 
 namespace ChitChat.DataAccess.Repositories.Interrface
 {

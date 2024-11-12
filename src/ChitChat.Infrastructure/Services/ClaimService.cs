@@ -1,15 +1,10 @@
 ﻿using ChitChat.Application.Helpers;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChitChat.Infrastructure.Services
 {
-    public class ClaimService: IClaimService
+    public class ClaimService : IClaimService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 

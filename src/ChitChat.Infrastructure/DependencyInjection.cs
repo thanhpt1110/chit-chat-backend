@@ -1,20 +1,16 @@
-﻿using ChitChat.Application.Helpers;
+using ChitChat.Application.Helpers;
 using ChitChat.DataAccess.Data;
 using ChitChat.Domain.Identity;
 using ChitChat.Infrastructure.Caching;
 using ChitChat.Infrastructure.EntityFrameworkCore;
 using ChitChat.Infrastructure.Logging;
 using ChitChat.Infrastructure.Middleware;
-using ChitChat.Infrastructure.Authorization;
 using ChitChat.Infrastructure.Services;
+using ChitChat.Infrastructure.SignalR;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChitChat.Infrastructure
 {
@@ -25,7 +21,8 @@ namespace ChitChat.Infrastructure
             builder
             .AddEntityFramewordCore()
             //.AddAppAuthorization()
-            .AddCaching();
+            .AddCaching()
+            .AddSignalRRegistration();
 
 
             // Services
@@ -34,6 +31,10 @@ namespace ChitChat.Infrastructure
 
             // Host
             builder.Host.AddHostSerilogConfiguration();
+
+            // Validation
+
+
             return builder;
 
         }

@@ -1,6 +1,6 @@
-﻿namespace ChitChat.Domain.Entities.PostEntities
+namespace ChitChat.Domain.Entities.PostEntities
 {
-    public class PostMedia:BaseEntity
+    public class PostMedia : BaseEntity
     {
         public Guid PostId { get; set; }
         public string MediaType { get; set; }

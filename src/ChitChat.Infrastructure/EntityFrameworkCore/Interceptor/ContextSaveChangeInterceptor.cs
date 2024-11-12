@@ -1,11 +1,7 @@
-﻿using ChitChat.Application.Helpers;
+using ChitChat.Application.Helpers;
 using ChitChat.Domain.Common;
+
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChitChat.DataAccess.Data.Interceptor
 {
@@ -28,22 +24,33 @@ namespace ChitChat.DataAccess.Data.Interceptor
 
             if (dbContext is not null)
             {
-                foreach (var entry in dbContext.ChangeTracker.Entries<IAuditedEntity>())
+
+                foreach (var entry in dbContext.ChangeTracker.Entries<BaseEntity>())
                 {
                     switch (entry.State)
                     {
                         case EntityState.Added:
-                            entry.Entity.CreatedBy = _claimService.GetUserId();
-                            entry.Entity.CreatedOn = DateTime.UtcNow;
+                            if (entry.Entity.Id == Guid.Empty)
+                                entry.Entity.Id = Guid.NewGuid(); // Sử dụng Guid.NewGuid() thay vì new Guid()
+
+                            if (entry.Entity is IAuditedEntity auditedEntity)
+                            {
+                                auditedEntity.CreatedBy = _claimService.GetUserId(); // Cast entity sang IAuditedEntity
+                                auditedEntity.CreatedOn = DateTime.UtcNow;
+                                auditedEntity.UpdatedBy = auditedEntity.CreatedBy;
+                                auditedEntity.UpdatedOn = auditedEntity.CreatedOn;
+                            }
                             break;
+
                         case EntityState.Modified:
-                            entry.Entity.UpdatedBy = _claimService.GetUserId();
-                            entry.Entity.UpdatedOn = DateTime.UtcNow;
+                            if (entry.Entity is IAuditedEntity auditedEntityModify)
+                            {
+                                auditedEntityModify.UpdatedBy = _claimService.GetUserId();
+                                auditedEntityModify.UpdatedOn = DateTime.UtcNow;
+                            }
                             break;
                     }
                 }
-
-
             }
             var saveChangeResult = await base.SavingChangesAsync(eventData, result, cancellationToken);
             return saveChangeResult;

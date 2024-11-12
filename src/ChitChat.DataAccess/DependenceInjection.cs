@@ -1,16 +1,9 @@
-﻿using ChitChat.DataAccess.Repositories.Interrface;
 using ChitChat.DataAccess.Repositories;
+using ChitChat.DataAccess.Repositories.Interface;
+using ChitChat.DataAccess.Repositories.Interrface;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ChitChat.Domain.Identity;
-using Microsoft.AspNetCore.Identity;
-using ChitChat.DataAccess.Data;
-using Microsoft.Extensions.Options;
 
 namespace ChitChat.DataAccess
 {
@@ -26,7 +19,9 @@ namespace ChitChat.DataAccess
         {
             services
             .AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>))
-            .AddScoped<IRepositoryFactory, RepositoryFactory>();
+            .AddScoped<IRepositoryFactory, RepositoryFactory>()
+            .AddScoped<IUserRepository, UserRepository>()
+            .AddScoped<IConversationRepository, ConversationRepository>();
         }
 
     }

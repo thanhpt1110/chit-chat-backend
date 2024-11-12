@@ -1,6 +1,3 @@
-﻿using ChitChat.Domain.Entities.PostEntities;
-using ChitChat.Domain.Identity;
-
 namespace ChitChat.Domain.Entities.PostEntities.Reaction
 {
     public class ReactionComment:BaseAuditedEntity

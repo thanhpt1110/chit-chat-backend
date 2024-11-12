@@ -1,10 +1,5 @@
-﻿using ChitChat.Application.Services.Caching;
+using ChitChat.Application.Services.Caching;
 using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChitChat.Infrastructure.Caching
 {

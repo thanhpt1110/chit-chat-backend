@@ -1,4 +1,4 @@
-﻿using ChitChat.Application.Models;
+using ChitChat.Application.Models;
 
 namespace ChitChat.Application.Exceptions;
 

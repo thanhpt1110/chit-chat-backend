@@ -1,5 +1,3 @@
-﻿using ChitChat.Domain.Identity;
-
 namespace ChitChat.Domain.Entities.SystemEntities
 {
     public class Notification:BaseEntity

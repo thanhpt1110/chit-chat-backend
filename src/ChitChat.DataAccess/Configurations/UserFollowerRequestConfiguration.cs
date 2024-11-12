@@ -1,15 +1,10 @@
-﻿using ChitChat.Domain.Entities.UserEntities;
-using Microsoft.EntityFrameworkCore;
+using ChitChat.Domain.Entities.UserEntities;
+
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChitChat.DataAccess.Configurations
 {
-    public class UserFollowerRequestConfiguration: IEntityTypeConfiguration<UserFollowerRequest>
+    public class UserFollowerRequestConfiguration : IEntityTypeConfiguration<UserFollowerRequest>
     {
         public void Configure(EntityTypeBuilder<UserFollowerRequest> modelBuilder)
         {
