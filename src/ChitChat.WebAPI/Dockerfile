@@ -10,7 +10,11 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
 # Cập nhật đường dẫn với `src`
-COPY src/**/*.csproj ./
+COPY ["src/ChitChat.WebAPI/ChitChat.WebAPI.csproj", "ChitChat.WebAPI/"]
+COPY ["src/ChitChat.Infrastructure/ChitChat.Infrastructure.csproj", "ChitChat.Infrastructure/"]
+COPY ["src/ChitChat.Application/ChitChat.Application.csproj", "ChitChat.Application/"]
+COPY ["src/ChitChat.DataAccess/ChitChat.DataAccess.csproj", "ChitChat.DataAccess/"]
+COPY ["src/ChitChat.Domain/ChitChat.Domain.csproj", "ChitChat.Domain/"]
 RUN dotnet restore "ChitChat.WebAPI/ChitChat.WebAPI.csproj"
 
 COPY src/ . 
