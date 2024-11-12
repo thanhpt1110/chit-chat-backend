@@ -16,7 +16,7 @@ namespace ChitChat.WebAPI.Controllers
 
         public async Task<IActionResult> Get()
         {
-            return Ok(new Post() { CreatedOn = DateTime.Now, Description = "Hello World - CI/CD - 2th" });
+            return Ok(new Post() { CreatedOn = DateTime.Now, Description = "Hello World - CI/CD - From PR to Main" });
         }
         [HttpGet]
         [Route("{id:int}")]
