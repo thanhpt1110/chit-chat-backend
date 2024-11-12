@@ -10,12 +10,7 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
 # Cập nhật đường dẫn với `src`
-COPY ["src/ChitChat.WebAPI/ChitChat.WebAPI.csproj", "ChitChat.WebAPI/"]
-COPY ["src/ChitChat.Infrastructure/ChitChat.Infrastructure.csproj", "ChitChat.Infrastructure/"]
-COPY ["src/ChitChat.Application/ChitChat.Application.csproj", "ChitChat.Application/"]
-COPY ["src/ChitChat.DataAccess/ChitChat.DataAccess.csproj", "ChitChat.DataAccess/"]
-COPY ["src/ChitChat.Domain/ChitChat.Domain.csproj", "ChitChat.Domain/"]
-
+COPY src/**/*.csproj ./
 RUN dotnet restore "ChitChat.WebAPI/ChitChat.WebAPI.csproj"
 
 COPY src/ . 
@@ -30,4 +25,6 @@ RUN dotnet publish "ChitChat.WebAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publ
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "ChitChat.WebAPI.dll"]
+
+# Wait for MySQL and then start the app
+ENTRYPOINT ["sh", "-c", "until nc -z -v -w30 mysql 3306; do echo 'Waiting for MySQL...'; sleep 1; done && dotnet ChitChat.WebAPI.dll"]

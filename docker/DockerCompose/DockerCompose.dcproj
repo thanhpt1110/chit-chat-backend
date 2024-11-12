@@ -10,10 +10,15 @@
     <DockerServiceName>chitchat.webapi</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="docker-compose.yml" />
+    <None Include="docker-compose.prod.yml" />
     <None Include="docker-compose.override.yml">
       <DependentUpon>docker-compose.yml</DependentUpon>
     </None>
-    <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
   </ItemGroup>
+  <PropertyGroup>
+    <DockerComposeFilePaths>docker-compose.local.yml</DockerComposeFilePaths>
+    <DockerComposeFilePaths>docker-compose.prod.yml</DockerComposeFilePaths>
+  </PropertyGroup>
 </Project>

@@ -1,0 +1,19 @@
+﻿version: "3.4"
+
+services:
+  chitchat.webapi:
+    image: ${DOCKER_REGISTRY-}chitchatwebapi
+    build:
+      context: ../../
+      dockerfile: src/ChitChat.WebAPI/Dockerfile
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+    networks:
+      - productnetwork
+    restart: unless-stopped
+
+networks:
+  productnetwork:
