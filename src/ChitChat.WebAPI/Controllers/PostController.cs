@@ -23,7 +23,6 @@ namespace ChitChat.WebAPI.Controllers
         public async Task<IActionResult> Get(string id)
         {
             return Ok(new Post() { CreatedOn = DateTime.Now, Description = $"Hello{id}" });
-
         }
     }
 }
