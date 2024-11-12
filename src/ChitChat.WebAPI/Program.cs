@@ -31,11 +31,9 @@ var app = builder.Build();
 
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
+
 // Migrate Database
 using var scope = app.Services.CreateAsyncScope();
 await AutomatedMigration.MigrateAsync(scope.ServiceProvider);
@@ -45,7 +43,10 @@ app.AddInfrastuctureApplication();
 app.UseAuthentication();
 app.UseAuthorization();
 app.AddSignalRHub();
-
+app.UseCors(corsPolicyBuilder => corsPolicyBuilder.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+    );
 app.MapControllers();
 
 app.Run();

@@ -27,8 +27,6 @@ RUN dotnet publish "ChitChat.WebAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publ
 
 # Stage 4: Final
 FROM base AS final
-WORKDIR /app
+WORKDIR /app		
 COPY --from=publish /app/publish .
-
-# Wait for MySQL and then start the app
-ENTRYPOINT ["sh", "-c", "until nc -z -v -w30 mysql 3306; do echo 'Waiting for MySQL...'; sleep 1; done && dotnet ChitChat.WebAPI.dll"]
+ENTRYPOINT ["dotnet", "ChitChat.WebAPI.dll"]
