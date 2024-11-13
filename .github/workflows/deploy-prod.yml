@@ -30,6 +30,7 @@ jobs:
           git checkout main
           git pull origin main
           docker-compose -f ~/chit-chat-backend/docker/DockerCompose/docker-compose.prod.yml down
+          docker system prune -a -f
           docker-compose -f ~/chit-chat-backend/docker/DockerCompose/docker-compose.prod.yml build
           docker-compose -f ~/chit-chat-backend/docker/DockerCompose/docker-compose.prod.yml up -d
         EOF
