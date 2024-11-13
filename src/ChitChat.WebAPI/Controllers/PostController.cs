@@ -16,14 +16,13 @@ namespace ChitChat.WebAPI.Controllers
 
         public async Task<IActionResult> Get()
         {
-            return Ok(new Post() { CreatedOn = DateTime.Now, Description = "Hello" });
+            return Ok(new Post() { CreatedOn = DateTime.Now, Description = "Test CI/CD - Merge PR - 3rd" });
         }
         [HttpGet]
         [Route("{id:int}")]
         public async Task<IActionResult> Get(string id)
         {
             return Ok(new Post() { CreatedOn = DateTime.Now, Description = $"Hello{id}" });
-
         }
     }
 }
