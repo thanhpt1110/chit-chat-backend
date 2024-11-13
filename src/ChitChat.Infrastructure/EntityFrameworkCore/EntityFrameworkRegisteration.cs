@@ -36,5 +36,6 @@ namespace ChitChat.Infrastructure.EntityFrameworkCore
 
             return builder;
         }
+
     }
 }
