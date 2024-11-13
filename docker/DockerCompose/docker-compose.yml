@@ -1,4 +1,4 @@
-version: '3.4'
+﻿version: "3.4"
 
 services:
   chitchat.webapi:
@@ -7,31 +7,30 @@ services:
       context: ../../
       dockerfile: src/ChitChat.WebAPI/Dockerfile
     ports:
-        - "8080:8080"
-        - "8081:8081"
+      - "8080:8080"
+      - "8081:8081"
     depends_on:
-    - sqlserver
+      - mysql
     environment:
-    - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Development
     networks:
-    - productnetwork
+      - productnetwork
     restart: on-failure
 
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+  mysql:
+    image: mysql:8.0.39
     environment:
-     SA_PASSWORD: "Password12345!"
-     ACCEPT_EULA: "Y"
+      MYSQL_ROOT_PASSWORD: "Password12345!"
+      MYSQL_DATABASE: chitchatdb
     ports:
-     - "1433:1433"
+      - "3306:3306"
     volumes:
-     - sqlvolumn:/var/opt/mssql
+      - mysqlvolumn:/var/lib/mysql
     networks:
-     - productnetwork
+      - productnetwork
+
 networks:
   productnetwork:
+
 volumes:
-  sqlvolumn:
-
-
-    
+  mysqlvolumn:

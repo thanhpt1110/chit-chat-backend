@@ -1,0 +1,35 @@
+name: Deploy to AWS EC2
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+
+jobs:
+  deploy:
+    if: github.event.pull_request.merged == true && github.event.pull_request.merge_commit_sha != null
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Deploy to EC2
+      env:
+        SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      run: |
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/chit-chat-server.pem ubuntu@ec2-18-138-250-74.ap-southeast-1.compute.amazonaws.com << 'EOF'
+          cd ~/chit-chat-backend
+          git checkout main
+          git pull origin main
+          docker-compose -f ~/chit-chat-backend/docker/DockerCompose/docker-compose.prod.yml down
+          docker-compose -f ~/chit-chat-backend/docker/DockerCompose/docker-compose.prod.yml build
+          docker-compose -f ~/chit-chat-backend/docker/DockerCompose/docker-compose.prod.yml up -d
+        EOF

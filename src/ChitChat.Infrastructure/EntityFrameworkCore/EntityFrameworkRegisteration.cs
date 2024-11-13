@@ -1,4 +1,3 @@
-using ChitChat.DataAccess;
 using ChitChat.DataAccess.Data;
 using ChitChat.DataAccess.Data.Interceptor;
 
@@ -18,17 +17,19 @@ namespace ChitChat.Infrastructure.EntityFrameworkCore
 
             builder.Services.AddDbContext<ApplicationDbContext>((provider, options) =>
             {
-                var databaseConfig = configuration.GetRequiredSection("Database").Get<DatabaseConfiguration>();
+                var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+                var connectionString = environment == "Development"
+                    ? configuration.GetSection("Database:ConnectionStrings").GetValue<string>("LocalConnection")
+                    : configuration.GetSection("Database:ConnectionStrings").GetValue<string>("AWSConnection");
 
                 options
-                    .AddInterceptors(provider.GetRequiredService<ContextSaveChangeInterceptor>());
-
-
-                options.UseSqlServer(databaseConfig.ConnectionString, opt =>
-                {
-                    opt.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
-                });
-
+                    .AddInterceptors(provider.GetRequiredService<ContextSaveChangeInterceptor>())
+                    .UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 39)),
+                        opt =>
+                        {
+                            opt.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
+                            opt.EnableRetryOnFailure();
+                        });
             });
 
             builder.Services.AddScoped<DbContext>(sp => sp.GetRequiredService<ApplicationDbContext>());

@@ -1,4 +1,4 @@
-﻿namespace ChitChat.DataAccess
+namespace ChitChat.DataAccess
 {
     public class DatabaseConfiguration
     {
