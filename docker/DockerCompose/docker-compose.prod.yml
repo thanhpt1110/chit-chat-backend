@@ -1,6 +1,4 @@
-﻿version: "3.4"
-
-services:
+﻿services:
   chitchat.webapi:
     image: ${DOCKER_REGISTRY-}chitchatwebapi
     build:
@@ -8,8 +6,11 @@ services:
       dockerfile: src/ChitChat.WebAPI/Dockerfile
     ports:
       - "80:8080"
+      - "443:8081"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/chitchat.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=chitchat
     networks:
       - productnetwork
     restart: unless-stopped
