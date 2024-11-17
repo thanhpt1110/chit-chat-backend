@@ -11,6 +11,8 @@
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/chitchat.pfx
       - ASPNETCORE_Kestrel__Certificates__Default__Password=chitchat
+    env_file:
+      - ../../src/ChitChat.WebAPI/.env
     networks:
       - productnetwork
     restart: unless-stopped
