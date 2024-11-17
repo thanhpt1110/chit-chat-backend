@@ -37,7 +37,7 @@ namespace ChitChat.WebAPI.Controllers
         {
             return Ok(ApiResult<bool>.Success(await _userService.LogoutAsync(loginHistoryId)));
         }
-        [HttpPost("refresh-token")]
+        [HttpPost("refreshToken")]
         [AllowAnonymous]
         public async Task<IActionResult> RefreshTokenAsync([FromBody] RefreshTokenDto refreshTokenDto)
         {
