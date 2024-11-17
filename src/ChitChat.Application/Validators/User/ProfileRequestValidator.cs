@@ -1,4 +1,4 @@
-using ChitChat.Application.Models.Dtos.User;
+using ChitChat.Application.Models.Dtos.User.Profile;
 using ChitChat.Domain.Enums;
 
 using FluentValidation;

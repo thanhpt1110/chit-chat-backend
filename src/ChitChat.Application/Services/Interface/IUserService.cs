@@ -6,6 +6,7 @@ namespace ChitChat.Application.Services.Interface
     {
         Task<bool> RegisterAsync(RegisterationRequestDto registerationRequestDto);
         Task<LoginResponseDto> LoginAsync(LoginRequestDto loginRequestDto);
+        Task<RefreshTokenDto> RefreshTokenAsync(RefreshTokenDto refreshTokenDto);
         Task<bool> LogoutAsync(Guid loginHistoryId);
     }
 }

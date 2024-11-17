@@ -46,7 +46,7 @@ namespace ChitChat.WebAPI.Controllers
         }
         [HttpPost]
         [Route("")]
-        public async Task<IActionResult> CreateNewPost([FromBody] CreatePostRequestDto requestDto)
+        public async Task<IActionResult> CreateNewPost([FromForm] CreatePostRequestDto requestDto)
         {
             return Ok(ApiResult<PostDto>.Success(await _postService.CreateNewPostAsync(requestDto)));
         }

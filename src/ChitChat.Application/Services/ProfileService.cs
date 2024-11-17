@@ -3,7 +3,7 @@ using AutoMapper;
 using ChitChat.Application.Exceptions;
 using ChitChat.Application.Helpers;
 using ChitChat.Application.Localization;
-using ChitChat.Application.Models.Dtos.User;
+using ChitChat.Application.Models.Dtos.User.Profile;
 using ChitChat.Application.Services.Interface;
 using ChitChat.DataAccess.Repositories.Interface;
 using ChitChat.DataAccess.Repositories.Interrface;

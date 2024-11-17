@@ -14,6 +14,8 @@ namespace ChitChat.Application.Mapping
             CreateMap<CreatePostRequestDto, Post>();
             CreateMap<CreatePostMediaRequestDto, PostMedia>();
             CreateMap<PostMedia, PostMediaDto>();
+            CreateMap<PostMediaDto, PostMedia>();
+
             //
 
         }

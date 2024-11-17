@@ -13,9 +13,9 @@ namespace ChitChat.Application.Validators.Post
                 .WithMessage("Description is required")
                 .MaximumLength(500)
                 .WithMessage("Description must not exceed 100 characters");
-            RuleFor(x => x.PostMedias)
+            RuleFor(x => x.Files)
                 .NotEmpty()
-                .WithMessage("Post media is required");
+                .WithMessage("File is required");
         }
     }
 }

@@ -1,4 +1,4 @@
-namespace ChitChat.Application.Models.Dtos.User
+namespace ChitChat.Application.Models.Dtos.User.Profile
 {
     public class ProfileSearchQueryDto : PaginationFilter
     {

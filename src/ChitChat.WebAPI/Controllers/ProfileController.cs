@@ -1,5 +1,5 @@
 using ChitChat.Application.Models;
-using ChitChat.Application.Models.Dtos.User;
+using ChitChat.Application.Models.Dtos.User.Profile;
 using ChitChat.Application.Services.Interface;
 
 using Microsoft.AspNetCore.Authorization;

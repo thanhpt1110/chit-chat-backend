@@ -9,6 +9,7 @@ using ChitChat.Application.Models;
 using ChitChat.Application.Models.Dtos.Post;
 using ChitChat.Application.Models.Dtos.Post.Comments;
 using ChitChat.Application.Models.Dtos.Post.CreatePost;
+using ChitChat.Application.Services.CloudinaryInterface;
 using ChitChat.Application.Services.Interface;
 using ChitChat.DataAccess.Repositories.Interface;
 using ChitChat.DataAccess.Repositories.Interrface;
@@ -32,13 +33,14 @@ namespace ChitChat.Application.Services
         private readonly IBaseRepository<PostMedia> _postMediaRepository;
         private readonly IBaseRepository<ReactionPost> _reactionPostRepository;
         private readonly IBaseRepository<ReactionComment> _reactionCommentRepository;
-
+        private readonly ICloudinaryService _cloudinaryService;
         private readonly IUserRepository _userRepository;
         public PostService(
             IClaimService claimService
             , IMapper mapper
             , IRepositoryFactory repositoryFactory
-            , IUserRepository userRepository)
+            , IUserRepository userRepository
+            , ICloudinaryService cloudinaryService)
         {
             _claimService = claimService;
             _mapper = mapper;
@@ -49,6 +51,7 @@ namespace ChitChat.Application.Services
             _postMediaRepository = repositoryFactory.GetRepository<PostMedia>();
             _reactionPostRepository = repositoryFactory.GetRepository<ReactionPost>();
             _reactionCommentRepository = repositoryFactory.GetRepository<ReactionComment>();
+            _cloudinaryService = cloudinaryService;
         }
         #region GET
         public async Task<List<PostDto>> GetAllPostsAsync(PostSearchQueryDto queryDto)
@@ -105,15 +108,15 @@ namespace ChitChat.Application.Services
             string userId = _claimService.GetUserId();
             Post post = _mapper.Map<Post>(requestDto);
             post.UserId = userId;
+            post.Id = Guid.NewGuid();
+            var requestPostMedia = await _cloudinaryService.PostMediaToCloudAsync(requestDto.Files, post.Id);
+            var postMedias = _mapper.Map<List<PostMedia>>(requestPostMedia);
             await _postRepository.AddAsync(post);
-            if (post.PostMedias != null)
+            foreach (var postMedia in postMedias)
             {
-                foreach (var postMedia in post.PostMedias)
-                {
-                    postMedia.PostId = post.Id;
-                }
-                await _postMediaRepository.AddRangeAsync(post.PostMedias);
+                postMedia.PostId = post.Id;
             }
+            await _postMediaRepository.AddRangeAsync(postMedias);
             return _mapper.Map<PostDto>(post);
         }
         public async Task<CommentDto> CreateNewCommentAsync(Guid postId, CreateCommentRequestDto requestDto)

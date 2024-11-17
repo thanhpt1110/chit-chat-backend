@@ -1,4 +1,4 @@
-# See https://aka.ms/customizecontainer to learn how to customize your debug container 
+﻿# See https://aka.ms/customizecontainer to learn how to customize your debug container 
 # and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
 # Stage 1: Base
@@ -20,7 +20,7 @@ COPY ["ChitChat.Domain/ChitChat.Domain.csproj", "ChitChat.Domain/"]
 
 RUN dotnet restore "ChitChat.WebAPI/ChitChat.WebAPI.csproj"
 
-COPY . .
+COPY . . 
 WORKDIR "/src/ChitChat.WebAPI"
 RUN dotnet build "ChitChat.WebAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
