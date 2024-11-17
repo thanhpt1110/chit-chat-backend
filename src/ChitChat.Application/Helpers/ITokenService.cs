@@ -1,5 +1,7 @@
-﻿using ChitChat.Domain.Identity;
 using System.Security.Claims;
+
+using ChitChat.Domain.Entities;
+using ChitChat.Domain.Identity;
 
 namespace ChitChat.Application.Helpers
 {
@@ -9,6 +11,6 @@ namespace ChitChat.Application.Helpers
 
         Task<ClaimsIdentity> GetPrincipalFromExpiredToken(string? token);
 
-        string GenerateAccessToken(UserApplication user, IEnumerable<string> roles);
+        string GenerateAccessToken(UserApplication user, IEnumerable<string> roles, LoginHistory loginHistory);
     }
 }

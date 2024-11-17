@@ -21,7 +21,7 @@ namespace ChitChat.DataAccess.Configurations
             // Configure relationship with ParentComment
             modelBuilder
                 .HasOne(c => c.ParentComment)
-                .WithMany()
+                .WithMany(c => c.ReplyComments)
                 .HasForeignKey(c => c.ParentCommentId)
                 .OnDelete(DeleteBehavior.Restrict);
 

@@ -1,5 +1,5 @@
 using ChitChat.Application.Models;
-using ChitChat.Application.Models.Dtos.User;
+using ChitChat.Application.Models.Dtos.User.Profile;
 using ChitChat.Application.Services.Interface;
 
 using Microsoft.AspNetCore.Authorization;
@@ -20,9 +20,9 @@ namespace ChitChat.WebAPI.Controllers
         [HttpGet]
         [Route("")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetAllProfilesAsync([FromQuery] string searchText = "", [FromQuery] int pageIndex = 0, [FromQuery] int pageSize = 50)
+        public async Task<IActionResult> GetAllProfilesAsync([FromQuery] ProfileSearchQueryDto query)
         {
-            return Ok(ApiResult<List<ProfileDto>>.Success(await _profileService.GetAllProfilesAsync(searchText, pageIndex, pageSize)));
+            return Ok(ApiResult<List<ProfileDto>>.Success(await _profileService.GetAllProfilesAsync(query)));
         }
         [HttpGet]
         [Route("${userId}")]

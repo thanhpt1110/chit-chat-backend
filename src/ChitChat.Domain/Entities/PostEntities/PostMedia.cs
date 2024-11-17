@@ -7,8 +7,6 @@ namespace ChitChat.Domain.Entities.PostEntities
         public string MediaUrl { get; set; }
         public int MediaOrder { get; set; }
         public string Description { get; set; }
-        public bool IsDeleted { get; set; }
-
         public Post Post { get; set; } // Navigation property
     }
 }

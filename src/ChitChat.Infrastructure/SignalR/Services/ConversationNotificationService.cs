@@ -12,8 +12,6 @@ namespace ChitChat.Infrastructure.SignalR.Services
     {
         private readonly IHubContext<ConversationHub, IConversationClient> _hubContext;
         public ConversationNotificationService(IHubContext<ConversationHub, IConversationClient> hubContext) => this._hubContext = hubContext;
-
-
         public async Task SendMessage(MessageDto message)
         {
             await _hubContext.Clients.Group(HubRoom.ConversationHubJoinRoom(message.ConversationId)).NewMessage(message);

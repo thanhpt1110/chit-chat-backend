@@ -1,4 +1,5 @@
 using ChitChat.Application.Services.Caching;
+
 using Microsoft.Extensions.Caching.Memory;
 
 namespace ChitChat.Infrastructure.Caching
