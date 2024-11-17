@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChitChat.DataAccess", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChitChat.Domain", "src\ChitChat.Domain\ChitChat.Domain.csproj", "{EB8C3E1E-3ECF-4C0E-A804-E0BF1B967A61}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker\DockerCompose\docker-compose.dcproj", "{37FE7C74-3803-4E83-A00F-09A51F680D0A}"
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "DockerCompose", "docker\DockerCompose\DockerCompose.dcproj", "{37FE7C74-3803-4E83-A00F-09A51F680D0A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

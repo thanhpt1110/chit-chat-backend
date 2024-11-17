@@ -5,11 +5,18 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ChitChat.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class V4 : Migration
+    public partial class V1Update : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropColumn(
+                name: "TestMigration",
+                table: "Comments");
+
+            migrationBuilder.DropColumn(
+                name: "Test_Update_comment",
+                table: "Comments");
 
             migrationBuilder.AlterColumn<int>(
                 name: "InteractionType",
@@ -17,7 +24,8 @@ namespace ChitChat.DataAccess.Migrations
                 type: "int",
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
+                oldType: "longtext")
+                .OldAnnotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.AddColumn<int>(
                 name: "CommentCount",
@@ -70,14 +78,25 @@ namespace ChitChat.DataAccess.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "InteractionType",
                 table: "UserInteractions",
-                type: "nvarchar(max)",
+                type: "longtext",
                 nullable: false,
                 oldClrType: typeof(int),
-                oldType: "int");
+                oldType: "int")
+                .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.AddColumn<string>(
+                name: "TestMigration",
+                table: "Comments",
+                type: "longtext",
+                nullable: false)
+                .Annotation("MySql:CharSet", "utf8mb4");
 
-
-
+            migrationBuilder.AddColumn<string>(
+                name: "Test_Update_comment",
+                table: "Comments",
+                type: "longtext",
+                nullable: false)
+                .Annotation("MySql:CharSet", "utf8mb4");
         }
     }
 }
