@@ -1,6 +1,7 @@
 using AutoMapper;
 
 using ChitChat.Application.Models.Dtos.User;
+using ChitChat.Application.Models.Dtos.User.Profile;
 using ChitChat.Domain.Identity;
 
 namespace ChitChat.Application.Mapping

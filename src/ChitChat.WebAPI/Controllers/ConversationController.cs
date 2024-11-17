@@ -25,9 +25,9 @@ namespace ChitChat.WebAPI.Controllers
         }
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> GetAllConversationsAsync([FromQuery] int pageIndex = 0, [FromQuery] int pageSize = 30)
+        public async Task<IActionResult> GetAllConversationsAsync([FromQuery] PaginationFilter pagination)
         {
-            return Ok(ApiResult<List<ConversationDto>>.Success(await _conversationService.GetAllConversationsAsync(pageIndex, pageSize)));
+            return Ok(ApiResult<List<ConversationDto>>.Success(await _conversationService.GetAllConversationsAsync(pagination)));
         }
         [HttpGet]
         [Route("${conversationId}")]

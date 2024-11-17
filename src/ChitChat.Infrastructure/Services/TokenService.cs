@@ -1,12 +1,14 @@
-﻿using ChitChat.Application.Exceptions;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
+
+using ChitChat.Application.Exceptions;
 using ChitChat.Application.Helpers;
 using ChitChat.Domain.Common;
 using ChitChat.Domain.Identity;
 using ChitChat.Infrastructure.ConfigSetting;
+
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
 
 namespace ChitChat.Infrastructure.Services
 {
@@ -24,7 +26,7 @@ namespace ChitChat.Infrastructure.Services
             randomNumberGenerator.GetBytes(randomNumber);
             return (Convert.ToBase64String(randomNumber), _jWTConfigSetting.RefreshTokenValidityInDays);
         }
-        public string GenerateAccessToken(UserApplication user, IEnumerable<string> roles)
+        public string GenerateAccessToken(UserApplication user, IEnumerable<string> roles, LoginHistory loginHistory)
         {
             var key = Encoding.ASCII.GetBytes(_jWTConfigSetting.SecretKey);
 
@@ -32,6 +34,7 @@ namespace ChitChat.Infrastructure.Services
             {
             new Claim(ClaimTypes.NameIdentifier, user.Id),
             new Claim(ClaimTypes.Name, user.UserName),
+            new Claim(JWTConfigSetting.LoginHistoryIdClaimType, loginHistory.Id.ToString()),
             };
             // Thêm các claim cho từng role của user
             var tokenHandler = new JwtSecurityTokenHandler();

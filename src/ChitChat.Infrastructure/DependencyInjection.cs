@@ -1,7 +1,9 @@
 using ChitChat.Application.Helpers;
+using ChitChat.Application.Services.CloudinaryInterface;
 using ChitChat.DataAccess.Data;
 using ChitChat.Domain.Identity;
 using ChitChat.Infrastructure.Caching;
+using ChitChat.Infrastructure.CloudinaryConfigurations;
 using ChitChat.Infrastructure.EntityFrameworkCore;
 using ChitChat.Infrastructure.Logging;
 using ChitChat.Infrastructure.Middleware;
@@ -41,8 +43,10 @@ namespace ChitChat.Infrastructure
         public static IServiceCollection AddInfrastructureService(this IServiceCollection services)
         {
             services.AddIdentity();
+            services.AddCloudinary();
             services.AddSingleton<IClaimService, ClaimService>();
             services.AddSingleton<ITokenService, TokenService>();
+            services.AddSingleton<ICloudinaryService, CloudinaryService>();
             return services;
         }
         private static void AddIdentity(this IServiceCollection services)

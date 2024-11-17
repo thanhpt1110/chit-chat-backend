@@ -1,6 +1,6 @@
 namespace ChitChat.Domain.Entities.PostEntities.Reaction
 {
-    public class ReactionPost:BaseAuditedEntity
+    public class ReactionPost : BaseAuditedEntity
     {
         public Guid PostId { get; set; }
         public string UserId { get; set; }

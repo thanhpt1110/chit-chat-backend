@@ -31,7 +31,8 @@ builder.Services
     .AddApplicationServices();
 builder
     .AddInfrastructure()
-    .AddWebAPI();
+    .AddWebAPI()
+    ;
 var app = builder.Build();
 
 
