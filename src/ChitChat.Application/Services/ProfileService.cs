@@ -62,7 +62,7 @@ namespace ChitChat.Application.Services
             _mapper.Map(userApplication, response);
             return response;
         }
-        public async Task<ProfileDto> UpdateProfileAsync(Guid userId, ProfileDto request)
+        public async Task<ProfileDto> UpdateProfileAsync(Guid userId, ProfileRequestDto request)
         {
             if (userId.ToString() != _claimService.GetUserId())
             {
@@ -79,7 +79,9 @@ namespace ChitChat.Application.Services
             userProfile.SearchData = this.GenerateSearchData(request.DisplayName, userApplication.Email ?? "", userId.ToString());
             await _profileRepository.UpdateAsync(userProfile);
             await _userRepository.UpdateAsync(userApplication);
-            return request;
+            var response = _mapper.Map<ProfileDto>(userProfile);
+            _mapper.Map(userApplication, response);
+            return response;
         }
         private string GenerateSearchData(string displayName, string email, string userId)
         {

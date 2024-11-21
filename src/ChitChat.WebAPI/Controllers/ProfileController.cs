@@ -39,7 +39,7 @@ namespace ChitChat.WebAPI.Controllers
         [HttpPut]
         [Route("${userId}")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetProfileByIdAsync(Guid userId, [FromBody] ProfileDto Profile)
+        public async Task<IActionResult> GetProfileByIdAsync(Guid userId, [FromBody] ProfileRequestDto Profile)
         {
             return Ok(ApiResult<ProfileDto>.Success(await _profileService.UpdateProfileAsync(userId, Profile)));
         }
