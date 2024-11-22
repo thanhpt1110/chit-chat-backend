@@ -25,7 +25,7 @@ namespace ChitChat.WebAPI.Controllers
             return Ok(ApiResult<List<ProfileDto>>.Success(await _profileService.GetAllProfilesAsync(query)));
         }
         [HttpGet]
-        [Route("${userId}")]
+        [Route("{userId}")]
         public async Task<IActionResult> GetProfileByIdAsync(Guid userId)
         {
             return Ok(ApiResult<ProfileDto>.Success(await _profileService.GetProfileByIdAsync(userId)));
@@ -37,7 +37,7 @@ namespace ChitChat.WebAPI.Controllers
             return Ok(ApiResult<ProfileDto>.Success(await _profileService.CreatProfileAsync(request)));
         }
         [HttpPut]
-        [Route("${userId}")]
+        [Route("{userId}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetProfileByIdAsync(Guid userId, [FromBody] ProfileRequestDto Profile)
         {
