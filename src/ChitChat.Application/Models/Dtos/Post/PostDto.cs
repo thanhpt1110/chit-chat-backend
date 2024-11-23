@@ -1,13 +1,16 @@
-using ChitChat.Domain.Entities.PostEntities;
+using ChitChat.Application.Models.Dtos.Post.Comments;
+using ChitChat.Application.Models.Dtos.User;
 
 namespace ChitChat.Application.Models.Dtos.Post
 {
+
     public class PostDto : BaseResponseDto
     {
         public string Description { get; set; }
         public int ReactionCount { get; set; }
         public int CommentCount { get; set; }
-        public ICollection<Comment>? Comments { get; set; }
+        public ICollection<CommentDto>? Comments { get; set; }
         public ICollection<PostMediaDto>? PostMedias { get; set; }
+        public UserDto UserPosted { get; set; }
     }
 }

@@ -19,9 +19,10 @@ namespace ChitChat.WebAPI.Controllers
         {
             this._postService = postService;
         }
+        [ProducesResponseType(typeof(ApiResult<List<PostDto>>), StatusCodes.Status200OK)] // OK với ProductResponse
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> GetAllPostsAsync([FromQuery] PostSearchQueryDto query)
+        public async Task<IActionResult> GetAllPostsAsync([FromQuery] PostUserSearchQueryDto query)
         {
             return Ok(ApiResult<List<PostDto>>.Success(await _postService.GetAllPostsAsync(query)));
         }
@@ -34,9 +35,9 @@ namespace ChitChat.WebAPI.Controllers
         }
         [HttpGet]
         [Route("reccomendation")]
-        public async Task<IActionResult> GetReccomendationPostsAsync([FromQuery] PaginationFilter query)
+        public async Task<IActionResult> GetReccomendationPostsAsync([FromQuery] PostSearchQueryDto query)
         {
-            return Ok(ApiResult<PostDto>.Success(await _postService.GetReccomendationPostsAsync(query)));
+            return Ok(ApiResult<List<PostDto>>.Success(await _postService.GetReccomendationPostsAsync(query)));
         }
         [HttpGet]
         [Route("{postId}/comments/{commentId}")]

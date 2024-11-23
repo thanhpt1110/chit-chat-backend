@@ -10,7 +10,7 @@ namespace ChitChat.Application.Mapping
     {
         public PostProfile()
         {
-            CreateMap<Post, PostDto>();
+            CreateMap<Post, PostDto>().ForMember(dest => dest.UserPosted, opt => opt.MapFrom(src => src.User));
             CreateMap<CreatePostRequestDto, Post>();
             CreateMap<CreatePostMediaRequestDto, PostMedia>();
             CreateMap<PostMedia, PostMediaDto>();

@@ -5,7 +5,6 @@ using AutoMapper;
 using ChitChat.Application.Exceptions;
 using ChitChat.Application.Helpers;
 using ChitChat.Application.Localization;
-using ChitChat.Application.Models;
 using ChitChat.Application.Models.Dtos.Post;
 using ChitChat.Application.Models.Dtos.Post.Comments;
 using ChitChat.Application.Models.Dtos.Post.CreatePost;
@@ -17,7 +16,6 @@ using ChitChat.Domain.Entities.PostEntities;
 using ChitChat.Domain.Entities.PostEntities.Reaction;
 using ChitChat.Domain.Entities.SystemEntities;
 using ChitChat.Domain.Enums;
-using ChitChat.Domain.Extensions;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -54,28 +52,21 @@ namespace ChitChat.Application.Services
             _cloudinaryService = cloudinaryService;
         }
         #region GET
-        public async Task<List<PostDto>> GetAllPostsAsync(PostSearchQueryDto queryDto)
+        public async Task<List<PostDto>> GetAllPostsAsync(PostUserSearchQueryDto query)
         {
             Expression<Func<Post, bool>> filter = x => !x.IsDeleted;
-            var userId = _claimService.GetUserId();
-            if (!string.IsNullOrEmpty(queryDto.SearchText))
+            var userId = query.UserId;
+            if (string.IsNullOrEmpty(userId))
+                userId = _claimService.GetUserId();
+            var user = await _userRepository.GetFirstAsync(p => p.Id == userId);
+            if (user == null)
             {
-                filter = filter.And(x => x.Description.Contains(queryDto.SearchText));
+                throw new NotFoundException(ValidationTexts.NotFound.Format("User", userId));
             }
-            if (!string.IsNullOrEmpty(queryDto.UserId))
-            {
-                var user = await _userRepository.GetFirstAsync(p => p.Id == queryDto.UserId);
-                if (user == null)
-                {
-                    throw new NotFoundException(ValidationTexts.NotFound.Format("User", queryDto.UserId));
-                }
-                filter = filter.And(x => x.UserId == queryDto.UserId);
-            }
-            else
-                filter = filter.And(x => x.UserId == userId);
+
             var paginationResponse = await _postRepository.GetAllAsync(filter, p => p.OrderByDescending(p => p.CreatedOn)
-                                                            , queryDto.PageIndex
-                                                            , queryDto.PageSize,
+                                                            , query.PageIndex
+                                                            , query.PageSize,
                                                             p => p.IgnoreAutoIncludes().Include(c => c.PostMedias)
                                                             );
             return _mapper.Map<List<PostDto>>(paginationResponse.Items);
@@ -83,19 +74,44 @@ namespace ChitChat.Application.Services
         public async Task<PostDto> GetPostByIdAsync(Guid postId)
         {
             var post = await _postRepository.GetFirstOrDefaultAsync(p => p.Id == postId && !p.IsDeleted
-                                                                    , p => p.Include(c => c.PostMedias).Include(c => c.Comments));
+                                                                    , p => p.Include(c => c.PostMedias).Include(c => c.Comments).Include(c => c.User));
             if (post == null)
                 throw new NotFoundException(ValidationTexts.NotFound.Format("Post", postId));
-            post.Comments = post.Comments.Where(p => p.CommentType == CommentType.Parent).ToList();
+            post.Comments = post.Comments.Where(p => p.CommentType == CommentType.Parent.ToString()).ToList();
             return _mapper.Map<PostDto>(post);
         }
-        public Task<PostDto> GetReccomendationPostsAsync(PaginationFilter query)
+        public async Task<List<PostDto>> GetReccomendationPostsAsync(PostSearchQueryDto query)
         {
-            throw new NotImplementedException();
+            var userId = _claimService.GetUserId();
+            if (!string.IsNullOrEmpty(query.SearchText))
+            {
+                if (query.IsTag)
+                {
+                    var postSearchTag = await _postRepository.GetAllAsync(p => p.PostDetailTags.Any(p => p.Tag.Contains(query.SearchText)) && !p.IsDeleted && p.UserId != userId
+                                                , p => p.OrderByDescending(p => p.CreatedOn)
+                                                , query.PageIndex
+                                                , query.PageSize
+                                                , p => p.Include(p => p.PostDetailTags).Include(p => p.User).Include(p => p.PostMedias));
+
+                    return _mapper.Map<List<PostDto>>(postSearchTag.Items);
+                }
+                var postSearchDescription = await _postRepository.GetAllAsync(p => p.Description.Contains(query.SearchText) && !p.IsDeleted && p.UserId != userId
+                                                , p => p.OrderByDescending(p => p.CreatedOn)
+                                                , query.PageIndex
+                                                , query.PageSize
+                                                , p => p.Include(p => p.PostDetailTags).Include(p => p.User).Include(p => p.PostMedias));
+                return _mapper.Map<List<PostDto>>(postSearchDescription.Items);
+            }
+
+            var posts = await _postRepository.GetAllAsync(p => p.UserId != userId && !p.IsDeleted, p => p.OrderByDescending(p => p.CreatedOn)
+                                                , query.PageIndex
+                                                , query.PageSize
+                                                , p => p.Include(p => p.PostDetailTags).Include(p => p.User).Include(p => p.PostMedias));
+            return _mapper.Map<List<PostDto>>(posts.Items);
         }
         public async Task<List<CommentDto>> GetAllReplyCommentsAsync(Guid postId, Guid commentId)
         {
-            var commentParent = _commentRepository.GetFirstOrDefaultAsync(p => p.Id == commentId && p.CommentType == CommentType.Parent);
+            var commentParent = _commentRepository.GetFirstOrDefaultAsync(p => p.Id == commentId && p.CommentType == CommentType.Parent.ToString());
             if (commentParent == null)
                 throw new NotFoundException(ValidationTexts.NotFound.Format("Comment", commentId));
             var comments = await _commentRepository.GetAllAsync(p => p.PostId == postId && p.ParentCommentId == commentId);
@@ -134,7 +150,7 @@ namespace ChitChat.Application.Services
             };
             comment.PostId = postId;
             comment.UserPostedId = userId;
-            comment.CommentType = CommentType.Parent;
+            comment.CommentType = CommentType.Parent.ToString();
             ++post.CommentCount;
             await _commentRepository.AddAsync(comment);
             await _postRepository.UpdateAsync(post);
@@ -143,11 +159,11 @@ namespace ChitChat.Application.Services
         }
         public async Task<CommentDto> CreateReplyCommentAsync(Guid postId, Guid parentCommentId, CreateCommentRequestDto requestDto)
         {
-            if (!(await _commentRepository.AnyAsync(p => p.Id == parentCommentId && p.CommentType == CommentType.Parent)))
+            if (!(await _commentRepository.AnyAsync(p => p.Id == parentCommentId && p.CommentType == CommentType.Parent.ToString())))
                 throw new NotFoundException(ValidationTexts.NotFound.Format("Comment", parentCommentId));
             var userId = _claimService.GetUserId();
             var comment = _mapper.Map<Comment>(requestDto);
-            comment.CommentType = CommentType.Reply;
+            comment.CommentType = CommentType.Reply.ToString();
             var post = await _postRepository.GetFirstAsync(p => p.Id == postId);
             if (post == null)
                 throw new NotFoundException(ValidationTexts.NotFound.Format("Post", postId));

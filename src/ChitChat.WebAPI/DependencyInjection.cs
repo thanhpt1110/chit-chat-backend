@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text;
 
 using ChitChat.Infrastructure.ConfigSetting;
@@ -76,7 +77,9 @@ namespace ChitChat.WebAPI
                     <br/>}"
                     // TODO: Description, TermsOfService, Contact, License
                 });
-
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                option.IncludeXmlComments(xmlPath);
                 option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = "JWT Authorization header using the Bearer scheme (Example: 'Bearer YOUR_TOKEN')",

@@ -1,4 +1,3 @@
-using ChitChat.Application.Models;
 using ChitChat.Application.Models.Dtos.Post;
 using ChitChat.Application.Models.Dtos.Post.Comments;
 using ChitChat.Application.Models.Dtos.Post.CreatePost;
@@ -7,9 +6,9 @@ namespace ChitChat.Application.Services.Interface
 {
     public interface IPostService
     {
-        Task<List<PostDto>> GetAllPostsAsync(PostSearchQueryDto query);
+        Task<List<PostDto>> GetAllPostsAsync(PostUserSearchQueryDto query);
         Task<PostDto> GetPostByIdAsync(Guid postId);
-        Task<PostDto> GetReccomendationPostsAsync(PaginationFilter query);
+        Task<List<PostDto>> GetReccomendationPostsAsync(PostSearchQueryDto query);
         Task<List<CommentDto>> GetAllReplyCommentsAsync(Guid postId, Guid commentId);
         Task<PostDto> CreateNewPostAsync(CreatePostRequestDto requestDto);
         Task<CommentDto> CreateNewCommentAsync(Guid postId, CreateCommentRequestDto requestDto);

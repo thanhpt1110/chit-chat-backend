@@ -7,7 +7,7 @@ namespace ChitChat.Domain.Entities.PostEntities
         public string UserPostedId { get; set; }
         public string Content { get; set; }
         public int ReactionCount { get; set; } = 0;
-        public CommentType CommentType { get; set; }
+        public string CommentType { get; set; }
         public Post Post { get; set; } // Navigation property
         public Comment ParentComment { get; set; } // Navigation property
         public List<Comment> ReplyComments { get; set; }
