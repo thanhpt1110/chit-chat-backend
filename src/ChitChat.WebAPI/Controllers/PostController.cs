@@ -29,37 +29,43 @@ namespace ChitChat.WebAPI.Controllers
         [HttpGet]
         [Route("{postId}")]
         [AllowAnonymous]
+        [ProducesResponseType(typeof(ApiResult<PostDto>), StatusCodes.Status200OK)] // OK với ProductResponse
+
         public async Task<IActionResult> GetPostByIdAsync(Guid postId)
         {
             return Ok(ApiResult<PostDto>.Success(await _postService.GetPostByIdAsync(postId)));
         }
         [HttpGet]
         [Route("reccomendation")]
+        [ProducesResponseType(typeof(ApiResult<List<PostDto>>), StatusCodes.Status200OK)] // OK với ProductResponse
         public async Task<IActionResult> GetReccomendationPostsAsync([FromQuery] PostSearchQueryDto query)
         {
             return Ok(ApiResult<List<PostDto>>.Success(await _postService.GetReccomendationPostsAsync(query)));
         }
         [HttpGet]
         [Route("{postId}/comments/{commentId}")]
+        [ProducesResponseType(typeof(ApiResult<List<CommentDto>>), StatusCodes.Status200OK)] // OK với ProductResponse
         public async Task<IActionResult> GetAllReplyCommentsAsync(Guid postId, Guid commentId)
         {
             return Ok(ApiResult<List<CommentDto>>.Success(await _postService.GetAllReplyCommentsAsync(postId, commentId)));
         }
         [HttpPost]
         [Route("")]
+        [ProducesResponseType(typeof(ApiResult<PostDto>), StatusCodes.Status200OK)] // OK với ProductResponse
         public async Task<IActionResult> CreateNewPost([FromForm] CreatePostRequestDto requestDto)
         {
             return Ok(ApiResult<PostDto>.Success(await _postService.CreateNewPostAsync(requestDto)));
         }
         [HttpPost]
         [Route("{postId}/comments")]
-        public async Task<IActionResult> CreateNewCommentAsync(Guid postId, [FromBody] CreateCommentRequestDto requestDto)
+        [ProducesResponseType(typeof(ApiResult<CommentDto>), StatusCodes.Status200OK)] // OK với ProductResponse
+        public async Task<IActionResult> CreateNewCommentAsync(Guid postId, [FromBody] CommentRequestDto requestDto)
         {
             return Ok(ApiResult<CommentDto>.Success(await _postService.CreateNewCommentAsync(postId, requestDto)));
         }
         [HttpPost]
         [Route("{postId}/comments/{parentCommentId}")]
-        public async Task<IActionResult> CreateReplyCommentAsync(Guid postId, Guid parentCommentId, [FromBody] CreateCommentRequestDto requestDto)
+        public async Task<IActionResult> CreateReplyCommentAsync(Guid postId, Guid parentCommentId, [FromBody] CommentRequestDto requestDto)
         {
             return Ok(ApiResult<CommentDto>.Success(await _postService.CreateReplyCommentAsync(postId, parentCommentId, requestDto)));
         }
@@ -71,13 +77,13 @@ namespace ChitChat.WebAPI.Controllers
         }
         [HttpPut]
         [Route("{postId}")]
-        public async Task<IActionResult> UpdatePostByIdAsync([FromBody] PostDto postDto, Guid postId)
+        public async Task<IActionResult> UpdatePostByIdAsync([FromBody] UpdatePostRequestDto postDto, Guid postId)
         {
             return Ok(ApiResult<PostDto>.Success(await _postService.UpdatePostByIdAsync(postDto, postId)));
         }
         [HttpPut]
         [Route("{postId}/comments/{commentId}")]
-        public async Task<IActionResult> UpdateCommentAsync([FromBody] CommentDto commentDto, Guid commentId)
+        public async Task<IActionResult> UpdateCommentAsync([FromBody] CommentRequestDto commentDto, Guid commentId)
         {
             return Ok(ApiResult<CommentDto>.Success(await _postService.UpdateCommentAsync(commentDto, commentId)));
         }

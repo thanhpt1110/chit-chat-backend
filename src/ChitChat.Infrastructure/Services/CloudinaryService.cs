@@ -21,6 +21,8 @@ namespace ChitChat.Infrastructure.Services
             _cloudinary = cloudinary;
             _logger = logger;
         }
+
+
         public async Task<List<PostMediaDto>> PostMediaToCloudAsync(List<IFormFile> files, Guid postId)
         {
             var stopwatch = Stopwatch.StartNew();
@@ -52,7 +54,7 @@ namespace ChitChat.Infrastructure.Services
             {
                 using (var stream = file.OpenReadStream())
                 {
-                    string customId = $"post_{postId}/media_{postMediaId}";
+                    string customId = GetPublicId(postId, postMediaId);
 
                     var uploadParams = new ImageUploadParams
                     {
@@ -60,15 +62,24 @@ namespace ChitChat.Infrastructure.Services
                         PublicId = customId,
                         Transformation = new Transformation()
                                         .Width(800)
-                                        .Height(600)
+                                        .Height(800)
                                         .Crop("thumb")
                     };
-
                     uploadResult = await _cloudinary.UploadAsync(uploadParams);
                 }
             }
             return uploadResult;
         }
-
+        public async Task<bool> DeleteMediaFromCloudAsync(Guid postId, Guid postMediaId)
+        {
+            string publicId = GetPublicId(postId, postMediaId);
+            var deletionParams = new DeletionParams(publicId);
+            var result = await _cloudinary.DestroyAsync(deletionParams);
+            return result.Result == "ok";
+        }
+        private static string GetPublicId(Guid postId, Guid postMediaId)
+        {
+            return $"post_{postId}/media_{postMediaId}";
+        }
     }
 }

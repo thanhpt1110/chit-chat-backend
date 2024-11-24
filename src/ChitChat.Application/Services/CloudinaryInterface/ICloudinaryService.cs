@@ -7,5 +7,6 @@ namespace ChitChat.Application.Services.CloudinaryInterface
     public interface ICloudinaryService
     {
         Task<List<PostMediaDto>> PostMediaToCloudAsync(List<IFormFile> files, Guid postId);
+        Task<bool> DeleteMediaFromCloudAsync(Guid postId, Guid postMediaId);
     }
 }

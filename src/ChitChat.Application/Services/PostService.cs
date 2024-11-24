@@ -135,7 +135,7 @@ namespace ChitChat.Application.Services
             await _postMediaRepository.AddRangeAsync(postMedias);
             return _mapper.Map<PostDto>(post);
         }
-        public async Task<CommentDto> CreateNewCommentAsync(Guid postId, CreateCommentRequestDto requestDto)
+        public async Task<CommentDto> CreateNewCommentAsync(Guid postId, CommentRequestDto requestDto)
         {
             var userId = _claimService.GetUserId();
             var comment = _mapper.Map<Comment>(requestDto);
@@ -157,7 +157,7 @@ namespace ChitChat.Application.Services
             await _userInteractionRepository.AddAsync(userInteraction);
             return _mapper.Map<CommentDto>(comment);
         }
-        public async Task<CommentDto> CreateReplyCommentAsync(Guid postId, Guid parentCommentId, CreateCommentRequestDto requestDto)
+        public async Task<CommentDto> CreateReplyCommentAsync(Guid postId, Guid parentCommentId, CommentRequestDto requestDto)
         {
             if (!(await _commentRepository.AnyAsync(p => p.Id == parentCommentId && p.CommentType == CommentType.Parent.ToString())))
                 throw new NotFoundException(ValidationTexts.NotFound.Format("Comment", parentCommentId));
@@ -184,13 +184,13 @@ namespace ChitChat.Application.Services
         }
         #endregion
         #region PUT
-        public async Task<PostDto> UpdatePostByIdAsync(PostDto postDto, Guid postId)
+        public async Task<PostDto> UpdatePostByIdAsync(UpdatePostRequestDto postDto, Guid postId)
         {
             Post post = await _postRepository.GetFirstAsync(p => p.Id == postId);
-            if (post.Id != postId)
-                throw new InvalidModelException(ValidationTexts.NotValidate.Format("Post", postId));
             if (post == null)
                 throw new NotFoundException(ValidationTexts.NotFound.Format("Post", postId));
+            if (post.UserId != _claimService.GetUserId())
+                throw new ForbiddenException(ValidationTexts.Forbidden.Format("Post", postId));
             post = _mapper.Map(postDto, post);
             await _postRepository.UpdateAsync(post);
             return _mapper.Map<PostDto>(post);
@@ -237,11 +237,13 @@ namespace ChitChat.Application.Services
                 return false;
             }
         }
-        public async Task<CommentDto> UpdateCommentAsync(CommentDto commentDto, Guid commentId)
+        public async Task<CommentDto> UpdateCommentAsync(CommentRequestDto commentDto, Guid commentId)
         {
             var comment = await _commentRepository.GetFirstOrDefaultAsync(p => p.Id == commentId);
             if (comment == null)
                 throw new NotFoundException(ValidationTexts.NotFound.Format("Comment", commentId));
+            if (comment.UserPostedId != _claimService.GetUserId())
+                throw new ForbiddenException(ValidationTexts.Forbidden.Format("Comment", commentId));
             comment = _mapper.Map(commentDto, comment);
             await _commentRepository.UpdateAsync(comment);
             return _mapper.Map<CommentDto>(comment);
@@ -283,12 +285,15 @@ namespace ChitChat.Application.Services
             Post post = await _postRepository.GetFirstAsync(p => p.Id == postId);
             if (post == null)
                 throw new NotFoundException(ValidationTexts.NotFound.Format("Post", postId));
+            if (post.UserId != _claimService.GetUserId())
+                throw new ForbiddenException(ValidationTexts.Forbidden.Format("Post", postId));
             var postMedia = await _postMediaRepository.GetAllAsync(p => p.PostId == postId);
             if (postMedia != null)
             {
                 foreach (var media in postMedia)
                 {
                     await _postMediaRepository.DeleteAsync(media);
+                    await _cloudinaryService.DeleteMediaFromCloudAsync(postId, media.Id);
                 }
             }
             await _postRepository.DeleteAsync(post);
@@ -299,6 +304,8 @@ namespace ChitChat.Application.Services
             var comment = await _commentRepository.GetFirstOrDefaultAsync(p => p.Id == commentId);
             if (comment == null)
                 throw new NotFoundException(ValidationTexts.NotFound.Format("Comment", commentId));
+            if (comment.UserPostedId != _claimService.GetUserId())
+                throw new ForbiddenException(ValidationTexts.Forbidden.Format("Comment", commentId));
             await _commentRepository.DeleteAsync(comment);
             return _mapper.Map<CommentDto>(comment);
         }
