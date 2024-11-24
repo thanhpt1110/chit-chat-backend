@@ -2,7 +2,7 @@ using ChitChat.Application.Models.Dtos.Post;
 
 using Microsoft.AspNetCore.Http;
 
-namespace ChitChat.Application.Services.CloudinaryInterface
+namespace ChitChat.Application.Helpers
 {
     public interface ICloudinaryService
     {

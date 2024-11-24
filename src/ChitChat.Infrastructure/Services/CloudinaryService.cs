@@ -1,7 +1,7 @@
 using System.Diagnostics;
 
+using ChitChat.Application.Helpers;
 using ChitChat.Application.Models.Dtos.Post;
-using ChitChat.Application.Services.CloudinaryInterface;
 using ChitChat.Domain.Enums;
 
 using CloudinaryDotNet;
@@ -63,7 +63,7 @@ namespace ChitChat.Infrastructure.Services
                         Transformation = new Transformation()
                                         .Width(800)
                                         .Height(800)
-                                        .Crop("thumb")
+                                        .Crop("limit")
                     };
                     uploadResult = await _cloudinary.UploadAsync(uploadParams);
                 }

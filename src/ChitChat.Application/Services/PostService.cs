@@ -8,7 +8,6 @@ using ChitChat.Application.Localization;
 using ChitChat.Application.Models.Dtos.Post;
 using ChitChat.Application.Models.Dtos.Post.Comments;
 using ChitChat.Application.Models.Dtos.Post.CreatePost;
-using ChitChat.Application.Services.CloudinaryInterface;
 using ChitChat.Application.Services.Interface;
 using ChitChat.DataAccess.Repositories.Interface;
 using ChitChat.DataAccess.Repositories.Interrface;
