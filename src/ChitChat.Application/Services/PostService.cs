@@ -68,6 +68,10 @@ namespace ChitChat.Application.Services
                                                             , query.PageSize,
                                                             p => p.IgnoreAutoIncludes().Include(c => c.PostMedias)
                                                             );
+            foreach (var post in paginationResponse.Items)
+            {
+                post.PostMedias = post.PostMedias.OrderBy(m => m.MediaOrder).ToList();
+            }
             return _mapper.Map<List<PostDto>>(paginationResponse.Items);
         }
         public async Task<PostDto> GetPostByIdAsync(Guid postId)
@@ -77,6 +81,7 @@ namespace ChitChat.Application.Services
             if (post == null)
                 throw new NotFoundException(ValidationTexts.NotFound.Format("Post", postId));
             post.Comments = post.Comments.Where(p => p.CommentType == CommentType.Parent.ToString()).ToList();
+            post.PostMedias = post.PostMedias.OrderBy(m => m.MediaOrder).ToList();
             return _mapper.Map<PostDto>(post);
         }
         public async Task<List<PostDto>> GetReccomendationPostsAsync(PostSearchQueryDto query)
@@ -91,7 +96,10 @@ namespace ChitChat.Application.Services
                                                 , query.PageIndex
                                                 , query.PageSize
                                                 , p => p.Include(p => p.PostDetailTags).Include(p => p.User).Include(p => p.PostMedias));
-
+                    foreach (var post in postSearchTag.Items)
+                    {
+                        post.PostMedias = post.PostMedias.OrderBy(m => m.MediaOrder).ToList();
+                    }
                     return _mapper.Map<List<PostDto>>(postSearchTag.Items);
                 }
                 var postSearchDescription = await _postRepository.GetAllAsync(p => p.Description.Contains(query.SearchText) && !p.IsDeleted && p.UserId != userId
@@ -99,6 +107,10 @@ namespace ChitChat.Application.Services
                                                 , query.PageIndex
                                                 , query.PageSize
                                                 , p => p.Include(p => p.PostDetailTags).Include(p => p.User).Include(p => p.PostMedias));
+                foreach (var post in postSearchDescription.Items)
+                {
+                    post.PostMedias = post.PostMedias.OrderBy(m => m.MediaOrder).ToList();
+                }
                 return _mapper.Map<List<PostDto>>(postSearchDescription.Items);
             }
 
@@ -106,6 +118,10 @@ namespace ChitChat.Application.Services
                                                 , query.PageIndex
                                                 , query.PageSize
                                                 , p => p.Include(p => p.PostDetailTags).Include(p => p.User).Include(p => p.PostMedias));
+            foreach (var post in posts.Items)
+            {
+                post.PostMedias = post.PostMedias.OrderBy(m => m.MediaOrder).ToList();
+            }
             return _mapper.Map<List<PostDto>>(posts.Items);
         }
         public async Task<List<CommentDto>> GetAllReplyCommentsAsync(Guid postId, Guid commentId)
@@ -127,10 +143,13 @@ namespace ChitChat.Application.Services
             var requestPostMedia = await _cloudinaryService.PostMediaToCloudAsync(requestDto.Files, post.Id);
             var postMedias = _mapper.Map<List<PostMedia>>(requestPostMedia);
             await _postRepository.AddAsync(post);
+            int i = 0;
             foreach (var postMedia in postMedias)
             {
                 postMedia.PostId = post.Id;
+                postMedia.MediaOrder = i++;
             }
+
             await _postMediaRepository.AddRangeAsync(postMedias);
             return _mapper.Map<PostDto>(post);
         }
