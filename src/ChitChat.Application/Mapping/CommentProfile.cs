@@ -10,7 +10,7 @@ namespace ChitChat.Application.Mapping
         public CommentProfile()
         {
             CreateMap<Comment, CommentDto>();
-            CreateMap<CreateCommentRequestDto, Comment>();
+            CreateMap<CommentRequestDto, Comment>();
         }
     }
 }
