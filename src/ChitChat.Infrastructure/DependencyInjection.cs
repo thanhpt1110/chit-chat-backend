@@ -1,5 +1,4 @@
 using ChitChat.Application.Helpers;
-using ChitChat.Application.Services.CloudinaryInterface;
 using ChitChat.DataAccess.Data;
 using ChitChat.Domain.Identity;
 using ChitChat.Infrastructure.Caching;
