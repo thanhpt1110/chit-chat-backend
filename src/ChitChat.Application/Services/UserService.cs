@@ -158,14 +158,6 @@ namespace ChitChat.Application.Services
             var result = await _userManager.CreateAsync(newUser, registerationRequestDto.Password); // Hash password by .net identity
             if (result.Succeeded)
             {
-                var userToReturn = await _userRepository.GetFirstOrDefaultAsync(p => p.Email == registerationRequestDto.Email);
-                UserDto userToReturnDto = new UserDto()
-                {
-                    Email = userToReturn.Email,
-                    Id = userToReturn.Id,
-                    DisplayName = userToReturn.DisplayName,
-                    PhoneNumber = userToReturn.PhoneNumber ?? "",
-                };
                 return true;
             }
             else

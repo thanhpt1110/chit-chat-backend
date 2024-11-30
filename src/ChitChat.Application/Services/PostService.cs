@@ -15,6 +15,7 @@ using ChitChat.Domain.Entities.PostEntities;
 using ChitChat.Domain.Entities.PostEntities.Reaction;
 using ChitChat.Domain.Entities.SystemEntities;
 using ChitChat.Domain.Enums;
+using ChitChat.Domain.Extensions;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -62,11 +63,11 @@ namespace ChitChat.Application.Services
             {
                 throw new NotFoundException(ValidationTexts.NotFound.Format("User", userId));
             }
-
+            filter = filter.And(p => p.UserId == userId);
             var paginationResponse = await _postRepository.GetAllAsync(filter, p => p.OrderByDescending(p => p.CreatedOn)
                                                             , query.PageIndex
                                                             , query.PageSize,
-                                                            p => p.IgnoreAutoIncludes().Include(c => c.PostMedias)
+                                                            p => p.IgnoreAutoIncludes().Include(c => c.PostMedias).Include(c => c.User)
                                                             );
             foreach (var post in paginationResponse.Items)
             {
