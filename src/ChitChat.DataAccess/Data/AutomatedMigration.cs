@@ -12,7 +12,7 @@ namespace ChitChat.DataAccess.Data
             var context = services.GetRequiredService<ApplicationDbContext>();
 
             var database = context.Database;
-                
+
             var pendingMigrations = await database.GetPendingMigrationsAsync();
 
             if (pendingMigrations.Any())
