@@ -62,12 +62,15 @@ namespace ChitChat.Application.Services
             {
                 throw new NotFoundException(ValidationTexts.NotFound.Format("User", userId));
             }
-            filter = filter.And(p => p.UserId == userId);
-            var paginationResponse = await _postRepository.GetAllAsync(filter, p => p.OrderByDescending(p => p.CreatedOn)
-                                                            , query.PageIndex
-                                                            , query.PageSize,
-                                                            p => p.IgnoreAutoIncludes().Include(c => c.PostMedias).Include(c => c.User)
-                                                            );
+            filter = x => !x.IsDeleted && x.UserId == userId;
+
+            var paginationResponse = await _postRepository.GetAllAsync(
+                filter,
+                p => p.OrderByDescending(p => p.CreatedOn),
+                query.PageIndex,
+                query.PageSize,
+                p => p.IgnoreAutoIncludes().Include(c => c.PostMedias).Include(c => c.User)
+            );
             foreach (var post in paginationResponse.Items)
             {
                 post.PostMedias = post.PostMedias.OrderBy(m => m.MediaOrder).ToList();
