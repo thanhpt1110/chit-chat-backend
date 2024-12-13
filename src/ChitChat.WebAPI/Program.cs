@@ -1,6 +1,7 @@
 using ChitChat.Application;
 using ChitChat.DataAccess;
 using ChitChat.DataAccess.Data;
+using ChitChat.Domain.Common;
 using ChitChat.Infrastructure;
 using ChitChat.Infrastructure.SignalR;
 using ChitChat.Infrastructure.Validations;
@@ -22,7 +23,11 @@ ValidatorOptions.Global.DefaultRuleLevelCascadeMode = CascadeMode.Stop;
 builder.Services
     .AddFluentValidationAutoValidation()
     .AddFluentValidationClientsideAdapters()
-    .AddControllers(config => config.Filters.Add(typeof(ValidateModelAttribute)));
+    .AddControllers(config => config.Filters.Add(typeof(ValidateModelAttribute)))
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new UnixTimestampConverter());
+    }); ;
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
