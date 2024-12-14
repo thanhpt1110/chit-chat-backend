@@ -1,4 +1,4 @@
-﻿using ChitChat.Domain.Common;
+using ChitChat.Domain.Common;
 
 namespace ChitChat.Domain.Entities
 {
