@@ -11,6 +11,7 @@ namespace ChitChat.Domain.Identity
         public string DisplayName { get; set; }
         [MaxLength(255)]
         public string? AvatarUrl { get; set; }
+        public string? MediaAvatarType { get; set; }
         public UserStatus UserStatus { get; set; }
 
 

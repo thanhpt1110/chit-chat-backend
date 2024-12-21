@@ -22,23 +22,27 @@ namespace ChitChat.WebAPI.Controllers
 
         [HttpPost("register")]
         [AllowAnonymous]
+        [ProducesResponseType(typeof(ApiResult<bool>), StatusCodes.Status200OK)] // OK với ProductResponse
         public async Task<IActionResult> RegisterUser([FromBody] RegisterationRequestDto registerationRequestDto)
         {
             return Ok(ApiResult<bool>.Success(await _userService.RegisterAsync(registerationRequestDto)));
         }
         [HttpPost("login")]
         [AllowAnonymous]
+        [ProducesResponseType(typeof(ApiResult<LoginResponseDto>), StatusCodes.Status200OK)] // OK với ProductResponse
         public async Task<IActionResult> LoginUser([FromBody] LoginRequestDto loginRequestDto)
         {
             return Ok(ApiResult<LoginResponseDto>.Success(await _userService.LoginAsync(loginRequestDto)));
         }
         [HttpPost("logout")]
+        [ProducesResponseType(typeof(ApiResult<bool>), StatusCodes.Status200OK)] // OK với ProductResponse
         public async Task<IActionResult> LogoutUser([FromBody] Guid loginHistoryId)
         {
             return Ok(ApiResult<bool>.Success(await _userService.LogoutAsync(loginHistoryId)));
         }
         [HttpPost("refreshToken")]
         [AllowAnonymous]
+        [ProducesResponseType(typeof(ApiResult<RefreshTokenDto>), StatusCodes.Status200OK)] // OK với ProductResponse
         public async Task<IActionResult> RefreshTokenAsync([FromBody] RefreshTokenDto refreshTokenDto)
         {
             return Ok(ApiResult<RefreshTokenDto>.Success(await _userService.RefreshTokenAsync(refreshTokenDto)));

@@ -5,6 +5,7 @@ using ChitChat.Domain.Entities.ChatEntities;
 using ChitChat.Domain.Entities.PostEntities;
 using ChitChat.Domain.Entities.PostEntities.Reaction;
 using ChitChat.Domain.Entities.SystemEntities;
+using ChitChat.Domain.Entities.SystemEntities.Notification;
 using ChitChat.Domain.Entities.UserEntities;
 using ChitChat.Domain.Identity;
 
@@ -28,7 +29,10 @@ namespace ChitChat.DataAccess.Data
         public DbSet<ReactionPost> ReactionPosts { get; set; }
         public DbSet<ReactionComment> ReactionComments { get; set; }
         public DbSet<UserInteraction> UserInteractions { get; set; }
-        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<PostNotification> PostNotifications { get; set; }
+        public DbSet<CommentNotification> CommentNotifications { get; set; }
+        public DbSet<UserNotification> UserNotifications { get; set; }
+
         public DbSet<Profile> Profiles { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
