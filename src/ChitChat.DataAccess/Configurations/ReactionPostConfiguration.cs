@@ -1,4 +1,5 @@
 using ChitChat.Domain.Entities.PostEntities.Reaction;
+
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ChitChat.DataAccess.Configurations
@@ -13,8 +14,7 @@ namespace ChitChat.DataAccess.Configurations
             modelBuilder
                 .HasOne(rp => rp.Post)
                 .WithMany()
-            .HasForeignKey(rp => rp.PostId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .HasForeignKey(rp => rp.PostId);
 
             modelBuilder
                 .HasOne(rp => rp.User)
