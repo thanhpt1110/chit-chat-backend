@@ -76,6 +76,7 @@ namespace ChitChat.Application.Services
                 query.PageSize,
                 p => p.IgnoreAutoIncludes().Include(c => c.PostMedias).Include(c => c.User)
             );
+
             var postDtos = _mapper.Map<List<PostDto>>(paginationResponse.Items);
             foreach (var postDto in postDtos)
             {
