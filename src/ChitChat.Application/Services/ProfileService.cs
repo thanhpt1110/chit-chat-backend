@@ -7,6 +7,7 @@ using ChitChat.Application.Models.Dtos.User.Profile;
 using ChitChat.Application.Services.Interface;
 using ChitChat.DataAccess.Repositories.Interface;
 using ChitChat.DataAccess.Repositories.Interrface;
+using ChitChat.Domain.Entities.UserEntities;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -18,8 +19,10 @@ namespace ChitChat.Application.Services
         private readonly IBaseRepository<Domain.Entities.UserEntities.Profile> _profileRepository;
         private readonly IClaimService _claimService;
         private readonly IUserRepository _userRepository;
+        private readonly IBaseRepository<UserFollower> _userFollowerRepository;
         public ProfileService(IMapper mapper
             , IBaseRepository<Domain.Entities.UserEntities.Profile> profileRepository
+            , IBaseRepository<UserFollower> userFollowerRepository
             , IClaimService claimService
             , IUserRepository userRepository)
         {
@@ -27,13 +30,20 @@ namespace ChitChat.Application.Services
             this._profileRepository = profileRepository;
             this._claimService = claimService;
             this._userRepository = userRepository;
+            this._userFollowerRepository = userFollowerRepository;
         }
         public async Task<List<ProfileDto>> GetAllProfilesAsync(ProfileSearchQueryDto query)
         {
+            var userId = _claimService.GetUserId();
             var paginationResponse = await _profileRepository.GetAllAsync(
                             p => p.IsDeleted == false && p.SearchData.Contains(query.SearchText), p => p.OrderByDescending(p => p.Id)
                             , query.PageIndex, query.PageSize, p => p.Include(p => p.UserApplication));
-            return _mapper.Map<List<ProfileDto>>(paginationResponse.Items);
+            var response = _mapper.Map<List<ProfileDto>>(paginationResponse.Items);
+            foreach (var profile in response)
+            {
+                profile.IsFollowed = await _userFollowerRepository.AnyAsync(p => p.FollowerId == userId);
+            }
+            return response;
         }
         public async Task<ProfileDto> GetProfileByIdAsync(Guid userId)
         {
@@ -43,9 +53,10 @@ namespace ChitChat.Application.Services
                 throw new NotFoundException(ValidationTexts.NotFound.Format("User", userId));
             }
             var response = _mapper.Map<ProfileDto>(userProfile);
+            response.IsFollowed = await _userFollowerRepository.AnyAsync(p => p.FollowerId == userId.ToString());
             return response;
         }
-        public async Task<ProfileDto> CreatProfileAsync(ProfileRequestDto request)
+        public async Task<ProfileDto> CreateProfileAsync(ProfileRequestDto request)
         {
             var userId = _claimService.GetUserId();
             Domain.Entities.UserEntities.Profile userProfile = this._mapper.Map<Domain.Entities.UserEntities.Profile>(request);

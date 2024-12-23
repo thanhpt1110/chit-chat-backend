@@ -42,6 +42,9 @@ namespace ChitChat.Application
             services.AddScoped<IConversationService, ConversationService>();
             services.AddScoped<IProfileService, ProfileService>();
             services.AddScoped<IPostService, PostService>();
+            services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<IFollowService, FollowService>();
+
             return services;
         }
     }
