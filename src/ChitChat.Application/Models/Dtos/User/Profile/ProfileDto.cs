@@ -10,5 +10,6 @@ namespace ChitChat.Application.Models.Dtos.User.Profile
         public string? Bio { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string? Gender { get; set; }
+        public bool IsFollowed { get; set; }
     }
 }

@@ -15,7 +15,7 @@ namespace ChitChat.DataAccess.Configurations
                 .HasOne(rc => rc.Comment)
                 .WithMany()
                 .HasForeignKey(rc => rc.CommentId)
-                 .OnDelete(DeleteBehavior.Restrict);
+                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder
                 .HasOne(rc => rc.User)

@@ -1,4 +1,5 @@
 using ChitChat.Application.Models.Dtos.Conversation;
+using ChitChat.Application.Models.Dtos.Notification;
 using ChitChat.Application.SignalR.Interface;
 using ChitChat.Infrastructure.SignalR.Helpers;
 using ChitChat.Infrastructure.SignalR.Hubs;
@@ -21,7 +22,6 @@ namespace ChitChat.Infrastructure.SignalR.Services
                 await _hubContext.Clients.Group(HubRoom.UserHubJoinRoom(uid)).AddConversation(conversation);
             }
         }
-
         public async Task UpdateConversation(ConversationDto conversation, string userSenderId)
         {
             await _hubContext.Clients.Group(HubRoom.UserHubJoinRoom(userSenderId)).UpdateConversation(conversation);
@@ -37,6 +37,15 @@ namespace ChitChat.Infrastructure.SignalR.Services
             {
                 await _hubContext.Clients.Group(HubRoom.UserHubJoinRoom(uid)).DeleteConversation(conversation);
             }
+        }
+        public async Task NewNotification(NotificationDto notificationDto)
+        {
+            await _hubContext.Clients.Group(HubRoom.UserHubJoinRoom(notificationDto.ReceiverUserId)).AddNotification(notificationDto);
+
+        }
+        public async Task UpdateNotification(NotificationDto notificationDto)
+        {
+            await _hubContext.Clients.Group(HubRoom.UserHubJoinRoom(notificationDto.ReceiverUserId)).UpdateNotification(notificationDto);
         }
     }
 }

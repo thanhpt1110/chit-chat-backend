@@ -6,7 +6,7 @@ namespace ChitChat.Application.Services.Interface
     {
         Task<List<ProfileDto>> GetAllProfilesAsync(ProfileSearchQueryDto query);
         Task<ProfileDto> GetProfileByIdAsync(Guid userId);
-        Task<ProfileDto> CreatProfileAsync(ProfileRequestDto request);
+        Task<ProfileDto> CreateProfileAsync(ProfileRequestDto request);
         Task<ProfileDto> UpdateProfileAsync(Guid userId, ProfileRequestDto request);
 
     }
