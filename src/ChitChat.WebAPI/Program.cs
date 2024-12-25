@@ -54,7 +54,8 @@ app.AddInfrastuctureApplication();
 app.UseAuthentication();
 app.UseAuthorization();
 app.AddSignalRHub();
-app.UseCors(corsPolicyBuilder => corsPolicyBuilder.AllowAnyOrigin()
+app.UseCors(corsPolicyBuilder => corsPolicyBuilder
+        .AllowAnyOrigin()
         .AllowAnyMethod()
         .AllowAnyHeader()
     );

@@ -22,7 +22,9 @@ namespace ChitChat.DataAccess
             .AddScoped<IRepositoryFactory, RepositoryFactory>()
             .AddScoped<IUserRepository, UserRepository>()
             .AddScoped<IConversationRepository, ConversationRepository>()
-            .AddScoped<IUserInteractionRepository, UserInteractionRepository>();
+            .AddScoped<IUserInteractionRepository, UserInteractionRepository>()
+            .AddScoped<IUserFollowerRepository, UserFollowerRepository>();
+
         }
 
     }
