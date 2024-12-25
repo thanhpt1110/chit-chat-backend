@@ -1,3 +1,4 @@
+using ChitChat.Application.MachineLearning.Models;
 using ChitChat.Application.Models.Dtos.Post;
 using ChitChat.Application.Models.Dtos.Post.Comments;
 using ChitChat.Application.Models.Dtos.Post.CreatePost;
@@ -8,7 +9,7 @@ namespace ChitChat.Application.Services.Interface
     {
         Task<List<PostDto>> GetAllPostsAsync(PostUserSearchQueryDto query);
         Task<PostDto> GetPostByIdAsync(Guid postId);
-        Task<List<PostDto>> GetReccomendationPostsAsync(PostSearchQueryDto query);
+        Task<List<ResponseRecommendationModel>> GetReccomendationPostsAsync(PostSearchQueryDto query);
         Task<List<CommentDto>> GetAllReplyCommentsAsync(Guid postId, Guid commentId);
         Task<PostDto> CreateNewPostAsync(CreatePostRequestDto requestDto);
         Task<CommentDto> CreateNewCommentAsync(Guid postId, CommentRequestDto requestDto);

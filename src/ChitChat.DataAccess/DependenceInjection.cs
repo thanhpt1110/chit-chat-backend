@@ -21,7 +21,8 @@ namespace ChitChat.DataAccess
             .AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>))
             .AddScoped<IRepositoryFactory, RepositoryFactory>()
             .AddScoped<IUserRepository, UserRepository>()
-            .AddScoped<IConversationRepository, ConversationRepository>();
+            .AddScoped<IConversationRepository, ConversationRepository>()
+            .AddScoped<IUserInteractionRepository, UserInteractionRepository>();
         }
 
     }

@@ -1,3 +1,4 @@
+using ChitChat.Application.MachineLearning.Models;
 using ChitChat.Application.Models;
 using ChitChat.Application.Models.Dtos.Post;
 using ChitChat.Application.Models.Dtos.Post.Comments;
@@ -40,7 +41,7 @@ namespace ChitChat.WebAPI.Controllers
         [ProducesResponseType(typeof(ApiResult<List<PostDto>>), StatusCodes.Status200OK)] // OK với ProductResponse
         public async Task<IActionResult> GetReccomendationPostsAsync([FromQuery] PostSearchQueryDto query)
         {
-            return Ok(ApiResult<List<PostDto>>.Success(await _postService.GetReccomendationPostsAsync(query)));
+            return Ok(ApiResult<List<ResponseRecommendationModel>>.Success(await _postService.GetReccomendationPostsAsync(query)));
         }
         [HttpGet]
         [Route("{postId}/comments/{commentId}")]
