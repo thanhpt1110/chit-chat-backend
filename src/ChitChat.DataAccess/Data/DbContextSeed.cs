@@ -11,6 +11,22 @@ namespace ChitChat.DataAccess.Data
         {
             // Seed dữ liệu người dùng
             var hasher = new PasswordHasher<UserApplication>();
+            /*            for(int i = 0; i < 8; i++)
+                        {
+                           var user =  new UserApplication
+                            {
+                                Id = Guid.NewGuid().ToString(),
+                                UserName = $"user{i}",
+                                DisplayName = $"user{i}",
+                                Email = $"user{i}@gmail.com",
+                                EmailConfirmed = true,
+                                AvatarUrl = "",
+                                UserStatus = Domain.Enums.UserStatus.Public,
+                            };
+                            await userManager.CreateAsync(user, "Password123!");
+
+                            await userManager.AddToRoleAsync(user, UserRoles.User.ToString());
+                        }*/
             if (!roleManager.Roles.Any())
             {
                 foreach (var role in Enum.GetNames<UserRoles>())

@@ -10,7 +10,11 @@ namespace ChitChat.Application.Mapping
         public NotificationProfile()
         {
             CreateMap<Notification, NotificationDto>().ReverseMap();
-            CreateMap<CommentNotification, NotificationDto>();
+            CreateMap<CommentNotification, NotificationDto>()
+                .ForMember(dest => dest.Post, opt => opt.MapFrom(p => p.Comment.Post))
+                .ForPath(dest => dest.Post.Comments, opt => opt.Ignore());
+
+
             CreateMap<PostNotification, NotificationDto>();
             CreateMap<NotificationDto, CommentNotification>();
             CreateMap<CreateCommentNotificationDto, CommentNotification>().ReverseMap();

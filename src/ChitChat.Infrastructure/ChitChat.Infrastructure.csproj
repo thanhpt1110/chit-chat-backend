@@ -27,6 +27,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="MachineLearning\" />
 	  <Folder Include="Middleware\" />
 	  <Folder Include="Authorization\" />
 	</ItemGroup>
