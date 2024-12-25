@@ -6,6 +6,7 @@ using ChitChat.Application.Models.Dtos.Notification;
 using ChitChat.Application.Models.Dtos.User;
 using ChitChat.Application.Models.Dtos.User.Follow;
 using ChitChat.Application.Services.Interface;
+using ChitChat.DataAccess.Repositories.Interface;
 using ChitChat.DataAccess.Repositories.Interrface;
 using ChitChat.Domain.Common;
 using ChitChat.Domain.Entities.UserEntities;
