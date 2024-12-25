@@ -5,6 +5,7 @@ using AutoMapper;
 using ChitChat.Application.Exceptions;
 using ChitChat.Application.Helpers;
 using ChitChat.Application.Localization;
+using ChitChat.Application.MachineLearning.Services.Interface;
 using ChitChat.Application.Models.Dtos.Notification;
 using ChitChat.Application.Models.Dtos.Post;
 using ChitChat.Application.Models.Dtos.Post.Comments;
@@ -18,6 +19,7 @@ using ChitChat.Domain.Entities.PostEntities.Reaction;
 using ChitChat.Domain.Entities.SystemEntities;
 using ChitChat.Domain.Enums;
 
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 namespace ChitChat.Application.Services
@@ -28,32 +30,39 @@ namespace ChitChat.Application.Services
         private readonly IMapper _mapper;
         private readonly IBaseRepository<Comment> _commentRepository;
         private readonly IBaseRepository<Post> _postRepository;
-        private readonly IBaseRepository<UserInteraction> _userInteractionRepository;
+        private readonly IUserInteractionRepository _userInteractionRepository;
         private readonly IBaseRepository<PostMedia> _postMediaRepository;
         private readonly IBaseRepository<ReactionPost> _reactionPostRepository;
         private readonly IBaseRepository<ReactionComment> _reactionCommentRepository;
         private readonly ICloudinaryService _cloudinaryService;
         private readonly IUserRepository _userRepository;
         private readonly INotificationService _notificationService;
+        private readonly IWebHostEnvironment _env;
+        private readonly ITrainingModelService _trainingModelService;
         public PostService(
             IClaimService claimService
             , IMapper mapper
             , IRepositoryFactory repositoryFactory
             , IUserRepository userRepository
             , ICloudinaryService cloudinaryService
-            , INotificationService notificationService)
+            , INotificationService notificationService
+            , IWebHostEnvironment env
+            , ITrainingModelService trainingModelService
+            , IUserInteractionRepository userInteractionRepository)
         {
             _claimService = claimService;
             _mapper = mapper;
             _userRepository = userRepository;
             _postRepository = repositoryFactory.GetRepository<Post>();
             _commentRepository = repositoryFactory.GetRepository<Comment>();
-            _userInteractionRepository = repositoryFactory.GetRepository<UserInteraction>();
+            _userInteractionRepository = userInteractionRepository;
             _postMediaRepository = repositoryFactory.GetRepository<PostMedia>();
             _reactionPostRepository = repositoryFactory.GetRepository<ReactionPost>();
             _reactionCommentRepository = repositoryFactory.GetRepository<ReactionComment>();
             _cloudinaryService = cloudinaryService;
             _notificationService = notificationService;
+            _trainingModelService = trainingModelService;
+            _env = env;
         }
         #region GET
         public async Task<List<PostDto>> GetAllPostsAsync(PostUserSearchQueryDto query)
@@ -111,50 +120,13 @@ namespace ChitChat.Application.Services
         public async Task<List<PostDto>> GetReccomendationPostsAsync(PostSearchQueryDto query)
         {
             var userId = _claimService.GetUserId();
-            if (!string.IsNullOrEmpty(query.SearchText))
-            {
-                if (query.IsTag)
-                {
-                    var postSearchTag = await _postRepository.GetAllAsync(p => p.PostDetailTags.Any(p => p.Tag.Contains(query.SearchText)) && !p.IsDeleted && p.UserId != userId
-                                                , p => p.OrderByDescending(p => p.CreatedOn)
-                                                , query.PageIndex
-                                                , query.PageSize
-                                                , p => p.Include(p => p.PostDetailTags).Include(p => p.User).Include(p => p.PostMedias));
-                    var postSearchTagDtos = _mapper.Map<List<PostDto>>(postSearchTag.Items);
-                    foreach (var postDto in postSearchTagDtos)
-                    {
-                        if (await _reactionPostRepository.AnyAsync(c => c.PostId == postDto.Id))
-                            postDto.IsReacted = true;
-                        if (postDto.PostMedias != null)
-                            postDto.PostMedias = postDto.PostMedias.OrderBy(m => m.MediaOrder).ToList();
-                    }
-                    return postSearchTagDtos;
-                }
-                var postSearchDescription = await _postRepository.GetAllAsync(p => p.Description.Contains(query.SearchText) && !p.IsDeleted && p.UserId != userId
-                                                , p => p.OrderByDescending(p => p.CreatedOn)
-                                                , query.PageIndex
-                                                , query.PageSize
-                                                , p => p.Include(p => p.PostDetailTags).Include(p => p.User).Include(p => p.PostMedias));
-                var postDtos = _mapper.Map<List<PostDto>>(postSearchDescription.Items);
-                foreach (var postDto in postDtos)
-                {
-                    if (await _reactionPostRepository.AnyAsync(c => c.PostId == postDto.Id))
-                        postDto.IsReacted = true;
-                    if (postDto.PostMedias != null)
-                        postDto.PostMedias = postDto.PostMedias.OrderBy(m => m.MediaOrder).ToList();
-                }
-                return postDtos;
-            }
-
-            var posts = await _postRepository.GetAllAsync(p => p.UserId != userId && !p.IsDeleted, p => p.OrderByDescending(p => p.CreatedOn)
-                                                , query.PageIndex
-                                                , query.PageSize
-                                                , p => p.Include(p => p.PostDetailTags).Include(p => p.User).Include(p => p.PostMedias));
-            foreach (var post in posts.Items)
-            {
-                post.PostMedias = post.PostMedias.OrderBy(m => m.MediaOrder).ToList();
-            }
-            return _mapper.Map<List<PostDto>>(posts.Items);
+            var userInteraction = await _userInteractionRepository.GetUserInteractionModelForTraining(10000);
+            var postReccomendation = await _postRepository.GetAllAsync(p => !p.IsDeleted && p.UserId != userId
+            && p.Description.Contains(query.SearchText), p => p.Include(c => c.PostMedias)
+                                                    .Include(c => c.Comments)
+                                                    .Include(c => c.User));
+            var response = _trainingModelService.GetRecommendationPostModel(userId, userInteraction, postReccomendation);
+            return _mapper.Map<List<PostDto>>(response.OrderByDescending(p => p.Score).Skip(query.PageIndex * query.PageSize).Take(query.PageSize).ToList());
         }
         public async Task<List<CommentDto>> GetAllReplyCommentsAsync(Guid postId, Guid commentId)
         {
@@ -424,6 +396,8 @@ namespace ChitChat.Application.Services
             await _commentRepository.DeleteAsync(comment);
             return _mapper.Map<CommentDto>(comment);
         }
+
+
         #endregion
     }
 }
