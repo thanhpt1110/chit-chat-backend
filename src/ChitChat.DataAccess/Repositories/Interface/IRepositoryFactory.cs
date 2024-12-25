@@ -1,6 +1,6 @@
 using ChitChat.Domain.Entities;
 
-namespace ChitChat.DataAccess.Repositories.Interrface
+namespace ChitChat.DataAccess.Repositories.Interface
 {
     public interface IRepositoryFactory
     {

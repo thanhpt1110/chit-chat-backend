@@ -1,5 +1,5 @@
 using ChitChat.Application.MachineLearning.Models;
-using ChitChat.DataAccess.Repositories.Interrface;
+using ChitChat.DataAccess.Repositories.Interface;
 using ChitChat.Domain.Entities.SystemEntities;
 
 namespace ChitChat.DataAccess.Repositories.Interface
