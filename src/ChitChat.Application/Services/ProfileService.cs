@@ -6,7 +6,7 @@ using ChitChat.Application.Localization;
 using ChitChat.Application.Models.Dtos.User.Profile;
 using ChitChat.Application.Services.Interface;
 using ChitChat.DataAccess.Repositories.Interface;
-using ChitChat.DataAccess.Repositories.Interrface;
+using ChitChat.DataAccess.Repositories.Interface;
 using ChitChat.Domain.Entities.UserEntities;
 
 using Microsoft.EntityFrameworkCore;

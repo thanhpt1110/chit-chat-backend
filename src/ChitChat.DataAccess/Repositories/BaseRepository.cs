@@ -1,7 +1,7 @@
 using System.Linq.Expressions;
 
 using ChitChat.DataAccess.Data;
-using ChitChat.DataAccess.Repositories.Interrface;
+using ChitChat.DataAccess.Repositories.Interface;
 using ChitChat.Domain.Common;
 using ChitChat.Domain.Entities;
 using ChitChat.Domain.Exceptions;

@@ -1,4 +1,4 @@
-using ChitChat.DataAccess.Repositories.Interrface;
+using ChitChat.DataAccess.Repositories.Interface;
 using ChitChat.Domain.Entities;
 
 using Microsoft.Extensions.DependencyInjection;

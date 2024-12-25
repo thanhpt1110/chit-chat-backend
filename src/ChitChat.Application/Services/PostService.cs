@@ -12,7 +12,7 @@ using ChitChat.Application.Models.Dtos.Post.Comments;
 using ChitChat.Application.Models.Dtos.Post.CreatePost;
 using ChitChat.Application.Services.Interface;
 using ChitChat.DataAccess.Repositories.Interface;
-using ChitChat.DataAccess.Repositories.Interrface;
+using ChitChat.DataAccess.Repositories.Interface;
 using ChitChat.Domain.Common;
 using ChitChat.Domain.Entities.PostEntities;
 using ChitChat.Domain.Entities.PostEntities.Reaction;

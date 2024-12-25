@@ -8,7 +8,7 @@ using ChitChat.Application.Localization;
 using ChitChat.Application.Models.Dtos.User;
 using ChitChat.Application.Services.Interface;
 using ChitChat.DataAccess.Repositories.Interface;
-using ChitChat.DataAccess.Repositories.Interrface;
+using ChitChat.DataAccess.Repositories.Interface;
 using ChitChat.Domain.Entities;
 using ChitChat.Domain.Identity;
 
