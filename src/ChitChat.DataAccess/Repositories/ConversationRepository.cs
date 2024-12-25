@@ -20,19 +20,21 @@ namespace ChitChat.DataAccess.Repositories
                                             c => c.ConversationDetails
                                             )
                                           .Include(c => c.LastMessage)
-
                                           .AsNoTracking()
                                           .ToListAsync();
             return listConversation;
         }
 
-        public async Task<bool> IsConversationExisted(string userSenderId, string userReceiverId)
+        public async Task<Conversation?> IsConversationExisted(string userSenderId, string userReceiverId)
         {
-            bool hasConversation = await Context.ConversationDetails
-            .Where(cd2 => cd2.UserId == userReceiverId)
-            .Select(cd2 => Context.ConversationDetails
-            .Any(cd1 => cd1.UserId == userSenderId && cd1.ConversationId == cd2.ConversationId && cd2.Conversation.ConversationType == ConversationType.Person.ToString()))
-            .AnyAsync(result => result == true);
+            Conversation? hasConversation = await Context.ConversationDetails
+                .Where(cd2 => cd2.UserId == userReceiverId && cd2.Conversation.ConversationType == ConversationType.Person.ToString())
+                .SelectMany(cd2 => Context.ConversationDetails
+                .Where(cd1 => cd1.UserId == userSenderId && cd1.ConversationId == cd2.ConversationId))
+                .Select(cd1 => cd1.Conversation)
+                .SingleOrDefaultAsync();
+            if (hasConversation != null)
+                hasConversation.LastMessage = await Context.Messages.SingleOrDefaultAsync(p => p.Id == hasConversation.LastMessageId);
             return hasConversation;
         }
     }

@@ -12,6 +12,9 @@ namespace ChitChat.Infrastructure.SignalR.Hubs.InterfaceClient
         Task NotifyNewFollower(string followerId, string followedUserId);
         Task AddNotification(NotificationDto notification);
         Task UpdateNotification(NotificationDto notification);
+ 
+
+
 
     }
 }
