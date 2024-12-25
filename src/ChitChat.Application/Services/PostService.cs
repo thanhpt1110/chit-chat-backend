@@ -14,6 +14,7 @@ using ChitChat.Application.Services.Interface;
 using ChitChat.DataAccess.Repositories.Interface;
 using ChitChat.DataAccess.Repositories.Interrface;
 using ChitChat.Domain.Common;
+using ChitChat.Domain.Common;
 using ChitChat.Domain.Entities.PostEntities;
 using ChitChat.Domain.Entities.PostEntities.Reaction;
 using ChitChat.Domain.Entities.SystemEntities;
@@ -88,12 +89,20 @@ namespace ChitChat.Application.Services
 
             var postDtos = _mapper.Map<List<PostDto>>(paginationResponse.Items);
             foreach (var postDto in postDtos)
+
+            var postDtos = _mapper.Map<List<PostDto>>(paginationResponse.Items);
+            foreach (var postDto in postDtos)
             {
                 if (await _reactionPostRepository.AnyAsync(c => c.PostId == postDto.Id))
                     postDto.IsReacted = true;
                 if (postDto.PostMedias != null)
                     postDto.PostMedias = postDto.PostMedias.OrderBy(m => m.MediaOrder).ToList();
+                if (await _reactionPostRepository.AnyAsync(c => c.PostId == postDto.Id))
+                    postDto.IsReacted = true;
+                if (postDto.PostMedias != null)
+                    postDto.PostMedias = postDto.PostMedias.OrderBy(m => m.MediaOrder).ToList();
             }
+            return postDtos;
             return postDtos;
         }
         public async Task<PostDto> GetPostByIdAsync(Guid postId)
@@ -102,11 +111,24 @@ namespace ChitChat.Application.Services
                                                                     , p => p.Include(c => c.PostMedias)
                                                                     .Include(c => c.Comments)
                                                                     .Include(c => c.User));
+                                                                    , p => p.Include(c => c.PostMedias)
+                                                                    .Include(c => c.Comments)
+                                                                    .Include(c => c.User));
             if (post == null)
                 throw new NotFoundException(ValidationTexts.NotFound.Format("Post", postId));
             post.Comments = post.Comments.Where(p => p.CommentType == CommentType.Parent.ToString()).ToList();
 
+
             post.PostMedias = post.PostMedias.OrderBy(m => m.MediaOrder).ToList();
+            PostDto postDto = _mapper.Map<PostDto>(post);
+            if (await _reactionPostRepository.AnyAsync(c => c.PostId == postDto.Id))
+                postDto.IsReacted = true;
+            foreach (var comment in postDto.Comments)
+            {
+                if (await _reactionCommentRepository.AnyAsync(c => c.CommentId == comment.Id))
+                    comment.IsReacted = true;
+            }
+            return postDto;
             PostDto postDto = _mapper.Map<PostDto>(post);
             if (await _reactionPostRepository.AnyAsync(c => c.PostId == postDto.Id))
                 postDto.IsReacted = true;
@@ -131,9 +153,17 @@ namespace ChitChat.Application.Services
         public async Task<List<CommentDto>> GetAllReplyCommentsAsync(Guid postId, Guid commentId)
         {
             var commentParent = _commentRepository.GetFirstOrDefaultAsync(p => p.Id == commentId && p.CommentType == CommentType.Parent.ToString() && !p.IsDeleted);
+            var commentParent = _commentRepository.GetFirstOrDefaultAsync(p => p.Id == commentId && p.CommentType == CommentType.Parent.ToString() && !p.IsDeleted);
             if (commentParent == null)
                 throw new NotFoundException(ValidationTexts.NotFound.Format("Comment", commentId));
             var comments = await _commentRepository.GetAllAsync(p => p.PostId == postId && p.ParentCommentId == commentId);
+            var commentDtos = _mapper.Map<List<CommentDto>>(comments);
+            foreach (var commentDto in commentDtos)
+            {
+                if (await _reactionCommentRepository.AnyAsync(c => c.CommentId == commentDto.Id))
+                    commentDto.IsReacted = true;
+            }
+            return commentDtos;
             var commentDtos = _mapper.Map<List<CommentDto>>(comments);
             foreach (var commentDto in commentDtos)
             {
@@ -193,6 +223,16 @@ namespace ChitChat.Application.Services
                 Reference = NotificationRefText.CommentRef(postId, comment.Id)
             };
             await _notificationService.CreateOrUpdateCommentNotificationAsync(createCommentNotification);
+            CreateCommentNotificationDto createCommentNotification = new CreateCommentNotificationDto
+            {
+                CommentId = comment.Id,
+                ReceiverUserId = post.UserId,
+                LastInteractorUserId = comment.UserPostedId,
+                Action = NotificationActionEnum.COMMENT_POST.ToString(),
+                Type = NotificationType.Comment.ToString(),
+                Reference = NotificationRefText.CommentRef(postId, comment.Id)
+            };
+            await _notificationService.CreateOrUpdateCommentNotificationAsync(createCommentNotification);
             return _mapper.Map<CommentDto>(comment);
         }
         public async Task<CommentDto> CreateReplyCommentAsync(Guid postId, Guid parentCommentId, CommentRequestDto requestDto)
@@ -202,10 +242,16 @@ namespace ChitChat.Application.Services
                 throw new NotFoundException(ValidationTexts.NotFound.Format("Post", postId));
             var parentComment = await _commentRepository.GetFirstOrDefaultAsync(p => p.Id == parentCommentId && p.CommentType == CommentType.Parent.ToString());
             if ((parentComment == null))
+            var post = await _postRepository.GetFirstAsync(p => p.Id == postId);
+            if (post == null)
+                throw new NotFoundException(ValidationTexts.NotFound.Format("Post", postId));
+            var parentComment = await _commentRepository.GetFirstOrDefaultAsync(p => p.Id == parentCommentId && p.CommentType == CommentType.Parent.ToString());
+            if ((parentComment == null))
                 throw new NotFoundException(ValidationTexts.NotFound.Format("Comment", parentCommentId));
             var userId = _claimService.GetUserId();
             var comment = _mapper.Map<Comment>(requestDto);
             comment.CommentType = CommentType.Reply.ToString();
+
 
             UserInteraction userInteraction = new UserInteraction
             {
@@ -220,6 +266,29 @@ namespace ChitChat.Application.Services
             await _commentRepository.AddAsync(comment);
             await _userInteractionRepository.AddAsync(userInteraction);
             await _postRepository.UpdateAsync(post);
+            CreateCommentNotificationDto createCommentNotification = new CreateCommentNotificationDto
+            {
+                CommentId = comment.Id,
+                ReceiverUserId = parentComment.UserPostedId,
+                LastInteractorUserId = userId,
+                Action = NotificationActionEnum.REPLY_COMMENT.ToString(),
+                Type = NotificationType.Comment.ToString(),
+                Reference = NotificationRefText.CommentRef(postId, comment.Id),
+                PostId = postId
+            };// cho người được reply 
+            CreateCommentNotificationDto createCommentNotificationUserPost = new CreateCommentNotificationDto
+            {
+                CommentId = comment.Id,
+                ReceiverUserId = post.UserId,
+                LastInteractorUserId = userId,
+                Action = NotificationActionEnum.COMMENT_POST.ToString(),
+                Type = NotificationType.Comment.ToString(),
+                Reference = NotificationRefText.CommentRef(postId, comment.Id)
+                ,
+                PostId = postId
+            }; // cho người đăng bài
+            await _notificationService.CreateOrUpdateCommentNotificationAsync(createCommentNotification);
+            await _notificationService.CreateOrUpdateCommentNotificationAsync(createCommentNotificationUserPost);
             CreateCommentNotificationDto createCommentNotification = new CreateCommentNotificationDto
             {
                 CommentId = comment.Id,
@@ -297,6 +366,17 @@ namespace ChitChat.Application.Services
                     Reference = NotificationRefText.PostRef(postId)
                 };
                 await _notificationService.CreateOrUpdatePostNotificationAsync(createPostNotification);
+
+                CreatePostNotificationDto createPostNotification = new CreatePostNotificationDto
+                {
+                    PostId = postId,
+                    ReceiverUserId = post.UserId,
+                    LastInteractorUserId = userId,
+                    Action = NotificationActionEnum.LIKE_POST.ToString(),
+                    Type = NotificationType.Post.ToString(),
+                    Reference = NotificationRefText.PostRef(postId)
+                };
+                await _notificationService.CreateOrUpdatePostNotificationAsync(createPostNotification);
                 return true;
             }
             else
@@ -341,6 +421,19 @@ namespace ChitChat.Application.Services
                 comment.ReactionCount++;
                 await _commentRepository.UpdateAsync(comment);
                 await _reactionCommentRepository.AddAsync(reactionComment);
+                if (_claimService.GetUserId() != comment.UserPostedId)
+                {
+                    CreateCommentNotificationDto createCommentNotificationDto = new CreateCommentNotificationDto
+                    {
+                        CommentId = commentId,
+                        ReceiverUserId = comment.UserPostedId,
+                        LastInteractorUserId = _claimService.GetUserId(),
+                        Action = NotificationActionEnum.LIKE_COMMENT.ToString(),
+                        Type = NotificationType.Comment.ToString(),
+                        Reference = NotificationRefText.CommentRef(comment.PostId, commentId),
+                    };
+                    await _notificationService.CreateOrUpdateCommentNotificationAsync(createCommentNotificationDto);
+                }
                 if (_claimService.GetUserId() != comment.UserPostedId)
                 {
                     CreateCommentNotificationDto createCommentNotificationDto = new CreateCommentNotificationDto
