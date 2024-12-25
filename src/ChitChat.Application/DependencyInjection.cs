@@ -1,5 +1,7 @@
 using System.Reflection;
 
+using ChitChat.Application.MachineLearning.Services;
+using ChitChat.Application.MachineLearning.Services.Interface;
 using ChitChat.Application.Mapping;
 using ChitChat.Application.Services;
 using ChitChat.Application.Services.Interface;
@@ -44,7 +46,7 @@ namespace ChitChat.Application
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<IFollowService, FollowService>();
-
+            services.AddScoped<ITrainingModelService, TrainingModelService>();
             return services;
         }
     }

@@ -17,18 +17,19 @@ namespace ChitChat.Application.Services
 {
     internal class FollowService : IFollowService
     {
-        private readonly IBaseRepository<UserFollower> _userFollowerRepository;
+        private readonly IUserFollowerRepository _userFollowerRepository;
         private readonly IMapper _mapper;
         private readonly IClaimService _claimService;
         private readonly INotificationService _notificationService;
         public FollowService(IMapper mapper
             , IClaimService claimService
             , IRepositoryFactory repositoryFactory
+            , IUserFollowerRepository userFollowerRepository
             , INotificationService notificationService)
         {
             _claimService = claimService;
             _mapper = mapper;
-            _userFollowerRepository = repositoryFactory.GetRepository<UserFollower>();
+            _userFollowerRepository = userFollowerRepository;
             _notificationService = notificationService;
         }
         public async Task<List<FollowDto>> GetAllFollowerAsync()
@@ -75,9 +76,22 @@ namespace ChitChat.Application.Services
             return followingDtos;
         }
 
-        public Task<List<FollowDto>> GetRecommendFollowAsync(PaginationFilter filter)
+        public async Task<List<FollowDto>> GetRecommendFollowAsync(PaginationFilter filter)
         {
-            return Task.FromResult(new List<FollowDto>());
+            var currentUserId = _claimService.GetUserId();
+            var followers = await _userFollowerRepository.GetRecommendedUsersAsync(currentUserId);
+            var followingDtos = new List<FollowDto>();
+            foreach (var following in followers)
+            {
+                var followDto = new FollowDto
+                {
+                    Id = following.Id,
+                    UserId = following.UserId,
+                    User = _mapper.Map<UserDto>(following.User)
+                };
+                followingDtos.Add(followDto);
+            }
+            return followingDtos;
         }
 
         public async Task<FollowDto> ToggleFollowAsync(string otherUserId)

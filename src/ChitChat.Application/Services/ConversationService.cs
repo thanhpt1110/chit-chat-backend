@@ -23,7 +23,7 @@ namespace ChitChat.Application.Services
         private readonly IConversationRepository _conversationRepository;
         private readonly IBaseRepository<ConversationDetail> _conversationDetailRepository;
         private readonly IBaseRepository<Message> _messageRepository;
-        private IMapper _mapper;
+        private readonly IMapper _mapper;
         private readonly IClaimService _claimService;
         private readonly IUserRepository _userRepository;
         private readonly IUserNotificationService _userNotificationService;
@@ -84,7 +84,7 @@ namespace ChitChat.Application.Services
             response.UserReceiverIds = receiverIds.ToList();
             var responsePagination = await _messageRepository
                 .GetAllAsync(p => p.IsDeleted == false && p.ConversationId == conversationId
-                            , p => p.OrderByDescending(p => p.UpdatedOn)
+                            , p => p.OrderBy(p => p.CreatedOn)
                             , messagePageIndex, messagePageSize
                             );
             response.Messages = _mapper.Map<List<MessageDto>>(responsePagination.Items);

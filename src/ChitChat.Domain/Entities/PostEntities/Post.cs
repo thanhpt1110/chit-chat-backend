@@ -11,6 +11,7 @@ namespace ChitChat.Domain.Entities.PostEntities
         public ICollection<PostDetailTag> PostDetailTags { get; set; }
         public ICollection<PostMedia> PostMedias { get; set; }
 
+
     }
 }
 
