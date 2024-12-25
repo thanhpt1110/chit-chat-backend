@@ -18,6 +18,7 @@ using ChitChat.Domain.Entities.PostEntities;
 using ChitChat.Domain.Entities.PostEntities.Reaction;
 using ChitChat.Domain.Entities.SystemEntities;
 using ChitChat.Domain.Enums;
+using ChitChat.Domain.Extensions;
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
