@@ -20,7 +20,6 @@ namespace ChitChat.DataAccess.Repositories
                                             c => c.ConversationDetails
                                             )
                                           .Include(c => c.LastMessage)
-
                                           .AsNoTracking()
                                           .ToListAsync();
             return listConversation;
