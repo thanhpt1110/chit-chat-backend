@@ -5,7 +5,5 @@ namespace ChitChat.Application.Models.Dtos.User
         public string Id { get; set; }
         public string DisplayName { get; set; }
         public string AvatarUrl { get; set; }
-        public string Email { get; set; }
-        public string PhoneNumber { get; set; }
     }
 }

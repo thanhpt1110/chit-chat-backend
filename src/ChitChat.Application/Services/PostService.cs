@@ -38,18 +38,25 @@ namespace ChitChat.Application.Services
         private readonly ICloudinaryService _cloudinaryService;
         private readonly IUserRepository _userRepository;
         private readonly INotificationService _notificationService;
+<<<<<<< HEAD
         private readonly IWebHostEnvironment _env;
         private readonly ITrainingModelService _trainingModelService;
+=======
+>>>>>>> develop
         public PostService(
             IClaimService claimService
             , IMapper mapper
             , IRepositoryFactory repositoryFactory
             , IUserRepository userRepository
             , ICloudinaryService cloudinaryService
+<<<<<<< HEAD
             , INotificationService notificationService
             , IWebHostEnvironment env
             , ITrainingModelService trainingModelService
             , IUserInteractionRepository userInteractionRepository)
+=======
+            , INotificationService notificationService)
+>>>>>>> develop
         {
             _claimService = claimService;
             _mapper = mapper;
@@ -62,8 +69,11 @@ namespace ChitChat.Application.Services
             _reactionCommentRepository = repositoryFactory.GetRepository<ReactionComment>();
             _cloudinaryService = cloudinaryService;
             _notificationService = notificationService;
+<<<<<<< HEAD
             _trainingModelService = trainingModelService;
             _env = env;
+=======
+>>>>>>> develop
         }
         #region GET
         public async Task<List<PostDto>> GetAllPostsAsync(PostUserSearchQueryDto query)
@@ -86,29 +96,92 @@ namespace ChitChat.Application.Services
                 query.PageSize,
                 p => p.IgnoreAutoIncludes().Include(c => c.PostMedias).Include(c => c.User)
             );
-            foreach (var post in paginationResponse.Items)
+
+            var postDtos = _mapper.Map<List<PostDto>>(paginationResponse.Items);
+            foreach (var postDto in postDtos)
             {
-                post.PostMedias = post.PostMedias.OrderBy(m => m.MediaOrder).ToList();
+                if (await _reactionPostRepository.AnyAsync(c => c.PostId == postDto.Id))
+                    postDto.IsReacted = true;
+                if (postDto.PostMedias != null)
+                    postDto.PostMedias = postDto.PostMedias.OrderBy(m => m.MediaOrder).ToList();
             }
-            return _mapper.Map<List<PostDto>>(paginationResponse.Items);
+            return postDtos;
         }
         public async Task<PostDto> GetPostByIdAsync(Guid postId)
         {
             var post = await _postRepository.GetFirstOrDefaultAsync(p => p.Id == postId && !p.IsDeleted
-                                                                    , p => p.Include(c => c.PostMedias).Include(c => c.Comments).Include(c => c.User));
+                                                                    , p => p.Include(c => c.PostMedias)
+                                                                    .Include(c => c.Comments)
+                                                                    .Include(c => c.User));
             if (post == null)
                 throw new NotFoundException(ValidationTexts.NotFound.Format("Post", postId));
             post.Comments = post.Comments.Where(p => p.CommentType == CommentType.Parent.ToString()).ToList();
+
             post.PostMedias = post.PostMedias.OrderBy(m => m.MediaOrder).ToList();
-            return _mapper.Map<PostDto>(post);
+            PostDto postDto = _mapper.Map<PostDto>(post);
+            if (await _reactionPostRepository.AnyAsync(c => c.PostId == postDto.Id))
+                postDto.IsReacted = true;
+            foreach (var comment in postDto.Comments)
+            {
+                if (await _reactionCommentRepository.AnyAsync(c => c.CommentId == comment.Id))
+                    comment.IsReacted = true;
+            }
+            return postDto;
         }
         public async Task<List<ResponseRecommendationModel>> GetReccomendationPostsAsync(PostSearchQueryDto query)
         {
             var userId = _claimService.GetUserId();
+<<<<<<< HEAD
             var userInteraction = await _userInteractionRepository.GetUserInteractionModelForTraining(10000);
             var postReccomendation = await _postRepository.GetAllAsync(p => !p.IsDeleted && p.UserId != userId && p.Description.Contains(query.SearchText));
             var response = _trainingModelService.GetRecommendationPostModel(userId, userInteraction, postReccomendation);
             return response;
+=======
+            if (!string.IsNullOrEmpty(query.SearchText))
+            {
+                if (query.IsTag)
+                {
+                    var postSearchTag = await _postRepository.GetAllAsync(p => p.PostDetailTags.Any(p => p.Tag.Contains(query.SearchText)) && !p.IsDeleted && p.UserId != userId
+                                                , p => p.OrderByDescending(p => p.CreatedOn)
+                                                , query.PageIndex
+                                                , query.PageSize
+                                                , p => p.Include(p => p.PostDetailTags).Include(p => p.User).Include(p => p.PostMedias));
+                    var postSearchTagDtos = _mapper.Map<List<PostDto>>(postSearchTag.Items);
+                    foreach (var postDto in postSearchTagDtos)
+                    {
+                        if (await _reactionPostRepository.AnyAsync(c => c.PostId == postDto.Id))
+                            postDto.IsReacted = true;
+                        if (postDto.PostMedias != null)
+                            postDto.PostMedias = postDto.PostMedias.OrderBy(m => m.MediaOrder).ToList();
+                    }
+                    return postSearchTagDtos;
+                }
+                var postSearchDescription = await _postRepository.GetAllAsync(p => p.Description.Contains(query.SearchText) && !p.IsDeleted && p.UserId != userId
+                                                , p => p.OrderByDescending(p => p.CreatedOn)
+                                                , query.PageIndex
+                                                , query.PageSize
+                                                , p => p.Include(p => p.PostDetailTags).Include(p => p.User).Include(p => p.PostMedias));
+                var postDtos = _mapper.Map<List<PostDto>>(postSearchDescription.Items);
+                foreach (var postDto in postDtos)
+                {
+                    if (await _reactionPostRepository.AnyAsync(c => c.PostId == postDto.Id))
+                        postDto.IsReacted = true;
+                    if (postDto.PostMedias != null)
+                        postDto.PostMedias = postDto.PostMedias.OrderBy(m => m.MediaOrder).ToList();
+                }
+                return postDtos;
+            }
+
+            var posts = await _postRepository.GetAllAsync(p => p.UserId != userId && !p.IsDeleted, p => p.OrderByDescending(p => p.CreatedOn)
+                                                , query.PageIndex
+                                                , query.PageSize
+                                                , p => p.Include(p => p.PostDetailTags).Include(p => p.User).Include(p => p.PostMedias));
+            foreach (var post in posts.Items)
+            {
+                post.PostMedias = post.PostMedias.OrderBy(m => m.MediaOrder).ToList();
+            }
+            return _mapper.Map<List<PostDto>>(posts.Items);
+>>>>>>> develop
         }
         public async Task<List<CommentDto>> GetAllReplyCommentsAsync(Guid postId, Guid commentId)
         {
@@ -116,7 +189,13 @@ namespace ChitChat.Application.Services
             if (commentParent == null)
                 throw new NotFoundException(ValidationTexts.NotFound.Format("Comment", commentId));
             var comments = await _commentRepository.GetAllAsync(p => p.PostId == postId && p.ParentCommentId == commentId);
-            return _mapper.Map<List<CommentDto>>(comments);
+            var commentDtos = _mapper.Map<List<CommentDto>>(comments);
+            foreach (var commentDto in commentDtos)
+            {
+                if (await _reactionCommentRepository.AnyAsync(c => c.CommentId == commentDto.Id))
+                    commentDto.IsReacted = true;
+            }
+            return commentDtos;
         }
         #endregion
         #region POST
