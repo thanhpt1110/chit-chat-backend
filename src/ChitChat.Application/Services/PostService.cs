@@ -5,7 +5,6 @@ using AutoMapper;
 using ChitChat.Application.Exceptions;
 using ChitChat.Application.Helpers;
 using ChitChat.Application.Localization;
-using ChitChat.Application.MachineLearning.Models;
 using ChitChat.Application.MachineLearning.Services.Interface;
 using ChitChat.Application.Models.Dtos.Notification;
 using ChitChat.Application.Models.Dtos.Post;
@@ -118,60 +117,16 @@ namespace ChitChat.Application.Services
             }
             return postDto;
         }
-        public async Task<List<ResponseRecommendationModel>> GetReccomendationPostsAsync(PostSearchQueryDto query)
+        public async Task<List<PostDto>> GetReccomendationPostsAsync(PostSearchQueryDto query)
         {
             var userId = _claimService.GetUserId();
-<<<<<<< HEAD
             var userInteraction = await _userInteractionRepository.GetUserInteractionModelForTraining(10000);
-            var postReccomendation = await _postRepository.GetAllAsync(p => !p.IsDeleted && p.UserId != userId && p.Description.Contains(query.SearchText));
+            var postReccomendation = await _postRepository.GetAllAsync(p => !p.IsDeleted && p.UserId != userId
+            && p.Description.Contains(query.SearchText), p => p.Include(c => c.PostMedias)
+                                                    .Include(c => c.Comments)
+                                                    .Include(c => c.User));
             var response = _trainingModelService.GetRecommendationPostModel(userId, userInteraction, postReccomendation);
-            return response;
-=======
-            if (!string.IsNullOrEmpty(query.SearchText))
-            {
-                if (query.IsTag)
-                {
-                    var postSearchTag = await _postRepository.GetAllAsync(p => p.PostDetailTags.Any(p => p.Tag.Contains(query.SearchText)) && !p.IsDeleted && p.UserId != userId
-                                                , p => p.OrderByDescending(p => p.CreatedOn)
-                                                , query.PageIndex
-                                                , query.PageSize
-                                                , p => p.Include(p => p.PostDetailTags).Include(p => p.User).Include(p => p.PostMedias));
-                    var postSearchTagDtos = _mapper.Map<List<PostDto>>(postSearchTag.Items);
-                    foreach (var postDto in postSearchTagDtos)
-                    {
-                        if (await _reactionPostRepository.AnyAsync(c => c.PostId == postDto.Id))
-                            postDto.IsReacted = true;
-                        if (postDto.PostMedias != null)
-                            postDto.PostMedias = postDto.PostMedias.OrderBy(m => m.MediaOrder).ToList();
-                    }
-                    return postSearchTagDtos;
-                }
-                var postSearchDescription = await _postRepository.GetAllAsync(p => p.Description.Contains(query.SearchText) && !p.IsDeleted && p.UserId != userId
-                                                , p => p.OrderByDescending(p => p.CreatedOn)
-                                                , query.PageIndex
-                                                , query.PageSize
-                                                , p => p.Include(p => p.PostDetailTags).Include(p => p.User).Include(p => p.PostMedias));
-                var postDtos = _mapper.Map<List<PostDto>>(postSearchDescription.Items);
-                foreach (var postDto in postDtos)
-                {
-                    if (await _reactionPostRepository.AnyAsync(c => c.PostId == postDto.Id))
-                        postDto.IsReacted = true;
-                    if (postDto.PostMedias != null)
-                        postDto.PostMedias = postDto.PostMedias.OrderBy(m => m.MediaOrder).ToList();
-                }
-                return postDtos;
-            }
-
-            var posts = await _postRepository.GetAllAsync(p => p.UserId != userId && !p.IsDeleted, p => p.OrderByDescending(p => p.CreatedOn)
-                                                , query.PageIndex
-                                                , query.PageSize
-                                                , p => p.Include(p => p.PostDetailTags).Include(p => p.User).Include(p => p.PostMedias));
-            foreach (var post in posts.Items)
-            {
-                post.PostMedias = post.PostMedias.OrderBy(m => m.MediaOrder).ToList();
-            }
-            return _mapper.Map<List<PostDto>>(posts.Items);
->>>>>>> develop
+            return _mapper.Map<List<PostDto>>(response.OrderByDescending(p => p.Score).Skip(query.PageIndex * query.PageSize).Take(query.PageSize).ToList());
         }
         public async Task<List<CommentDto>> GetAllReplyCommentsAsync(Guid postId, Guid commentId)
         {
