@@ -91,16 +91,24 @@ namespace ChitChat.Application.Services
             return response;
 
         }
+
         public async Task<ConversationDto> CreateConversationAsync(List<string> userIds)
         {
-            var senderUser = _claimService.GetUserId();
+            var senderId = _claimService.GetUserId();
             if (userIds.Count < 2)
             {
                 throw new InvalidModelException(ValidationTexts.NotValidate.Format(userIds.GetType(), userIds));
             }
-            if (userIds.Count == 2 && await _conversationRepository.IsConversationExisted(userIds[0], userIds[1]))
+            if (userIds.Count == 2)
             {
-                throw new ConflictException(ValidationTexts.Conflict.Format("Conversation", userIds[0] + " and user " + userIds[1]));
+                var conversationExisted = await _conversationRepository.IsConversationExisted(userIds[0], userIds[1]);
+                if (conversationExisted != null)
+                {
+                    var conversationExistedDto = _mapper.Map<ConversationDto>(conversationExisted);
+                    var otherUser = userIds[0] == senderId ? userIds[1] : userIds[0];
+                    conversationExistedDto.UserReceivers = _mapper.Map<List<UserDto>>(await _userRepository.GetAllAsync(p => p.Id == otherUser));
+                    return conversationExistedDto;
+                }
             }
             Conversation conversation = new Conversation()
             {
@@ -124,7 +132,7 @@ namespace ChitChat.Application.Services
             conversationDto.LastMessage = null;
             conversationDto.UserReceiverIds = userIds;
             conversationDto.UserReceivers = _mapper.Map<List<UserDto>>(await _userRepository.GetAllAsync(p => userIds.Contains(p.Id)));
-            await _userNotificationService.AddConversation(conversationDto, senderUser);
+            await _userNotificationService.AddConversation(conversationDto, senderId);
             return conversationDto;
         }
         public async Task<MessageDto> SendMessageAsync(Guid conversationId, RequestSendMessageDto request)
