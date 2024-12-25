@@ -38,25 +38,18 @@ namespace ChitChat.Application.Services
         private readonly ICloudinaryService _cloudinaryService;
         private readonly IUserRepository _userRepository;
         private readonly INotificationService _notificationService;
-<<<<<<< HEAD
         private readonly IWebHostEnvironment _env;
         private readonly ITrainingModelService _trainingModelService;
-=======
->>>>>>> develop
         public PostService(
             IClaimService claimService
             , IMapper mapper
             , IRepositoryFactory repositoryFactory
             , IUserRepository userRepository
             , ICloudinaryService cloudinaryService
-<<<<<<< HEAD
             , INotificationService notificationService
             , IWebHostEnvironment env
             , ITrainingModelService trainingModelService
             , IUserInteractionRepository userInteractionRepository)
-=======
-            , INotificationService notificationService)
->>>>>>> develop
         {
             _claimService = claimService;
             _mapper = mapper;
@@ -69,11 +62,8 @@ namespace ChitChat.Application.Services
             _reactionCommentRepository = repositoryFactory.GetRepository<ReactionComment>();
             _cloudinaryService = cloudinaryService;
             _notificationService = notificationService;
-<<<<<<< HEAD
             _trainingModelService = trainingModelService;
             _env = env;
-=======
->>>>>>> develop
         }
         #region GET
         public async Task<List<PostDto>> GetAllPostsAsync(PostUserSearchQueryDto query)
