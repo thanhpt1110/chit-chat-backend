@@ -5,7 +5,7 @@ using ChitChat.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore.Query;
 
-namespace ChitChat.DataAccess.Repositories.Interrface
+namespace ChitChat.DataAccess.Repositories.Interface
 {
     public interface IBaseRepository<TEntity> where TEntity : BaseEntity
     {

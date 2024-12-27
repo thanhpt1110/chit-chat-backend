@@ -5,7 +5,7 @@ using ChitChat.Application.Models;
 using ChitChat.Application.Models.Dtos.Notification;
 using ChitChat.Application.Services.Interface;
 using ChitChat.Application.SignalR.Interface;
-using ChitChat.DataAccess.Repositories.Interrface;
+using ChitChat.DataAccess.Repositories.Interface;
 using ChitChat.Domain.Entities.SystemEntities.Notification;
 
 using Microsoft.EntityFrameworkCore;

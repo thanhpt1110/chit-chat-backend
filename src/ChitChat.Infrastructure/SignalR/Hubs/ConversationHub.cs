@@ -16,23 +16,25 @@ namespace ChitChat.Infrastructure.SignalR.Hubs
         public override Task OnConnectedAsync() => base.OnConnectedAsync();
         public async Task JoinConversationGroup(Guid conversationId)
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, HubRoom.ConversationHubJoinRoom(conversationId));
-            await Clients.Group(HubRoom.ConversationHubJoinRoom(conversationId)).ConversationJoined($"{Context.ConnectionId} has joined the room {HubRoom.ConversationHubJoinRoom(conversationId)}");
+            var roomId = HubRoom.ConversationHubJoinRoom(conversationId);
+            await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
+            await Clients.Group(roomId).ConversationJoined($"{Context.ConnectionId} has joined the room {roomId}");
         }
         public async Task SendOffer(Guid conversationId, string sdp)
         {
-            await Clients.OthersInGroup(HubRoom.ConversationHubJoinRoom(conversationId)).ReceiveOffer(Context.ConnectionId, sdp);
+            var roomId = HubRoom.ConversationHubJoinRoom(conversationId);
+            await Clients.OthersInGroup(roomId).ReceiveOffer(Context.ConnectionId, sdp);
         }
 
-        // Gửi SDP Answer
-        public async Task SendAnswer(string roomId, string sdp)
+        public async Task SendAnswer(Guid conversationId, string sdp)
         {
+            var roomId = HubRoom.ConversationHubJoinRoom(conversationId);
             await Clients.OthersInGroup(roomId).ReceiveAnswer(Context.ConnectionId, sdp);
         }
 
-        // Gửi ICE Candidate
-        public async Task SendIceCandidate(string roomId, string candidate)
+        public async Task SendIceCandidate(Guid conversationId, string candidate)
         {
+            var roomId = HubRoom.ConversationHubJoinRoom(conversationId);
             await Clients.OthersInGroup(roomId).ReceiveIceCandidate(Context.ConnectionId, candidate);
         }
     }
