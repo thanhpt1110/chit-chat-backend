@@ -78,15 +78,14 @@ namespace ChitChat.Application.Services
         public async Task<List<FollowDto>> GetRecommendFollowAsync(PaginationFilter filter)
         {
             var currentUserId = _claimService.GetUserId();
-            var followers = await _userFollowerRepository.GetRecommendedUsersAsync(currentUserId);
+            var followers = await _userFollowerRepository.GetRecommendedUsersAsync(currentUserId, filter.PageSize);
             var followingDtos = new List<FollowDto>();
             foreach (var following in followers)
             {
                 var followDto = new FollowDto
                 {
-                    Id = following.Id,
-                    UserId = following.UserId,
-                    User = _mapper.Map<UserDto>(following.User)
+                    UserId = following.Id,
+                    User = _mapper.Map<UserDto>(following)
                 };
                 followingDtos.Add(followDto);
             }
