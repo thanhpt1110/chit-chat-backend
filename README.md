@@ -49,7 +49,7 @@ A backend services for a social networking application, built with `.NET Core` a
    Create a .env file in the `ChitChat.WebAPI` directory with the following content:
 
    ```bash
-   SecretKey = <>  # The secret key used for signing and verifying tokens
+   SecretKey =  # The secret key used for signing and verifying tokens
    TokenValidityInDays =  # The number of days the token is valid
    RefreshTokenValidityInDays =  # The number of days the refresh token is valid
    Issuer =  # The issuer of the token
@@ -74,7 +74,7 @@ A backend services for a social networking application, built with `.NET Core` a
 5. **Build and run with Docker**:
 
    ```bash
-   Visit http://localhost:8080/swagger to explore the API endpoints using Swagger UI.
+   Visit http://localhost:8080/swagger/index.html to explore the API endpoints using Swagger UI.
    ```
 
 ---
