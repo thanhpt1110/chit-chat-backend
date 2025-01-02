@@ -37,5 +37,11 @@ namespace ChitChat.Infrastructure.SignalR.Hubs
             var roomId = HubRoom.ConversationHubJoinRoom(conversationId);
             await Clients.OthersInGroup(roomId).ReceiveIceCandidate(Context.ConnectionId, candidate);
         }
+        public async Task StartCall(Guid conversationId)
+        {
+            var roomId = HubRoom.ConversationHubJoinRoom(conversationId);
+            await Clients.OthersInGroup(roomId).ReceiveCall(conversationId);
+        }
+
     }
 }

@@ -53,18 +53,18 @@ namespace ChitChat.WebAPI.Controllers
             return Ok(ApiResult<ProfileDto>.Success(await _profileService.UpdateProfileAsync(userId, Profile)));
         }
         [HttpGet]
-        [Route("followers")]
+        [Route("{userId}/followers")]
         [ProducesResponseType(typeof(ApiResult<List<FollowDto>>), StatusCodes.Status200OK)] // OK với ProductResponse
-        public async Task<IActionResult> GetAllFollowerAsync()
+        public async Task<IActionResult> GetAllFollowerAsync(Guid userId)
         {
-            return Ok(ApiResult<List<FollowDto>>.Success(await _followService.GetAllFollowerAsync()));
+            return Ok(ApiResult<List<FollowDto>>.Success(await _followService.GetAllFollowerAsync(userId.ToString())));
         }
         [HttpGet]
-        [Route("followings")]
+        [Route("{userId}/followings")]
         [ProducesResponseType(typeof(ApiResult<List<FollowDto>>), StatusCodes.Status200OK)] // OK với ProductResponse
-        public async Task<IActionResult> GetAllFollowingsAsync()
+        public async Task<IActionResult> GetAllFollowingsAsync(Guid userId)
         {
-            return Ok(ApiResult<List<FollowDto>>.Success(await _followService.GetAllFollowingsAsync()));
+            return Ok(ApiResult<List<FollowDto>>.Success(await _followService.GetAllFollowingsAsync(userId.ToString())));
         }
         [HttpPut]
         [Route("toggle-follow/{otherUserId}")]
