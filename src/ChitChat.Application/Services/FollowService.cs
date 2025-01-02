@@ -32,11 +32,10 @@ namespace ChitChat.Application.Services
             _userFollowerRepository = userFollowerRepository;
             _notificationService = notificationService;
         }
-        public async Task<List<FollowDto>> GetAllFollowerAsync()
+        public async Task<List<FollowDto>> GetAllFollowerAsync(string userId)
         {
-            var currentUserId = _claimService.GetUserId();
             var followers = await _userFollowerRepository.GetAllAsync(
-                uf => uf.FollowerId == currentUserId,
+                uf => uf.FollowerId == userId,
                 uf => uf.Include(uf => uf.User)
             );
 
@@ -54,11 +53,10 @@ namespace ChitChat.Application.Services
             return followerDtos;
         }
 
-        public async Task<List<FollowDto>> GetAllFollowingsAsync()
+        public async Task<List<FollowDto>> GetAllFollowingsAsync(string userId)
         {
-            var currentUserId = _claimService.GetUserId();
             var followings = await _userFollowerRepository.GetAllAsync(
-                uf => uf.UserId == currentUserId,
+                uf => uf.UserId == userId,
                 uf => uf.Include(uf => uf.Follower)
             );
 
@@ -68,7 +66,7 @@ namespace ChitChat.Application.Services
                 var followDto = new FollowDto
                 {
                     Id = following.Id,
-                    UserId = following.UserId,
+                    UserId = following.FollowerId,
                     User = _mapper.Map<UserDto>(following.Follower)
                 };
                 followingDtos.Add(followDto);

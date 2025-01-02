@@ -13,6 +13,6 @@ namespace ChitChat.Infrastructure.SignalR.Hubs.InterfaceClient
         Task ReceiveOffer(string connectionId, string sdp);
         Task ReceiveAnswer(string connectionId, string sdp);
         Task ReceiveIceCandidate(string connectionId, string candidate);
-
+        Task ReceiveCall(Guid ConversationId);
     }
 }
