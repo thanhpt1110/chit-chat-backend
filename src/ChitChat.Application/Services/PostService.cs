@@ -101,7 +101,7 @@ namespace ChitChat.Application.Services
         {
             var post = await _postRepository.GetFirstOrDefaultAsync(p => p.Id == postId && !p.IsDeleted
                                                                     , p => p.Include(c => c.PostMedias)
-                                                                    .Include(c => c.Comments)
+                                                                    .Include(c => c.Comments).ThenInclude(c=>c.UserPosted)
                                                                     .Include(c => c.User));
             if (post == null)
                 throw new NotFoundException(ValidationTexts.NotFound.Format("Post", postId));
